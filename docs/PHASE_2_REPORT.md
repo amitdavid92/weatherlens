@@ -195,7 +195,10 @@ Bands: Low < 40 ≤ Moderate < 70 ≤ High.
 | `218bad4` | test(analytics): hand-computed unit tests and snapshot-based scenario tests |
 | `92228ae` | feat(cli): scenarios command rendering the four assignment scenarios and score table |
 | `88663b9` | docs: scoring methodology, Phase 2 decisions and generated scenario validation |
-| (this commit) | docs: Phase 2 report |
+| `afa9d5e` | docs: Phase 2 report |
+| `d50aca6` | feat(analytics): methodology 1.1.0 hybrid FEMA normalization, explicit contribution levels and ranking eligibility |
+| `a7d4584` | docs: methodology 1.1.0, sensitivity analysis, updated validation and Phase 2 report; add reviewed AI session export (phases 0-1) |
+| (this commit) | docs: record refinement commit hashes |
 
 Nothing has been pushed; there is no remote. `ASSIGNMENT.pdf` remains untracked.
 
