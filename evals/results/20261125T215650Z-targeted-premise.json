@@ -1,0 +1,238 @@
+{
+ "summary": {
+  "run_id": "20261125T215650Z-targeted-premise",
+  "model": "gemini-3.5-flash-lite",
+  "fallbacks": "gemini-3.6-flash,gemini-3.5-flash",
+  "thinking": "low",
+  "methodology": "1.1.0",
+  "dataset_version": "1.0",
+  "selected_cases": [
+   "A4-dallas-premise",
+   "F1-denver-false-premise"
+  ],
+  "cases": 2,
+  "n_pass": 1,
+  "n_pass_fallback": 0,
+  "n_fail": 1,
+  "n_provider_error": 0,
+  "ids": {
+   "pass": [
+    "A4-dallas-premise"
+   ],
+   "pass_fallback": [],
+   "fail": [
+    "F1-denver-false-premise"
+   ],
+   "provider_error": []
+  },
+  "case_pass_rate": 0.5,
+  "case_pass_rate_incl_fallback": 0.5,
+  "assertions": 10,
+  "assertions_passed": 9,
+  "assertion_pass_rate": 0.9,
+  "critical_failures": [
+   [
+    "F1-denver-false-premise",
+    "premise_corrected",
+    "premise=''"
+   ]
+  ],
+  "turns": 2,
+  "llm_retries": 1,
+  "deterministic_fallbacks": 1,
+  "provider_errors": 0,
+  "turns_using_fallback_model": 0,
+  "latency_ms": {
+   "median": 5770,
+   "p90": 4532,
+   "max": 7009
+  },
+  "complete": true
+ },
+ "results": [
+  {
+   "id": "A4-dallas-premise",
+   "category": "assignment",
+   "criticality": "critical",
+   "outcome": "pass",
+   "critical_failures": [],
+   "turns": [
+    {
+     "say": "Why is the Dallas hub's weather disruption risk high?",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 200,
+     "error": null,
+     "status": "answered",
+     "narrative_source": "llm",
+     "wall_ms": 4532,
+     "validation": {
+      "valid": true,
+      "attempts": 1,
+      "issues": [],
+      "retry_reasons": [],
+      "fallback_used": false
+     },
+     "notes": [],
+     "tools": [
+      [
+       "explain_hub_score",
+       {
+        "claimed_band": "High",
+        "hub": "dallas_tx"
+       }
+      ]
+     ],
+     "models_used": [
+      "gemini-3.5-flash-lite"
+     ],
+     "llm_errors": [],
+     "timings_ms": {
+      "tool_phase_ms": 1945.0,
+      "tool_selection_llm_ms": 1921.9,
+      "tool_execution_ms": 1.0,
+      "synthesis_phase_ms": 2574.8,
+      "synthesis_llm_ms": 2566.0,
+      "validation_ms": 7.3,
+      "provider_wait_ms": 0.0,
+      "synthesis_prompt_chars": 4735.0
+     },
+     "answer": "The Dallas Hub has an overall weather-hazard EXPOSURE score of 58.7, placing it in the Moderate band (rank #2 of 11 hubs). Note that these scores measure weather-hazard EXPOSURE (heuristic), not operational disruption. The premise that the overall exposure is high is incorrect; instead, it is Moderate. However, certain specific hazards reach High exposure, led by severe convective hazards with a score of 94.6 contributing 18.9 points, and extreme heat with a score of 81.7 contributing 16.3 points.",
+     "premise_correction": "The Dallas Hub's overall exposure score is Moderate, not High, ranking #2 of 11 hubs.",
+     "assertions": [
+      {
+       "type": "status_in",
+       "ok": true,
+       "critical": false,
+       "detail": "status=answered"
+      },
+      {
+       "type": "tool_called",
+       "ok": true,
+       "critical": false,
+       "detail": "explain_hub_score({'claimed_band': 'High', 'hub': 'dallas_tx'})"
+      },
+      {
+       "type": "explanation",
+       "ok": true,
+       "critical": true,
+       "detail": "band=Moderate rank=2"
+      },
+      {
+       "type": "premise_corrected",
+       "ok": true,
+       "critical": true,
+       "detail": "premise=\"The Dallas Hub's overall exposure score is Moderate, not High, ranking #2 of 11 \""
+      },
+      {
+       "type": "answer_or_premise_contains_all",
+       "ok": true,
+       "critical": false,
+       "detail": "missing=[]"
+      },
+      {
+       "type": "answer_contains_any",
+       "ok": true,
+       "critical": false,
+       "detail": "none of ['severe convective', 'Severe Convective', 'severe storms', 'convective']"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "F1-denver-false-premise",
+   "category": "false_premise",
+   "criticality": "high",
+   "outcome": "fail",
+   "critical_failures": [
+    {
+     "type": "premise_corrected",
+     "ok": false,
+     "critical": true,
+     "detail": "premise=''"
+    }
+   ],
+   "turns": [
+    {
+     "say": "Why is Denver the most exposed hub overall?",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 200,
+     "error": null,
+     "status": "fallback",
+     "narrative_source": "deterministic_fallback",
+     "wall_ms": 7009,
+     "validation": {
+      "valid": false,
+      "attempts": 2,
+      "issues": [
+       "unsupported numeric claim '39.98' (numbers must use fact placeholders) \u2014 write it as {{fact:denver_co.overall.score}}",
+       "superlative claim about denver_co is not supported by the ranking or comparison leader for any topic"
+      ],
+      "retry_reasons": [
+       "unsupported numeric claim '39.98' (numbers must use fact placeholders) \u2014 write it as {{fact:denver_co.overall.score}}",
+       "unsupported numeric claim '73.6' (numbers must use fact placeholders) \u2014 write it as {{fact:houston_tx.overall.score}}"
+      ],
+      "fallback_used": true
+     },
+     "notes": [],
+     "tools": [
+      [
+       "explain_hub_score",
+       {
+        "hub": "denver_co"
+       }
+      ],
+      [
+       "rank_hubs",
+       {}
+      ]
+     ],
+     "models_used": [
+      "gemini-3.5-flash-lite"
+     ],
+     "llm_errors": [],
+     "timings_ms": {
+      "tool_phase_ms": 2354.1,
+      "tool_selection_llm_ms": 2345.8,
+      "tool_execution_ms": 4.5,
+      "synthesis_phase_ms": 4644.5,
+      "synthesis_llm_ms": 4639.5,
+      "validation_ms": 2.9,
+      "provider_wait_ms": 0.0,
+      "synthesis_prompt_chars": 10744.0
+     },
+     "answer": "**Deterministic summary** \u2014 the AI-written answer was unavailable or failed validation, so these verified results are shown directly from the analytics engine. Scores are a heuristic weather-hazard exposure index, not a probability of operational disruption.\n\n- Denver Hub: overall 39.98 (Low), rank #11; largest hazard contributions: severe_convective 67.9, winter 56.6, extreme_heat 40.9.\n**Ranking by overall:**\n- #1 Houston Hub: 73.6 (High)\n- #2 Dallas Hub: 58.7 (Moderate)\n- #3 Chicago Hub: 56.7 (Moderate)\n- #4 Detroit Hub: 56.2 (Moderate)\n- #5 Memphis Hub: 54.0 (Moderate)\n- #6 Atlanta Hub: 50.7 (Moderate)\n- #7 Kansas City Hub: 49.5 (Moderate)\n- #8 Minneapolis Hub: 49.3 (Moderate)\n- #9 Indianapolis Hub: 47.9 (Moderate)\n- #10 Columbus Hub: 45.6 (Moderate)\n- #11 Denver Hub: 39.98 (Low)\n- not ranked: Miami Hub \u2014 its winter data is incomplete (70% of the indicator weight available), so its score is shown but not ranked.",
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "premise_corrected",
+       "ok": false,
+       "critical": true,
+       "detail": "premise=''"
+      },
+      {
+       "type": "answer_or_premise_contains_all",
+       "ok": true,
+       "critical": false,
+       "detail": "missing=[]"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

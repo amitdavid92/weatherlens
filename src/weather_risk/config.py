@@ -21,7 +21,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # LLM — declared for later phases; unused in the data layer.
+    # LLM (AI Analyst). The key is server-side only and never logged.
     gemini_api_key: SecretStr | None = Field(default=None, alias="GEMINI_API_KEY")
     gemini_model: str = Field(default="gemini-3.5-flash-lite", alias="WEATHER_RISK_GEMINI_MODEL")
     # Comma-separated fallback chain, tried in order on 503 / timeout / 429 (D-037).

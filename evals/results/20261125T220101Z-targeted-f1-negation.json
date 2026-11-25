@@ -1,0 +1,127 @@
+{
+ "summary": {
+  "run_id": "20261125T220101Z-targeted-f1-negation",
+  "model": "gemini-3.5-flash-lite",
+  "fallbacks": "gemini-3.6-flash,gemini-3.5-flash",
+  "thinking": "low",
+  "methodology": "1.1.0",
+  "dataset_version": "1.0",
+  "selected_cases": [
+   "F1-denver-false-premise"
+  ],
+  "cases": 1,
+  "n_pass": 0,
+  "n_pass_fallback": 1,
+  "n_fail": 0,
+  "n_provider_error": 0,
+  "ids": {
+   "pass": [],
+   "pass_fallback": [
+    "F1-denver-false-premise"
+   ],
+   "fail": [],
+   "provider_error": []
+  },
+  "case_pass_rate": 0.0,
+  "case_pass_rate_incl_fallback": 1.0,
+  "assertions": 3,
+  "assertions_passed": 3,
+  "assertion_pass_rate": 1.0,
+  "critical_failures": [],
+  "turns": 1,
+  "llm_retries": 1,
+  "deterministic_fallbacks": 1,
+  "provider_errors": 0,
+  "turns_using_fallback_model": 0,
+  "latency_ms": {
+   "median": 7613,
+   "p90": 7613,
+   "max": 7613
+  },
+  "complete": true
+ },
+ "results": [
+  {
+   "id": "F1-denver-false-premise",
+   "category": "false_premise",
+   "criticality": "high",
+   "outcome": "pass_fallback",
+   "critical_failures": [],
+   "turns": [
+    {
+     "say": "Why is Denver the most exposed hub overall?",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 200,
+     "error": null,
+     "status": "fallback",
+     "narrative_source": "deterministic_fallback",
+     "wall_ms": 7613,
+     "validation": {
+      "valid": false,
+      "attempts": 2,
+      "issues": [
+       "unsupported numeric claim '39.98' (numbers must use fact placeholders) \u2014 write it as {{fact:denver_co.overall.score}}",
+       "unsupported numeric claim '73.6' (numbers must use fact placeholders) \u2014 write it as {{fact:houston_tx.overall.score}}"
+      ],
+      "retry_reasons": [
+       "unsupported numeric claim '39.98' (numbers must use fact placeholders) \u2014 write it as {{fact:denver_co.overall.score}}",
+       "unsupported numeric claim '73.6' (numbers must use fact placeholders) \u2014 write it as {{fact:houston_tx.overall.score}}"
+      ],
+      "fallback_used": true
+     },
+     "notes": [],
+     "tools": [
+      [
+       "explain_hub_score",
+       {
+        "claimed_band": "High",
+        "hub": "denver_co"
+       }
+      ],
+      [
+       "rank_hubs",
+       {}
+      ]
+     ],
+     "models_used": [
+      "gemini-3.5-flash-lite"
+     ],
+     "llm_errors": [],
+     "timings_ms": {
+      "tool_phase_ms": 3014.5,
+      "tool_selection_llm_ms": 2987.3,
+      "tool_execution_ms": 7.6,
+      "synthesis_phase_ms": 4583.3,
+      "synthesis_llm_ms": 4571.9,
+      "validation_ms": 8.1,
+      "provider_wait_ms": 0.0,
+      "synthesis_prompt_chars": 10866.0
+     },
+     "answer": "**Deterministic summary** \u2014 the AI-written answer was unavailable or failed validation, so these verified results are shown directly from the analytics engine. Scores are a heuristic weather-hazard exposure index, not a probability of operational disruption.\n\n- Denver Hub: overall 39.98 (Low), rank #11; largest hazard contributions: severe_convective 67.9, winter 56.6, extreme_heat 40.9.\n- The claim \u201coverall exposure is High\u201d is not supported by the index.\n**Ranking by overall:**\n- #1 Houston Hub: 73.6 (High)\n- #2 Dallas Hub: 58.7 (Moderate)\n- #3 Chicago Hub: 56.7 (Moderate)\n- #4 Detroit Hub: 56.2 (Moderate)\n- #5 Memphis Hub: 54.0 (Moderate)\n- #6 Atlanta Hub: 50.7 (Moderate)\n- #7 Kansas City Hub: 49.5 (Moderate)\n- #8 Minneapolis Hub: 49.3 (Moderate)\n- #9 Indianapolis Hub: 47.9 (Moderate)\n- #10 Columbus Hub: 45.6 (Moderate)\n- #11 Denver Hub: 39.98 (Low)\n- not ranked: Miami Hub \u2014 its winter data is incomplete (70% of the indicator weight available), so its score is shown but not ranked.",
+     "premise_correction": "The claim \u201coverall exposure is High\u201d is not supported by the index.",
+     "assertions": [
+      {
+       "type": "premise_corrected",
+       "ok": true,
+       "critical": true,
+       "detail": "premise='The claim \u201coverall exposure is High\u201d is not supported by the index.'"
+      },
+      {
+       "type": "answer_or_premise_contains_all",
+       "ok": true,
+       "critical": false,
+       "detail": "missing=[]"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

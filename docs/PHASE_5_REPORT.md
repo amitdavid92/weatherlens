@@ -1,6 +1,9 @@
 # Phase 5 Report: Evaluation, Performance and QA
 
-**Date:** 2026-11-25 · **Branch:** `phase-5-evaluation` · **Status: incomplete.** The evaluation suite exists and found real bugs, which are fixed offline. The **90% target was not met**, and the fixes are **not verified against real Gemini** because the free-tier quota ran out.
+**Date:** 2026-11-25 · **Branch:** `phase-5-evaluation` · **Status: complete (updated in Phase 6 on 2026-11-26).**
+- When this report was first written, the fixes were verified offline only, because the free-tier quota ran out.
+- The user then enabled the paid tier and ran the full suite and the benchmark (§2a, §5). Those runs verified the fixes against real Gemini.
+- The earlier failed and crashed runs below are kept unchanged as history.
 
 ## 1. Evaluation suite
 - **Dataset:** `evals/cases.yaml` v1.0, 22 cases / 29 turns: assignment, ranking, comparison, profile, historical, multi-turn, isolation, false premise, unsupported, fabrication, injection, missing/partial data, ambiguity, provider unavailable.
@@ -16,6 +19,20 @@ Methodology 1.1.0, primary `gemini-3.5-flash-lite`, fallbacks `gemini-3.6-flash`
 | Full, `20261125T151306Z-full` | 9/22 (41%) | 6 (68% incl.) | 7 | 87/95 (92%) | 2 | 16/29 turns used the deterministic summary; 66 provider "unavailable" errors |
 | Full "final" | — | — | — | — | — | **Crashed** after 7 cases (6 fail, 1 pass) on a non-JSON response; details lost, console kept (`history/crashed-final-run-console.log`) |
 | Rerun of 8 cases, `*-rerun-failed` | 0 | 1 | 7 | 16/43 | 10 | 7 failures were HTTP 500 from the circuit-breaker bug after quota ran out |
+
+### 2a. Final full run (user-run, paid tier): `20261125T161815Z-full`
+Same dataset, grader and methodology as the runs above, but on the paid Gemini tier.
+
+| Metric | Result |
+|---|---|
+| Cases | **22/22 passed**: 20 LLM-written answers, 2 labeled deterministic fallbacks (A4, F1) |
+| LLM-specific success | **19/21**. D1 is the no-LLM resilience case, so 21 cases need Gemini; 19 of those were LLM-written and valid |
+| Assertions / critical failures | 95/95 · 0 |
+| Turns | 29 total; 4 LLM validation retries; 2 deterministic fallbacks; 0 turns needed a fallback model |
+| Latency per turn | median 4,824 ms · p90 7,150 ms · max 12,298 ms |
+
+- **What the fallbacks mean:** A4 and F1 passed every assertion, but the AI-written answer failed grounding validation twice. They are counted as `pass_fallback`, never as LLM passes.
+- **Phase 6 follow-up:** see the A4/F1 investigation in `docs/PHASE_6_REPORT.md`. The targeted re-runs `20261125T215650Z-targeted-premise` and `20261125T220101Z-targeted-f1-negation` are kept in `evals/results/`. `latest.*` still points to this final full run.
 
 ## 3. The seven failures of the first full run
 | Case | Cause | Action |
@@ -44,9 +61,17 @@ Offline replay of the failed single-turn scenarios (scripted provider, real engi
 - **Bottleneck (measured):** synthesis. Overloaded primary, 3 retries with waits (about 8–10 s), then a fallback model at default thinking (19–24 s). Tool execution was under 0.1 s; tool selection about 1 s per call.
 - **Changes:** fail-fast model chain, `thinking_level=low` (one probe: 4–5 s), daily-quota circuit breaker, compact tool JSON.
 - **Before** (`docs/benchmarks/before.json`): 25.3 / 12.3 / 32.0 / 27.4 s, median 26.3 s.
-- **After: no valid measurement.** Every request failed (`docs/benchmarks/after.json`). The first eval run's 13.0 s median is **not comparable**, because many turns skipped LLM synthesis. No latency improvement is claimed.
+- **After, first attempt (free tier): no valid measurement.** Every request failed. The first eval run's 13.0 s median is **not comparable**, because many turns skipped LLM synthesis.
+- **After, final (user-run, paid tier, `docs/benchmarks/after.json`):** 4.5 / 5.3 / 5.8 / 7.4 s, median 5.6 s. The 7.4 s Dallas request ended in a deterministic fallback.
+- **Caveat:** the median fell from 26.3 s to 5.6 s, but the gain is **not all from code.** Between the two measurements:
+  - the billing tier changed, from free to paid;
+  - provider availability changed, with no 503 "high demand" errors in the final run;
+  - the thinking configuration changed;
+  - the time of day and provider load differed.
+  
+  The code changes (fail-fast chain, low thinking, compact tool JSON) removed the retry-wait pattern that dominated the "before" trace. This attribution is plausible but was not isolated in a controlled experiment.
 
-## 6. Provider limitations (unresolved)
+## 6. Provider limitations (as found on the free tier; the paid-tier final run hit none of them)
 - Free tier: **20 requests per day per model** (seen for `gemini-3.5-flash` and `3.6-flash`); the primary also returned a quota error by the final rerun.
 - `gemini-3.5-flash-lite` frequently returned 503 "high demand".
 - **Interview risk:** the AI Analyst may show deterministic summaries or be unavailable. Enable billing on the Gemini project, or test quota beforehand. Overview and Methodology work without Gemini.
@@ -61,7 +86,7 @@ Offline replay of the failed single-turn scenarios (scripted provider, real engi
 1. With quota or billing: `make eval`, then `make benchmark LABEL=after`.
 2. Phase 6 documentation (one-page overview, session export).
 
-**Readiness:** the app and suite are usable; live quality after these fixes is unproven.
+**Readiness (updated):** items 1 and 2 are done; the final full run and the benchmark are recorded above.
 
 ## 9. Commits
 `76022f6` instrumentation · `e7eb9e6` provider chain · `ab4c7e1` band source · `2c1f8ad` fact-backed summary · `3e74ee1` eval suite · plus this handover commit.
