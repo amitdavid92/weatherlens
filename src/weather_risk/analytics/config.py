@@ -186,5 +186,9 @@ class ScoringConfig(BaseModel):
 
 
 def load_scoring_config(path: Path) -> ScoringConfig:
+    from weather_risk.analytics.formatting import configure_bands
+
     with path.open() as f:
-        return ScoringConfig.model_validate(yaml.safe_load(f))
+        cfg = ScoringConfig.model_validate(yaml.safe_load(f))
+    configure_bands([b.min for b in cfg.bands])  # display rounding uses the same bands
+    return cfg
