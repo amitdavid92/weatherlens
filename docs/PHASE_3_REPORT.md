@@ -265,7 +265,7 @@ The fake-provider tests verify our code paths. **They are not LLM evaluations.**
 | `1fac3eb` | feat(api): FastAPI endpoints for health, hubs, hub scores, chat and session history |
 | `55ee878` | test(agent,api): offline tests for tools, grounding, retries, sessions, limits and API contracts |
 | `be39f26` | feat(scripts): real-Gemini smoke scenarios through the HTTP API; band-safe scores in reports |
-| (next) | docs: Phase 3 report, architecture, live smoke results, decisions, README |
+| `4c773c3` | docs: Phase 3 report, architecture, real-Gemini smoke results, decisions, README |
 
 Nothing has been pushed. `ASSIGNMENT.pdf` remains untracked.
 
