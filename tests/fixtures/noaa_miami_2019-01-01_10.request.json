@@ -1,0 +1,15 @@
+{
+  "source_id": "noaa_ghcn_daily",
+  "url": "https://www.ncei.noaa.gov/access/services/data/v1",
+  "params": {
+    "dataset": "daily-summaries",
+    "stations": "USW00012839",
+    "startDate": "2019-01-01",
+    "endDate": "2019-01-10",
+    "dataTypes": "SNOW,PRCP,TMIN,TMAX,AWND,WSF5",
+    "units": "metric",
+    "format": "json",
+    "includeAttributes": "true"
+  },
+  "location_id": "USW00012839"
+}
