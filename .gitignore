@@ -30,3 +30,6 @@ web/node_modules/.tmp/
 .DS_Store
 .idea/
 .vscode/
+
+# Proprietary assignment brief — never commit
+ASSIGNMENT.pdf

@@ -32,6 +32,14 @@ SUPERLATIVE = re.compile(
     r"ranked first|number one|#1|leads?)\b",
     re.IGNORECASE,
 )
+# Narrative sentences: only explicit negation exempts a superlative from the winner check.
+NEGATION = re.compile(r"\bnot\b|n't\b", re.IGNORECASE)
+# premise_correction sentences restate the user's claim in order to reject it ("the premise that
+# X is the most exposed is incorrect"), so correction vocabulary also counts there — and only there.
+CORRECTION = re.compile(
+    r"\b(not|no|never|incorrect|false|untrue|unsupported|contrary|premise|claim)\b|n't\b",
+    re.IGNORECASE,
+)
 ANALYTICAL_INTENTS = {"rank", "compare", "weather_stat", "explain", "profile"}
 
 
@@ -187,15 +195,22 @@ def validate(
             continue
         if bare in allowed and "%" not in n:
             continue
-        issues.append(f"unsupported numeric claim '{n}' (numbers must use fact placeholders)")
+        # Targeted correction: name the fact(s) that hold this exact value, if any.
+        matches = [f.fact_id for f in registry.all() if f.display.rstrip("%").strip() == bare][:2]
+        hint = (" — write it as " + " or ".join(f"{{{{fact:{m}}}}}" for m in matches)
+                if matches else "")  # fmt: skip
+        issues.append(f"unsupported numeric claim '{n}' (numbers must use fact placeholders){hint}")
 
     # 4. superlatives
     winners_by_topic = _winners_by_topic(executions)
     has_ordering = any(e.ok and e.name in ("rank_hubs", "compare_hubs") for e in executions)
     if has_ordering:
-        for sentence in _sentences(claims_text):
+        narrative_text = "\n".join([answer.narrative, answer.clarification_question or ""])
+        checked = [(s, NEGATION) for s in _sentences(narrative_text)]
+        checked += [(s, CORRECTION) for s in _sentences(answer.premise_correction or "")]
+        for sentence, exempt in checked:
             clean = PLACEHOLDER.sub(" ", sentence)
-            if not SUPERLATIVE.search(clean) or re.search(r"\bnot\b|n't\b", clean):
+            if not SUPERLATIVE.search(clean) or exempt.search(clean):
                 continue
             mentioned = [hid for hid, p in pats.items() if p.search(clean)]
             if len(mentioned) != 1:

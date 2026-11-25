@@ -373,3 +373,42 @@ def test_fallback_template_adds_no_unregistered_numbers(engine, sessions):
                                   ("raise", LLMUnavailableError("503"))])  # fmt: skip
     header = r.answer.split("\n\n")[0]
     assert not any(ch.isdigit() for ch in header)
+
+
+def test_typed_number_feedback_names_the_matching_fact(engine, sessions):
+    """Regression (eval A4/F1): the model typed '58.7' twice; the retry must name the fact id."""
+    p = engine.get_hub_profile("Dallas")
+    typed = answer("Dallas scores {{fact:dallas_tx.overall.score}}.", intent="explain",
+                   premise_correction=f"Dallas scores {p.overall_score_display}, not High.")  # fmt: skip
+    fixed = dict(
+        typed, premise_correction="Dallas scores {{fact:dallas_tx.overall.score}}, not High."
+    )
+    r, prov = run(engine, sessions, [("tools", [EXPLAIN]), ("text", "ok"), ("json", typed),
+                                     ("json", fixed)], message="Why is Dallas high?")  # fmt: skip
+    assert r.validation.valid and r.validation.attempts == 2
+    retry_prompt = [c for c in prov.calls if c["type"] == "structured"][1]["prompt"]
+    assert "{{fact:dallas_tx.overall.score}}" in retry_prompt.split("REJECTED")[1]
+
+
+def test_premise_correction_restating_a_superlative_is_not_rejected(engine, sessions):
+    """Regression (eval F1): 'The premise that Denver is the most exposed hub is incorrect'."""
+    rank = ToolCall("rank_hubs", {})
+    ans = answer("Denver ranks {{fact:rank.overall.all.denver_co}} overall.", intent="rank",
+                 premise_correction="The premise that Denver is the most exposed hub is incorrect: "
+                 "it ranks {{fact:rank.overall.all.denver_co}}.")  # fmt: skip
+    r, _ = run(engine, sessions, [("tools", [rank]), ("text", "ok"), ("json", ans)],
+               message="Why is Denver the most exposed hub overall?")  # fmt: skip
+    assert r.validation.valid and r.narrative_source == "llm"
+    wrong = answer("Denver has the highest overall exposure ({{fact:denver_co.overall.score}}).",
+                   intent="rank")  # fmt: skip
+    r2, _ = run(engine, sessions, [("tools", [rank]), ("text", "ok"), ("json", wrong), ("json", wrong)],
+                message="Rank all hubs")  # fmt: skip
+    assert any("superlative claim about denver_co" in x for x in r2.validation.issues)
+
+
+def test_correction_words_in_narrative_do_not_exempt_a_superlative(engine, sessions):
+    rank = ToolCall("rank_hubs", {})
+    wrong = answer("Contrary to the claim, Denver has the highest overall exposure.", intent="rank")
+    r, _ = run(engine, sessions, [("tools", [rank]), ("text", "ok"), ("json", wrong), ("json", wrong)],
+               message="Rank all hubs")  # fmt: skip
+    assert any("superlative claim about denver_co" in x for x in r.validation.issues)
