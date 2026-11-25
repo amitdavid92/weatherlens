@@ -6,11 +6,17 @@ from datetime import UTC, datetime
 
 from weather_risk.analytics.config import ClimateMetric, Hazard
 from weather_risk.analytics.engine import AnalyticsEngine
+from weather_risk.analytics.formatting import format_score
 from weather_risk.data.models import HazardCode, SourceId
 
 
 def _f(x: float | None, nd: int = 1) -> str:
     return "—" if x is None else f"{x:.{nd}f}"
+
+
+def _s(x: float | None) -> str:
+    """0–100 score with the band-safe rounding policy (formatting.format_score)."""
+    return "—" if x is None else format_score(x)
 
 
 def _g(x: float | None) -> str:
@@ -41,10 +47,10 @@ def render_scenarios(engine: AnalyticsEngine, *, offline: bool) -> str:
     w("|---|---|---|---|---|---|---|---|---|---|---|")
     for e in ranking.ranked + ranking.not_ranked:
         p = engine.get_hub_profile(e.hub_id)
-        hz = [f"{_f(p.hazards[h].score)}{'*' if p.hazards[h].status == 'partial' else ''}"
+        hz = [f"{_s(p.hazards[h].score)}{'*' if p.hazards[h].status == 'partial' else ''}"
               for h in Hazard]  # fmt: skip
         w(f"| {e.rank if e.rank else 'not ranked'} | {p.hub_id} | {p.region} | "
-          f"{_f(p.overall_score)} | {p.overall_band} | {p.overall_status} | " + " | ".join(hz)
+          f"{_s(p.overall_score)} | {p.overall_band} | {p.overall_status} | " + " | ".join(hz)
           + " |")  # fmt: skip
     w("\n\\* partial hazard score (some indicator weight unavailable, renormalized). Partial "
       "overall results are reported but not ranked (`rank_partial_results: false`).\n")  # fmt: skip
