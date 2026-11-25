@@ -19,8 +19,12 @@ data/cache/
 # Raw AI session transcripts stay outside the repo until reviewed/redacted
 *.jsonl
 
-# Frontend (later phases)
+# Frontend
 node_modules/
+web/dist/
+web/test-results/
+web/playwright-report/
+web/node_modules/.tmp/
 
 # OS / IDE
 .DS_Store

@@ -1,0 +1,134 @@
+[
+  {
+    "viewport": "desktop-1440",
+    "kpis": [
+      "Distribution hubs12Illustrative catalog",
+      "Ranked · partial11 · 1Partial hubs are not ranked overall",
+      "Highest overall exposureHouston 73.6High among ranked hubs",
+      "High-exposure hubs1Overall index ≥ High band"
+    ],
+    "rankingRows": 11,
+    "firstRow": [
+      "1",
+      "HoustonSouth",
+      "73.6",
+      "High"
+    ],
+    "hubDots": 12,
+    "tooltip": "Houston · 73.6 · High",
+    "denverProfile": "39.98LowOverall rank #11",
+    "miamiProfile": "61.3Moderate Partial data",
+    "hurricaneTop": "MiamiSouth",
+    "overflow": {
+      "overview": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "offenders": []
+      },
+      "profile": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "offenders": []
+      },
+      "methodology": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "offenders": []
+      },
+      "analyst": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "offenders": []
+      }
+    },
+    "errors": []
+  },
+  {
+    "viewport": "laptop-1024",
+    "kpis": [
+      "Distribution hubs12Illustrative catalog",
+      "Ranked · partial11 · 1Partial hubs are not ranked overall",
+      "Highest overall exposureHouston 73.6High among ranked hubs",
+      "High-exposure hubs1Overall index ≥ High band"
+    ],
+    "rankingRows": 11,
+    "firstRow": [
+      "1",
+      "HoustonSouth",
+      "73.6",
+      "High"
+    ],
+    "hubDots": 12,
+    "tooltip": "Houston · 73.6 · High",
+    "denverProfile": "39.98LowOverall rank #11",
+    "miamiProfile": "61.3Moderate Partial data",
+    "hurricaneTop": "MiamiSouth",
+    "overflow": {
+      "overview": {
+        "scrollWidth": 1024,
+        "clientWidth": 1024,
+        "offenders": []
+      },
+      "profile": {
+        "scrollWidth": 1024,
+        "clientWidth": 1024,
+        "offenders": []
+      },
+      "methodology": {
+        "scrollWidth": 1024,
+        "clientWidth": 1024,
+        "offenders": []
+      },
+      "analyst": {
+        "scrollWidth": 1024,
+        "clientWidth": 1024,
+        "offenders": []
+      }
+    },
+    "errors": []
+  },
+  {
+    "viewport": "mobile-390",
+    "kpis": [
+      "Distribution hubs12Illustrative catalog",
+      "Ranked · partial11 · 1Partial hubs are not ranked overall",
+      "Highest overall exposureHouston 73.6High among ranked hubs",
+      "High-exposure hubs1Overall index ≥ High band"
+    ],
+    "rankingRows": 11,
+    "firstRow": [
+      "1",
+      "HoustonSouth",
+      "73.6",
+      "High"
+    ],
+    "hubDots": 12,
+    "tooltip": "Houston · 73.6 · High",
+    "denverProfile": "39.98LowOverall rank #11",
+    "miamiProfile": "61.3Moderate Partial data",
+    "hurricaneTop": "MiamiSouth",
+    "overflow": {
+      "overview": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "offenders": []
+      },
+      "profile": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "offenders": []
+      },
+      "methodology": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "offenders": []
+      },
+      "analyst": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "offenders": []
+      }
+    },
+    "errors": []
+  }
+]

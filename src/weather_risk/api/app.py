@@ -12,9 +12,9 @@ from __future__ import annotations
 import logging
 import threading
 from contextlib import asynccontextmanager
-from typing import Any
+from typing import Any, Literal
 
-from fastapi import FastAPI, HTTPException, Path, Request
+from fastapi import FastAPI, HTTPException, Path, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -34,7 +34,7 @@ from weather_risk.agent.schema import ChatRequest, ChatResponse, ErrorResponse
 from weather_risk.agent.session import SessionNotFoundError, SessionStore
 from weather_risk.analytics.config import load_scoring_config
 from weather_risk.analytics.engine import AnalyticsEngine
-from weather_risk.analytics.models import HubProfile
+from weather_risk.analytics.models import HubProfile, RankingResult
 from weather_risk.catalog import load_catalog
 from weather_risk.config import PROJECT_ROOT, Settings, get_settings
 from weather_risk.data.errors import DataUnavailableError, UnsupportedHubError
@@ -171,6 +171,117 @@ def create_app(state: AppState | None = None) -> FastAPI:
         except DataUnavailableError as exc:
             raise HTTPException(503, {"error": "data_unavailable", "detail": str(exc),
                                       "retryable": True}) from None  # fmt: skip
+
+    def _freshness(c: AppState, hub_ids: list[str]) -> dict[str, list[str]]:
+        out: dict[str, set[str]] = {}
+        for hid in hub_ids:
+            for src in c.engine.get_hub_profile(hid).sources:
+                out.setdefault(src.source_id.value, set()).add(src.freshness)
+        return {k: sorted(v) for k, v in out.items()}
+
+    @app.get("/api/overview", tags=["hubs"], responses=ERRORS,
+             summary="Dashboard summary for all hubs (deterministic, no LLM)")  # fmt: skip
+    def overview(request: Request) -> dict[str, Any]:
+        c = ctx(request)
+        try:
+            with c.lock:
+                eng = c.engine
+                ranking = eng.rank_hubs()
+                ranks = {e.hub_id: e.rank for e in ranking.ranked}
+                hubs = []
+                for h in eng.catalog.hubs:
+                    p = eng.get_hub_profile(h)
+                    el = p.ranking_eligibility
+                    drivers = sorted(p.hazards.values(),
+                                     key=lambda r: -(r.contribution_to_overall or 0))  # fmt: skip
+                    hubs.append({
+                        "hub_id": h.id, "name": h.display_name, "city": h.city, "state": h.state,
+                        "region": h.region.value, "latitude": h.latitude, "longitude": h.longitude,
+                        "overall": {"score": p.overall_score, "score_display": p.overall_score_display,
+                                    "band": p.overall_band, "status": p.overall_status,
+                                    "rank": ranks.get(h.id), "eligible": el["overall"].eligible,
+                                    "exclusion_reason": el["overall"].reason},
+                        "hazards": {hz.value: {"score": r.score, "score_display": r.score_display,
+                                               "band": r.band, "status": r.status,
+                                               "eligible": el[hz.value].eligible,
+                                               "exclusion_reason": el[hz.value].reason}
+                                    for hz, r in p.hazards.items()},
+                        "primary_driver": drivers[0].hazard.value if drivers[0].score is not None
+                        else None,
+                    })  # fmt: skip
+                statuses = [x["overall"]["status"] for x in hubs]
+                top = ranking.ranked[0] if ranking.ranked else None
+                snap = eng.repo.snapshot
+                return {
+                    "illustrative": True,
+                    "methodology_version": eng.cfg.methodology_version,
+                    "nri_version": eng.percentiles().nri_version,
+                    "climate_period": eng.climatology.label,
+                    "counts": {"hubs": len(hubs), "ranked": len(ranking.ranked),
+                               "partial": statuses.count("partial"),
+                               "unavailable": statuses.count("unavailable"),
+                               "high": sum(1 for x in hubs if x["overall"]["band"] == "High")},
+                    "highest": None if top is None else {
+                        "hub_id": top.hub_id, "name": top.display_name,
+                        "score_display": top.score_display, "band": top.band},
+                    "data_freshness": _freshness(c, [h.id for h in eng.catalog.hubs]),
+                    "snapshot_generated_at": (snap.manifest.generated_at.isoformat()
+                                              if snap is not None and snap.manifest else None),
+                    "hubs": hubs,
+                }  # fmt: skip
+        except DataUnavailableError as exc:
+            raise HTTPException(503, {"error": "data_unavailable", "detail": str(exc),
+                                      "retryable": True}) from None  # fmt: skip
+
+    @app.get("/api/rankings", tags=["hubs"], response_model=RankingResult, responses=ERRORS,
+             summary="Deterministic ranking (overall or one hazard, optional region)")  # fmt: skip
+    def rankings(
+        request: Request,
+        hazard: Literal["winter", "hurricane", "flood", "severe_convective", "extreme_heat"]
+        | None = Query(None),
+        region: Literal["Midwest", "South", "West"] | None = Query(None),
+    ) -> RankingResult:
+        c = ctx(request)
+        try:
+            with c.lock:
+                return c.engine.rank_hubs(hazard=hazard, region=region)
+        except DataUnavailableError as exc:
+            raise HTTPException(503, {"error": "data_unavailable", "detail": str(exc),
+                                      "retryable": True}) from None  # fmt: skip
+
+    @app.get("/api/methodology", tags=["system"],
+             summary="Scoring configuration, data sources and versions (read-only)")  # fmt: skip
+    def methodology(request: Request) -> dict[str, Any]:
+        c = ctx(request)
+        cfg = c.engine.cfg
+        snap = c.engine.repo.snapshot
+        from weather_risk.data.snapshot import LICENSES
+
+        with c.lock:
+            nri_version = c.engine.percentiles().nri_version
+        return {
+            "methodology_version": cfg.methodology_version,
+            "nri_version": nri_version,
+            "climate": {"source": cfg.climate.source.value, "period": cfg.climate.period,
+                        "min_coverage": cfg.climate.min_coverage,
+                        "exclude_quality_flagged": cfg.climate.exclude_quality_flagged},
+            "thresholds": cfg.thresholds.model_dump(),
+            "coverage_policy": cfg.coverage.model_dump(),
+            "bands": [b.model_dump() for b in cfg.bands],
+            "hazard_weights": {k.value: v for k, v in cfg.hazard_weights.items()},
+            "hazards": {k.value: {"label": h.label, "indicators": [
+                {"id": i.id, "kind": i.kind, "weight": i.weight,
+                 "metric": i.metric.value if i.metric else None,
+                 "nri_hazard": i.nri_hazard.name if i.nri_hazard else None,
+                 "anchor": i.anchor.model_dump() if i.anchor else None, "unit": i.unit}
+                for i in h.indicators]} for k, h in cfg.hazards.items()},
+            "nri_normalization": cfg.nri_normalization.model_dump(),
+            "sources": [{"source_id": k, "license": v} for k, v in LICENSES.items()],
+            "snapshot": {"entries": len(snap) if snap is not None else 0,
+                         "generated_at": snap.manifest.generated_at.isoformat()
+                         if snap is not None and snap.manifest else None},
+            "offline_mode": c.settings.offline,
+        }  # fmt: skip
 
     @app.post("/api/chat", tags=["agent"], response_model=ChatResponse, responses=ERRORS,
               summary="Ask the grounded agent (requires Gemini)")  # fmt: skip

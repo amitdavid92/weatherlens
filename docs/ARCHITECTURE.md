@@ -6,9 +6,9 @@ The **Weather Risk Intelligence Agent** answers analysts' questions about weathe
 
 ## 1. Components and how they talk
 ```
- Chat UI (Phase 4, React)          curl / scripts/live_smoke.py
-        │  HTTP JSON                         │
-        ▼                                    ▼
+ WeatherLens (React + Vite)        curl / scripts/live_smoke.py
+   browser → Vite dev server ──/api proxy──┐  │
+                                           ▼  ▼
  ┌──────────────────────── FastAPI (weather_risk.api.app) ─────────────────────────┐
  │ GET /api/health   GET /api/hubs   GET /api/hubs/{id}/scores   GET /api/sessions │
  │ POST /api/chat ──► Agent (agent/orchestrator.py)                                 │
@@ -29,6 +29,18 @@ The **Weather Risk Intelligence Agent** answers analysts' questions about weathe
   premise                  SQLite cache   NOAA GHCN-Daily · Open-Meteo ERA5 · FEMA NRI
                            (raw bodies)   (+ committed snapshot in data/snapshot/)
 ```
+
+### Web app (Phase 4)
+| View | Endpoints | Notes |
+|---|---|---|
+| Overview | `/api/overview`, `/api/rankings?hazard=&region=`, `/api/hubs/{id}/scores` | KPIs; self-contained US map (us-atlas Albers + d3-geo; no tiles or keys); rankings with partial hubs listed separately with reasons; hub profile |
+| AI Analyst | `/api/chat`, `/api/sessions/{id}` | The narrative is shown as safe Markdown. Evidence blocks are rendered from `analysis` only; numbers are never parsed from prose. Docked beside the dashboard on screens ≥ 1280 px. |
+| Methodology & Data | `/api/methodology`, `/api/overview` | All parameters, versions and freshness come from the API |
+| Status bar | `/api/health`, `/api/overview` | Separate indicators for analytics availability, AI availability and data freshness |
+
+**Data integrity:** the frontend never computes scores, bands or ranks. It displays the backend's `*_display` strings (band-safe rounding, D-026). Its only local formatting is for raw values such as coverage percentages and frequencies.
+
+**Frontend state:** React state plus one `useChat` hook; no state library.
 
 ### Request flow for `POST /api/chat`
 1. **Load the session.** The server reads the last 6 turns and the latest resolved context (hubs, hazards, metric, period) from SQLite. A new session gets an unguessable id.
@@ -75,7 +87,8 @@ data/snapshot/ committed raw API responses + manifest (offline fallback)
 tests/unit/    offline tests (fixtures, snapshot-backed engine, FakeProvider)
 tests/integration/  opt-in live data-source tests (-m live)
 scripts/       record_fixtures.py, sensitivity.py, live_smoke.py (REAL Gemini)
-docs/          plan, decisions, methodology, phase reports, AI session export
+web/           WeatherLens frontend (src/api, src/components, src/hooks, e2e/)
+docs/          plan, decisions, methodology, phase reports, screenshots, AI session export
 ```
 
 ## 3. Data storage choice

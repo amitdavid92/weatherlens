@@ -1,8 +1,10 @@
-# Weather Risk Intelligence Agent
+# WeatherLens — Logistics Weather Risk Intelligence
+
+![WeatherLens overview](docs/screenshots/desktop-1440-overview.png)
 
 An AI agent that helps logistics analysts see which US distribution hubs are most exposed to weather hazards. It uses public data and deterministic analytics; the LLM never computes numbers or rankings.
 
-> **Status: Phase 3 (AI agent and API) complete.** Next: the React chat UI (Phase 4). See [docs/PHASE_3_REPORT.md](docs/PHASE_3_REPORT.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+> **Status: Phase 4 (WeatherLens web app) complete.** Next: evaluation and QA (Phase 5). See [docs/PHASE_4_REPORT.md](docs/PHASE_4_REPORT.md).
 
 **Scope and framing:** the product computes a **Weather Hazard Exposure Index**. It does not measure operational disruption risk, because we have no shipment, downtime or loss data. The 12 hubs in [config/hubs.yaml](config/hubs.yaml) are **illustrative examples**, not real company facilities.
 
@@ -50,6 +52,28 @@ make snapshot           # re-fetch everything into data/snapshot/ (~6-8 min, net
 
 Set `WEATHER_RISK_OFFLINE=true` to skip the network entirely.
 
+## Quick start (full stack)
+Requirements: [uv](https://docs.astral.sh/uv/) and Node.js ≥ 20. uv provides Python 3.12 automatically.
+```bash
+uv sync --frozen && make web-install     # backend + frontend dependencies (lockfiles)
+cp .env.example .env                     # then set GEMINI_API_KEY=... (only needed for the AI Analyst)
+make dev                                 # API on :8000 + WeatherLens on http://localhost:5173
+```
+- **Different frontend port:** use `make dev WEB_PORT=5181` if 5173 is taken.
+- **No network for weather data:** `WEATHER_RISK_OFFLINE=true make dev` serves weather data from the committed snapshot. The AI Analyst still needs internet.
+- **How the frontend reaches the API:** the browser only calls the Vite server, which proxies `/api` to FastAPI, so the Gemini key never reaches the browser.
+- **Without a key:** the Overview and Methodology views work fully, and the AI Analyst shows that it is unavailable.
+
+### Web app commands
+```bash
+make web-test         # Vitest (9 integration tests on recorded real API responses)
+make web-lint         # oxlint + TypeScript type check
+make web-build        # production build -> web/dist
+make web-inspect      # real Chromium: overflow/console checks + screenshots at 1440/1024/390 (app running)
+make web-real-gemini  # the 4 assignment questions through the UI with REAL Gemini (app running, uses quota)
+```
+Playwright's browser is needed for the last two commands: `cd web && npx playwright install chromium`.
+
 ## Running the API and agent (Phase 3)
 1. Put your Gemini key in `.env` (gitignored): `GEMINI_API_KEY=...`. See `.env.example` for the model and timeout settings.
 2. Start the server:
@@ -95,6 +119,11 @@ src/weather_risk/
   cli.py                         weather-risk CLI (hubs, build-snapshot, validate-data, ...)
   agent/                         Gemini provider, typed tools, fact registry, grounding, sessions
   api/app.py                     FastAPI endpoints
+web/                             WeatherLens (React + TypeScript + Vite)
+  src/api/                       typed client + response types
+  src/components/                Overview, UsMap, HubProfilePanel, ChatPanel, AnswerCard, Methodology
+  src/hooks/useChat.ts           conversation state, retry, session persistence
+  e2e/                           Playwright scripts (inspection, real-Gemini UI run)
   data/
     models.py                    typed contracts (provenance, statuses, datasets, NRI records)
     adapters/{noaa_ghcn,open_meteo,fema_nri}.py   source-specific request/parse only

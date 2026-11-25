@@ -234,3 +234,35 @@ A tool call may only name hubs that the user mentioned in the current message (b
 
 ### D-031: Honest LLM availability
 `FakeProvider` exists only for offline tests, and responses report `agent.provider`. Without a key, `/api/chat` returns 503 `llm_unavailable`; it never falls back to a fake model.
+
+## Phase 4 (2026-11-25): WeatherLens web app
+
+### D-032: Frontend stack
+- React 19 + TypeScript + Vite.
+- One CSS file with design tokens (no CSS framework).
+- `d3-geo` + `topojson-client` + `us-atlas` for a self-contained US map. The pre-projected Albers geometry means no tile server, API key or attribution dependency.
+- `react-markdown` with `skipHtml` and links disabled: model text can never inject HTML.
+- `lucide-react` for icons; self-hosted Inter font (`@fontsource-variable/inter`).
+- No state library and no charting library: score bars are plain elements, sized by backend scores.
+
+### D-033: Additive deterministic endpoints for the dashboard
+- `/api/overview` serves all hubs, KPIs, eligibility and freshness in one call.
+- `/api/rankings` returns a ranking for any hazard and region.
+- `/api/methodology` exposes the configuration and versions.
+- Result models gained computed `*_display` fields so clients never re-round or reclassify scores.
+
+None of these duplicates the engine.
+
+### D-034: Honest latency UX
+The API does not stream, so the UI shows:
+- the submitted message immediately;
+- a non-streaming "working" state with an elapsed-seconds counter;
+- after 20 s, a note that real responses take about 5–45 s.
+
+It shows no invented progress stages. Duplicate submissions are blocked while a request is pending. A failed request can be retried; because the backend stores a turn only after success, a retry never duplicates a turn. The client timeout is 120 s.
+
+### D-035: Session persistence
+The `session_id` is kept in `localStorage`, and the conversation is restored from `/api/sessions/{id}` on reload. "New conversation" clears it.
+
+### D-036: Same-origin `/api` through the Vite proxy
+The browser only talks to the Vite origin, which proxies `/api` to FastAPI. The Gemini key stays on the server and CORS is not needed in development. The default port is 5173, overridable with `WEB_PORT`.

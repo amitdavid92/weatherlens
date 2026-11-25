@@ -1,4 +1,6 @@
-.PHONY: install test test-live lint format hubs snapshot verify-snapshot validate-data validate-data-offline scenarios scenarios-live api api-offline smoke-live smoke-live-no-weather-network
+WEB_PORT ?= 5173
+
+.PHONY: dev web-install web-dev web-test web-lint web-build web-inspect web-real-gemini install test test-live lint format hubs snapshot verify-snapshot validate-data validate-data-offline scenarios scenarios-live api api-offline smoke-live smoke-live-no-weather-network
 
 install:            ## reproducible install from uv.lock
 	uv sync --frozen
@@ -49,3 +51,30 @@ smoke-live:         ## REAL Gemini: 4 scenarios + 2 conversations + isolation vi
 
 smoke-live-no-weather-network:  ## REAL Gemini with weather APIs blocked (snapshot only)
 	uv run python scripts/live_smoke.py --no-weather-network --only scenarios --out docs/PHASE_3_LIVE_SMOKE_NO_WEATHER_NETWORK.md
+
+# ---------------------------------------------------------------- web app (Phase 4)
+dev:                ## full stack: API on :8000 + WeatherLens on :$(WEB_PORT) (Ctrl+C stops both)
+	@trap 'kill 0' EXIT INT TERM; \
+	uv run uvicorn weather_risk.api.app:app --port 8000 & \
+	cd web && WEB_PORT=$(WEB_PORT) npm run dev
+
+web-install:        ## reproducible frontend install from package-lock.json
+	cd web && npm ci
+
+web-dev:
+	cd web && WEB_PORT=$(WEB_PORT) npm run dev
+
+web-test:           ## frontend unit/integration tests (Vitest, recorded real API responses)
+	cd web && npm test
+
+web-lint:           ## oxlint + TypeScript type check
+	cd web && npm run lint && npm run typecheck
+
+web-build:          ## production build into web/dist
+	cd web && npm run build
+
+web-inspect:        ## real-browser checks + screenshots at 1440/1024/390 (app must be running)
+	cd web && node e2e/inspect.mjs http://localhost:$(WEB_PORT) ../docs/screenshots
+
+web-real-gemini:    ## REAL Gemini through the browser UI (app running, key + quota needed)
+	cd web && node e2e/real-gemini.mjs http://localhost:$(WEB_PORT) ../docs/screenshots

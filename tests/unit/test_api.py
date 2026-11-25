@@ -117,3 +117,60 @@ def test_openapi_documents_endpoints(engine, tmp_path):
                  "/api/sessions/{session_id}"):  # fmt: skip
         assert path in spec["paths"]
     assert "ChatResponse" in spec["components"]["schemas"]
+
+
+# ------------------------------------------------------------------ Phase 4 dashboard endpoints
+
+
+def test_overview_counts_and_boundary_cases(engine, tmp_path):
+    o = client(engine, tmp_path).get("/api/overview").json()
+    assert o["counts"]["hubs"] == 12 and o["illustrative"] is True
+    ranking = engine.rank_hubs()
+    assert o["counts"]["ranked"] == len(ranking.ranked)
+    assert o["highest"]["hub_id"] == ranking.ranked[0].hub_id
+    hubs = {h["hub_id"]: h for h in o["hubs"]}
+    denver = hubs["denver_co"]["overall"]
+    assert denver["band"] == "Low" and denver["score_display"] == "39.98"  # never "40.0"
+    miami = hubs["miami_fl"]
+    assert miami["overall"]["status"] == "partial" and miami["overall"]["rank"] is None
+    assert (
+        miami["overall"]["eligible"] is False
+        and "winter is partial" in miami["overall"]["exclusion_reason"]
+    )
+    assert miami["hazards"]["hurricane"]["eligible"] is True
+    dallas = hubs["dallas_tx"]["overall"]
+    assert dallas["band"] == "Moderate" and dallas["rank"] == 2
+    assert set(o["data_freshness"]) == {"noaa_ghcn_daily", "fema_nri"}
+    assert all(
+        set(v) <= {"snapshot", "cache", "live", "stale_cache"} for v in o["data_freshness"].values()
+    )
+
+
+def test_rankings_endpoint_matches_engine_and_validates(engine, tmp_path):
+    c = client(engine, tmp_path)
+    r = c.get("/api/rankings", params={"hazard": "hurricane"}).json()
+    exp = engine.rank_hubs(hazard="hurricane")
+    assert [e["hub_id"] for e in r["ranked"]] == [e.hub_id for e in exp.ranked]
+    assert r["ranked"][0]["hub_id"] == "miami_fl" and r["ranked"][0]["score_display"]
+    w = c.get("/api/rankings", params={"hazard": "winter", "region": "Midwest"}).json()
+    assert len(w["ranked"]) == 6
+    assert c.get("/api/rankings", params={"hazard": "earthquake"}).status_code == 422
+    assert c.get("/api/rankings", params={"region": "Narnia"}).status_code == 422
+
+
+def test_methodology_endpoint(engine, tmp_path):
+    m = client(engine, tmp_path).get("/api/methodology").json()
+    assert m["methodology_version"] == "1.1.0" and m["nri_normalization"]["method"] == "hybrid"
+    assert set(m["hazards"]) == {
+        "winter",
+        "hurricane",
+        "flood",
+        "severe_convective",
+        "extreme_heat",
+    }
+    assert [b["label"] for b in m["bands"]] == ["Low", "Moderate", "High"]
+    assert m["snapshot"]["entries"] > 0 and {s["source_id"] for s in m["sources"]} == {
+        "noaa_ghcn_daily",
+        "open_meteo_archive",
+        "fema_nri",
+    }
