@@ -1,0 +1,65 @@
+# Weather Hazard Exposure Index — scoring configuration.
+#
+# HEURISTIC index of weather-hazard EXPOSURE (0–100). It is NOT a probability of disruption and NOT
+# a loss prediction. Anchors and weights below are transparent judgment calls, documented in
+# docs/SCORING_METHODOLOGY.md, and were fixed BEFORE any hub scores were computed.
+
+methodology_version: "1.0.0"
+
+climate:
+  source: noaa_ghcn_daily            # one source per statistic/ranking (never mixed)
+  period: {start_year: 2016, end_year: 2025}   # completed calendar years
+  min_coverage: 0.90                 # valid observations / expected days, per element
+  exclude_quality_flagged: true      # NOAA values with a non-empty quality flag are excluded
+
+thresholds:
+  heavy_snow_mm: 101.6               # 4.0 in of new snow in a day (≥)
+  freezing_tmin_c: 0.0               # TMIN ≤ 0 °C
+  extreme_heat_tmax_c: 35.0          # TMAX ≥ 35 °C (95 °F)
+
+coverage:
+  min_hazard_weight_fraction: 0.60   # a hazard is computed only if ≥60% of its indicator weight is available
+  rank_partial_results: false        # partial results are reported separately, not ranked
+
+bands:                               # heuristic labels on the 0–100 scale
+  - {label: Low, min: 0}
+  - {label: Moderate, min: 40}
+  - {label: High, min: 70}
+
+hazard_weights:                      # equal by default: transparency, not validated priorities
+  winter: 0.2
+  hurricane: 0.2
+  flood: 0.2
+  severe_convective: 0.2
+  extreme_heat: 0.2
+
+hazards:
+  winter:
+    label: Winter weather
+    indicators:
+      - {id: snow_days_measurable, kind: climate_anchor, metric: snow_days_measurable, weight: 0.20, anchor: {low: 0, high: 60}, unit: days/yr}
+      - {id: heavy_snow_days, kind: climate_anchor, metric: heavy_snow_days, weight: 0.10, anchor: {low: 0, high: 6}, unit: days/yr}
+      - {id: freezing_days, kind: climate_anchor, metric: freezing_days, weight: 0.20, anchor: {low: 0, high: 180}, unit: days/yr}
+      - {id: nri_winter_weather, kind: nri_percentile, nri_hazard: WNTW, weight: 0.20}
+      - {id: nri_ice_storm, kind: nri_percentile, nri_hazard: ISTM, weight: 0.20}
+      - {id: nri_cold_wave, kind: nri_percentile, nri_hazard: CWAV, weight: 0.10}
+  hurricane:
+    label: Hurricane
+    indicators:
+      - {id: nri_hurricane, kind: nri_percentile, nri_hazard: HRCN, weight: 1.0}
+  flood:
+    label: Flooding (coastal + inland)
+    indicators:
+      - {id: nri_coastal_flooding, kind: nri_percentile, nri_hazard: CFLD, weight: 0.5}
+      - {id: nri_inland_flooding, kind: nri_percentile, nri_hazard: IFLD, weight: 0.5}
+  severe_convective:
+    label: Severe convective storms
+    indicators:
+      - {id: nri_tornado, kind: nri_percentile, nri_hazard: TRND, weight: 0.334}
+      - {id: nri_hail, kind: nri_percentile, nri_hazard: HAIL, weight: 0.333}
+      - {id: nri_strong_wind, kind: nri_percentile, nri_hazard: SWND, weight: 0.333}
+  extreme_heat:
+    label: Extreme heat
+    indicators:
+      - {id: extreme_heat_days, kind: climate_anchor, metric: extreme_heat_days, weight: 0.5, anchor: {low: 0, high: 100}, unit: days/yr}
+      - {id: nri_heat_wave, kind: nri_percentile, nri_hazard: HWAV, weight: 0.5}
