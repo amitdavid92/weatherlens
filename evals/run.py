@@ -79,7 +79,8 @@ def spawn(with_llm: bool) -> tuple[subprocess.Popen, str]:
         env["GEMINI_API_KEY"] = ""
     proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "weather_risk.api.app:app",
                              "--port", str(port)], cwd=ROOT, env=env,
-                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)  # fmt: skip
+                            stdout=subprocess.DEVNULL, stderr=(tmp / "server.log").open("w"))  # fmt: skip
+    print(f"server log: {tmp / 'server.log'}", flush=True)
     base = f"http://127.0.0.1:{port}"
     for _ in range(80):
         try:
@@ -311,13 +312,46 @@ def check(kind: str, spec: dict, c: Ctx) -> tuple[bool, str]:  # noqa: C901 - fl
 
 
 # ---------------------------------------------------------------- runner
+def _body(resp: httpx.Response) -> dict:
+    """Parsed JSON object, or a recorded error for HTML/plain-text/empty bodies."""
+    try:
+        data = resp.json()
+        if isinstance(data, dict):
+            return data
+    except ValueError:
+        pass
+    return {"error": "non_json_response", "detail": resp.text[:200]}
+
+
+def save(results: list[dict], meta: dict, complete: bool) -> tuple[dict, str]:
+    """Write after every case so a crash never loses finished results."""
+    summary, md = summarize(results, meta)
+    summary["complete"] = complete
+    if not complete:
+        md = "> **INCOMPLETE RUN** (interrupted or still running).\n\n" + md
+    out = ROOT / "evals" / "results"
+    out.mkdir(parents=True, exist_ok=True)
+    payload = json.dumps({"summary": summary, "results": results}, indent=1, default=str)
+    for name in (meta["run_id"], "latest"):
+        (out / f"{name}.json").write_text(payload)
+        (out / f"{name}.md").write_text(md)
+    return summary, md
+
+
 def post(client: httpx.Client, message: str, sid: str | None) -> tuple[dict, list[str]]:
     notes = []
     for attempt in (1, 2):
         t = time.perf_counter()
-        resp = client.post("/api/chat", json={"message": message} | ({"session_id": sid} if sid else {}),
+        try:
+            resp = client.post("/api/chat", json={"message": message} | ({"session_id": sid} if sid else {}),
                            timeout=240)  # fmt: skip
-        d = resp.json()
+        except httpx.HTTPError as exc:
+            return {
+                "error": f"transport_error: {type(exc).__name__}",
+                "_http_status": 0,
+                "_wall_ms": round((time.perf_counter() - t) * 1000),
+            }, notes
+        d = _body(resp)
         d["_http_status"], d["_wall_ms"] = resp.status_code, round((time.perf_counter() - t) * 1000)
         if resp.status_code == 200 or d.get("error") not in PROVIDER_ERRORS or attempt == 2:
             return d, notes
@@ -470,20 +504,26 @@ def main() -> int:
                 "dataset_version": data["dataset_version"], "selected_cases": [c["id"] for c in cases]}  # fmt: skip
         results = []
         for case in cases:
-            res = run_case(case, engine, clients)
+            try:
+                res = run_case(case, engine, clients)
+            except Exception as exc:  # noqa: BLE001 - record it and keep going
+                res = {
+                    "id": case["id"],
+                    "category": case["category"],
+                    "criticality": case.get("criticality"),
+                    "outcome": "fail",
+                    "critical_failures": [],
+                    "turns": [],
+                    "runner_error": f"{type(exc).__name__}: {exc}"[:300],
+                }
             results.append(res)
+            save(results, meta, complete=False)
             print(f"{res['outcome']:<15} {case['id']:<30} "
                   + " ".join(f"{t['wall_ms'] / 1000:.1f}s" for t in res["turns"]), flush=True)  # fmt: skip
     finally:
         for p in procs:
             p.terminate()
-    summary, md = summarize(results, meta)
-    out = ROOT / "evals" / "results"
-    out.mkdir(parents=True, exist_ok=True)
-    payload = {"summary": summary, "results": results}
-    (out / f"{run_id}.json").write_text(json.dumps(payload, indent=1, default=str))
-    (out / "latest.json").write_text(json.dumps(payload, indent=1, default=str))
-    (out / "latest.md").write_text(md)
+    summary, md = save(results, meta, complete=True)
     print("\n" + md)
     return 0 if summary["n_fail"] == 0 else 1
 

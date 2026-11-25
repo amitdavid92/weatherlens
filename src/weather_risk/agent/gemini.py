@@ -184,7 +184,8 @@ class GeminiProvider:
                 self.call_log.append({"phase": phase, "wait_ms": round(delay * 1000),
                                       "reason": last.kind if last else "retry"})  # fmt: skip
                 self._sleep(delay)
-        assert last is not None
+        if last is None:  # every model already circuit-broken: nothing was attempted
+            raise LLMQuotaError("Gemini daily quota exhausted for all configured models")
         raise last
 
     # ----------------------------------------------------------------- interface

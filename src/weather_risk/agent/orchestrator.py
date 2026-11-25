@@ -366,7 +366,7 @@ class Agent:
             text, used = render(summary, registry)
             text = ("**Deterministic summary** — the AI-written answer was unavailable or failed "
                     "validation, so these verified results are shown directly from the analytics "
-                    "engine. Scores are a heuristic weather-hazard exposure index (0–100), not a "
+                    "engine. Scores are a heuristic weather-hazard exposure index, not a "
                     "probability of operational disruption.\n\n" + text)  # fmt: skip
             status, intent, source = "fallback", _intent_from(execs), "deterministic_fallback"
             resolved = _resolved_from(execs)

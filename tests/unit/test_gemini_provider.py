@@ -138,3 +138,13 @@ def test_all_models_daily_exhausted_raises_immediately():
     with pytest.raises(LLMQuotaError):
         p.structured(system="s", prompt="p", schema={})
     assert stub.models_called == ["primary", "fallback"] and sleeps == []
+
+
+def test_request_after_all_models_exhausted_raises_quota_not_assertion():
+    """Regression (eval rerun): the next request tried no model and hit `assert` -> HTTP 500."""
+    daily = ' "retryDelay": "50000s"'
+    p, stub, _ = provider([api_error(429, "q", daily)] * 2, fallback_model="fallback")
+    for _ in range(2):
+        with pytest.raises(LLMQuotaError):
+            p.structured(system="s", prompt="p", schema={})
+    assert stub.models_called == ["primary", "fallback"]

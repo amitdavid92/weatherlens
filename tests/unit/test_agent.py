@@ -349,3 +349,27 @@ def test_fallback_ranking_numbers_are_registered_facts(engine, sessions):
     displays = {f["display"] for f in r.facts}
     for tok in re.findall(r"\d+(?:\.\d+)?%", r.answer):
         assert tok in displays, tok
+
+
+def test_rankings_over_different_subsets_do_not_collide(engine):
+    """Regression: reused rank fact ids raised ValueError -> HTTP 500."""
+    box = ToolBox(engine, FactRegistry())
+    for hubs in (["chicago_il", "detroit_mi"], ["detroit_mi", "minneapolis_mn"]):
+        assert box.execute("rank_hubs", {"hubs": hubs, "hazard": "winter"}).ok
+
+
+def test_unexpected_tool_exception_is_contained(engine, monkeypatch):
+    box = ToolBox(engine, FactRegistry())
+    monkeypatch.setattr(box, "_list_hubs", lambda a: 1 / 0)
+    ex = box.execute("list_hubs", {})
+    assert not ex.ok and ex.error_type == "internal_error"
+
+
+def test_fallback_template_adds_no_unregistered_numbers(engine, sessions):
+    """Regression (eval A1-A4): the fallback header contained a literal '100'."""
+    from weather_risk.agent.llm import LLMUnavailableError
+
+    r, _ = run(engine, sessions, [("tools", [DENVER_CALL]), ("text", "ok"),
+                                  ("raise", LLMUnavailableError("503"))])  # fmt: skip
+    header = r.answer.split("\n\n")[0]
+    assert not any(ch.isdigit() for ch in header)

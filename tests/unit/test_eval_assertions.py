@@ -119,3 +119,19 @@ def test_every_known_assertion_is_implemented(engine, denver):
         except Exception:  # noqa: BLE001 - only the dispatch is under test here
             detail = ""
         assert "unknown assertion" not in detail, kind
+
+
+def test_runner_records_non_json_and_transport_errors():
+    import httpx
+
+    assert (
+        eval_run._body(httpx.Response(500, text="Internal Server Error"))["error"]
+        == "non_json_response"
+    )
+
+    class Down:
+        def post(self, *a, **k):
+            raise httpx.ConnectError("refused")
+
+    r, _ = eval_run.post(Down(), "hi", None)
+    assert r["_http_status"] == 0 and r["error"].startswith("transport_error")

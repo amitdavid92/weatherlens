@@ -130,6 +130,11 @@ def create_app(state: AppState | None = None) -> FastAPI:
                                                               "detail": str(exc.detail)}  # fmt: skip
         return err(exc.status_code, d["error"], d["detail"], d.get("retryable", False))
 
+    @app.exception_handler(Exception)
+    async def unhandled(_: Request, exc: Exception):
+        log.error("unhandled_error", exc_info=exc)
+        return err(500, "internal_error", "The server could not process the request.")
+
     @app.get("/api/health", tags=["system"], summary="Service, data and LLM status")
     def health(request: Request) -> dict[str, Any]:
         c = ctx(request)
