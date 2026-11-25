@@ -69,15 +69,23 @@ export function UsMap({
           </g>
         )
       })}
-      {focus && (
-        <g transform={`translate(${focus.x},${focus.y - 26})`} className="usmap-label" pointerEvents="none">
-          <rect x={-78} y={-24} width={156} height={30} rx={6} />
-          <text textAnchor="middle" y={-4}>
-            {shortName(focus.hub.name)} · {focus.display ?? 'n/a'}
-            {focus.partial ? ' (partial)' : ''}
-          </text>
-        </g>
-      )}
+      {focus &&
+        (() => {
+          const label = `${shortName(focus.hub.name)} · ${focus.display ?? 'n/a'} · ${focus.band ?? 'n/a'}${focus.partial ? ' (partial)' : ''}`
+          const w = Math.max(120, label.length * 8.4 + 24)
+          // keep the tooltip inside the map horizontally
+          const left = focus.x - w / 2
+          const right = focus.x + w / 2
+          const dx = left < 6 ? 6 - left : right > W - 6 ? W - 6 - right : 0
+          return (
+            <g transform={`translate(${focus.x + dx},${focus.y - 26})`} className="usmap-label" pointerEvents="none">
+              <rect x={-w / 2} y={-24} width={w} height={30} rx={6} />
+              <text textAnchor="middle" y={-4}>
+                {label}
+              </text>
+            </g>
+          )
+        })()}
     </svg>
   )
 }

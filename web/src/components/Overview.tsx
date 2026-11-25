@@ -1,5 +1,5 @@
 import { MessageSquareText } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { api } from '../api/client'
 import type { HazardKey, Overview as OverviewData, RankingResult } from '../api/types'
 import { HAZARDS, hazardLabel, humanizeReason } from '../format'
@@ -16,7 +16,9 @@ export function Overview({
   selected,
   onSelect,
   onAsk,
+  headerAction,
 }: {
+  headerAction?: ReactNode
   overview: OverviewData | null
   error: string | null
   selected: string | null
@@ -63,8 +65,33 @@ export function Overview({
   const hubsById = Object.fromEntries(overview.hubs.map((h) => [h.hub_id, h]))
   const visibleHubs = region === 'All' ? overview.hubs : overview.hubs.filter((h) => h.region === region)
 
+  const profile =
+    selected && hubsById[selected] ? (
+      <HubProfilePanel
+        hub={hubsById[selected]}
+        onClose={() => onSelect(null)}
+        onAsk={(name, band) =>
+          onAsk(`Explain the ${name} hub's weather exposure${band ? ` (overall band ${band})` : ''}: what are its main drivers?`)
+        }
+      />
+    ) : (
+      <p className="hint">
+        <MessageSquareText size={15} aria-hidden /> Select a hub on the map or in the ranking to see its profile and ask the AI Analyst about it.
+      </p>
+    )
+
   return (
     <div className="page overview">
+      <header className="page-head">
+        <div>
+          <h1>Weather Risk Overview</h1>
+          <p className="page-sub">
+            Weather-hazard exposure across {c.hubs} distribution hubs, scored from public NOAA and FEMA data to help prioritize
+            resilience investment.
+          </p>
+        </div>
+        {headerAction ? <div className="page-head-action">{headerAction}</div> : null}
+      </header>
       <section className="kpis" aria-label="Portfolio summary">
         <div className="kpi">
           <span className="kpi-label">Distribution hubs</span>
@@ -101,6 +128,7 @@ export function Overview({
       </section>
 
       <div className="overview-grid">
+        <div className="overview-left">
         <section className="panel map-panel" aria-label="Hub map">
           <SectionHeader title={scope === 'overall' ? 'Overall exposure by hub' : `${hazardLabel(scope)} exposure by hub`}>
             <div className="legend" aria-label="Legend">
@@ -116,6 +144,8 @@ export function Overview({
             {overview.nri_version} · NOAA climate {overview.climate_period}.
           </p>
         </section>
+        <div className="profile-slot">{profile}</div>
+        </div>
 
         <section className="panel ranking-panel" aria-label="Exposure ranking">
           <SectionHeader title="Exposure ranking">
@@ -153,7 +183,12 @@ export function Overview({
                 </thead>
                 <tbody>
                   {ranking.ranked.map((e) => (
-                    <tr key={e.hub_id} className={e.hub_id === selected ? 'is-selected' : ''} onClick={() => onSelect(e.hub_id)}>
+                    <tr
+                      key={e.hub_id}
+                      className={e.hub_id === selected ? 'is-selected' : ''}
+                      aria-selected={e.hub_id === selected}
+                      onClick={() => onSelect(e.hub_id)}
+                    >
                       <td className="col-rank num">{e.rank}</td>
                       <td>
                         <button className="linklike" onClick={() => onSelect(e.hub_id)}>
@@ -175,7 +210,7 @@ export function Overview({
                 <div className="not-ranked">
                   <h3>Not ranked: incomplete data</h3>
                   {ranking.not_ranked.map((e) => (
-                    <div key={e.hub_id} className="not-ranked-row" onClick={() => onSelect(e.hub_id)}>
+                    <div key={e.hub_id} className={`not-ranked-row ${e.hub_id === selected ? 'is-selected' : ''}`} onClick={() => onSelect(e.hub_id)}>
                       <div className="not-ranked-head">
                         <button className="linklike" onClick={() => onSelect(e.hub_id)}>
                           {e.display_name.replace(/ Hub$/, '')}
@@ -193,21 +228,6 @@ export function Overview({
         </section>
       </div>
 
-      {selected && hubsById[selected] && (
-        <HubProfilePanel
-          hub={hubsById[selected]}
-          onClose={() => onSelect(null)}
-          onAsk={(name, band) =>
-            onAsk(`Explain the ${name} hub's weather exposure${band ? ` (overall band ${band})` : ''}: what are its main drivers?`)
-          }
-        />
-      )}
-
-      {!selected && (
-        <p className="hint">
-          <MessageSquareText size={15} aria-hidden /> Select a hub on the map or in the ranking to see its profile and ask the AI Analyst about it.
-        </p>
-      )}
     </div>
   )
 }

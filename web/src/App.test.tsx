@@ -10,6 +10,9 @@ beforeEach(() => {
 })
 afterEach(() => vi.unstubAllGlobals())
 
+// Suggestion cards are named "<title> <question>"; the question is what gets submitted.
+const card = (question: string) => ({ name: new RegExp(question.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) })
+
 describe('Overview dashboard', () => {
   it('renders KPIs and the ranking from API data, with backend display strings', async () => {
     mockApi()
@@ -81,7 +84,7 @@ describe('AI Analyst', () => {
     const { fetchMock } = mockApi({ chat: () => d.promise })
     render(<App />)
     await goToAnalyst()
-    await userEvent.click(await screen.findByRole('button', { name: 'What percentage of days in Denver last year had snowfall?' }))
+    await userEvent.click(await screen.findByRole('button', card('What percentage of days in Denver last year had snowfall?')))
     expect(screen.getByText('What percentage of days in Denver last year had snowfall?')).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('The AI Analyst is working on your question')
     expect(screen.getByRole('button', { name: 'Send question' })).toBeDisabled()
@@ -104,7 +107,7 @@ describe('AI Analyst', () => {
     const { calls } = mockApi({ chat: () => json(fixtures.chatMidwest) })
     render(<App />)
     await goToAnalyst()
-    await userEvent.click(await screen.findByRole('button', { name: 'Which hubs in the Midwest are most exposed to winter disruption?' }))
+    await userEvent.click(await screen.findByRole('button', card('Which hubs in the Midwest are most exposed to winter disruption?')))
     const answer = await screen.findByRole('article', { name: 'AI Analyst answer' })
     const ranked = fixtures.chatMidwest.analysis.rankings[0].ranked
     const rows = within(answer).getAllByRole('row')
@@ -128,12 +131,12 @@ describe('AI Analyst', () => {
     render(<App />)
     await goToAnalyst()
     const q = 'What percentage of days in Denver last year had snowfall?'
-    await userEvent.click(await screen.findByRole('button', { name: q }))
+    await userEvent.click(await screen.findByRole('button', card(q)))
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent('The AI provider is rate-limiting requests')
     await userEvent.click(within(alert).getByRole('button', { name: /Retry/ }))
     await screen.findByRole('article', { name: 'AI Analyst answer' })
-    expect(screen.getAllByText(q)).toHaveLength(1) // one user turn, not two
+    expect(screen.getAllByText(q, { selector: '.msg-user p' })).toHaveLength(1) // one user turn, not two
     expect(calls.filter((c) => c.url === '/api/chat').map((c) => (c.body as { message: string }).message)).toEqual([q, q])
   })
 
@@ -141,8 +144,24 @@ describe('AI Analyst', () => {
     mockApi({ chat: () => Promise.reject(new TypeError('Failed to fetch')) })
     render(<App />)
     await goToAnalyst()
-    await userEvent.click(await screen.findByRole('button', { name: 'What percentage of days in Denver last year had snowfall?' }))
+    await userEvent.click(await screen.findByRole('button', card('What percentage of days in Denver last year had snowfall?')))
     expect(await screen.findByRole('alert')).toHaveTextContent('Connection problem')
+  })
+
+  it('shows the analyst empty state with titled suggestion cards that submit the original questions', async () => {
+    const { calls } = mockApi()
+    render(<App />)
+    await goToAnalyst()
+    expect(await screen.findByRole('heading', { name: 'Your AI Weather Risk Analyst' })).toBeInTheDocument()
+    for (const title of ['Winter Exposure', 'Compare Hubs', 'Historical Analysis', 'Understand Risk Drivers']) {
+      expect(screen.getByText(title)).toBeInTheDocument()
+    }
+    expect(screen.getByText(/Deterministic scoring/)).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: /Understand Risk Drivers/ }))
+    await waitFor(() => expect(calls.some((c) => c.url === '/api/chat')).toBe(true))
+    expect((calls.find((c) => c.url === '/api/chat')!.body as { message: string }).message).toBe(
+      "Why is the Dallas hub's weather disruption risk high?",
+    )
   })
 
   it('makes missing LLM configuration explicit while deterministic views keep working', async () => {
@@ -153,6 +172,6 @@ describe('AI Analyst', () => {
     await goToAnalyst()
     expect(await screen.findByText('AI Analyst unavailable')).toBeInTheDocument()
     expect(screen.getByRole('textbox')).toBeDisabled()
-    expect(screen.getByRole('button', { name: 'What percentage of days in Denver last year had snowfall?' })).toBeDisabled()
+    expect(screen.getByRole('button', card('What percentage of days in Denver last year had snowfall?'))).toBeDisabled()
   })
 })

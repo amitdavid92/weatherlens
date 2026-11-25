@@ -99,13 +99,19 @@ export default function App() {
         {view === 'overview' && (
           <div className="overview-wrap">
             <div className="overview-main">
-              <div className="dock-toggle-row">
-                <button className="btn btn-ghost dock-toggle" onClick={() => setDockOpen((o) => !o)} aria-pressed={dockOpen}>
-                  {dockOpen ? <PanelRightClose size={16} aria-hidden /> : <PanelRightOpen size={16} aria-hidden />}
-                  {dockOpen ? 'Hide AI Analyst' : 'Open AI Analyst beside the dashboard'}
-                </button>
-              </div>
-              <Overview overview={overview} error={overviewError} selected={selected} onSelect={setSelected} onAsk={ask} />
+              <Overview
+                overview={overview}
+                error={overviewError}
+                selected={selected}
+                onSelect={setSelected}
+                onAsk={ask}
+                headerAction={
+                  <button className="btn btn-ghost dock-toggle" onClick={() => setDockOpen((o) => !o)} aria-pressed={dockOpen}>
+                    {dockOpen ? <PanelRightClose size={16} aria-hidden /> : <PanelRightOpen size={16} aria-hidden />}
+                    {dockOpen ? 'Hide AI Analyst' : 'Open AI Analyst alongside'}
+                  </button>
+                }
+              />
             </div>
             {dockOpen && (
               <aside className="dock" aria-label="AI Analyst panel">

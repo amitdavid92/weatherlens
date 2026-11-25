@@ -46,6 +46,9 @@ for (const vp of VIEWPORTS) {
   )
   const hubDots = await page.$$eval('.usmap-hub', (g) => g.length)
   const ovOverflow = await overflow()
+  // hover a map marker: tooltip must show name, score and band
+  await page.hover('.usmap-hub[aria-label^="Houston"]')
+  const tooltip = await page.$eval('.usmap-label text', (t) => t.textContent)
   await page.screenshot({ path: `${out}/${vp.name}-overview.png`, fullPage: vp.width < 600 })
 
   // select Denver (boundary case) and Miami (partial)
@@ -82,6 +85,7 @@ for (const vp of VIEWPORTS) {
     rankingRows: rows.length,
     firstRow: rows[0],
     hubDots,
+    tooltip,
     denverProfile,
     miamiProfile,
     hurricaneTop,

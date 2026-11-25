@@ -25,7 +25,7 @@ async function ask(question, shot) {
   const newConv = page.getByRole('button', { name: 'New conversation' })
   if (await newConv.isEnabled()) await newConv.click()
   const t0 = Date.now()
-  await page.getByRole('button', { name: question }).click()
+  await page.getByRole('button', { name: new RegExp(question.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) }).click()
   // loading state must appear immediately with the user's message
   await page.waitForSelector('.msg-user.pending', { timeout: 2000 })
   const loadingVisible = await page.isVisible('.waiting')

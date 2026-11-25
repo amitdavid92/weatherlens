@@ -248,16 +248,6 @@ code {
   display: flex;
   min-width: 0;
 }
-.dock-toggle-row {
-  max-width: 1480px;
-  margin: 0 auto;
-  padding: 0.9rem 1.25rem 0;
-  display: flex;
-  justify-content: flex-end;
-}
-.dock-toggle-row + .page {
-  padding-top: 0.6rem;
-}
 
 .panel {
   background: var(--white);
@@ -1228,7 +1218,7 @@ tr.is-primary th {
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1279px) {
   .dock,
-  .dock-toggle-row {
+  .dock-toggle {
     display: none;
   }
   .app.has-dock .overview-wrap,
@@ -1318,5 +1308,272 @@ tr.is-primary th {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------- Phase 4.1 polish */
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+  flex-wrap: wrap;
+}
+.page-head h1 {
+  font-size: 1.4rem;
+}
+.page-sub {
+  margin: 0.2rem 0 0;
+  color: var(--slate-600);
+  font-size: 0.92rem;
+  max-width: 70ch;
+}
+.overview-left {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+.profile-slot .profile {
+  margin-top: 0;
+}
+.profile-slot .hint {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px dashed var(--slate-300);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+.map-panel .usmap {
+  margin: -0.4rem 0 -0.6rem;
+}
+.ranking-table tbody tr.is-selected {
+  background: var(--teal-50);
+  box-shadow: inset 0 0 0 1px #9fd8d0;
+}
+.ranking-table tbody tr.is-selected .col-rank,
+.ranking-table tbody tr.is-selected .linklike {
+  color: var(--teal-700);
+}
+.not-ranked-row.is-selected {
+  background: var(--teal-50);
+  border-radius: 8px;
+  padding: 0.25rem 0.4rem;
+}
+.table.ranking-table td,
+.table.ranking-table th {
+  padding-top: 0.42rem;
+  padding-bottom: 0.42rem;
+}
+
+/* AI Analyst empty state */
+.chat-empty {
+  max-width: 760px;
+  margin: 2.25rem auto 1rem;
+  text-align: center;
+}
+.chat-empty h2 {
+  font-size: 1.45rem;
+  margin: 0.9rem 0 0.4rem;
+}
+.chat-empty-lead {
+  color: var(--slate-600);
+  max-width: 62ch;
+  margin: 0 auto;
+}
+.analyst-mark {
+  display: block;
+  margin: 0 auto;
+}
+.chat-empty .examples {
+  margin-top: 1.4rem;
+  gap: 0.75rem;
+  text-align: left;
+}
+.example {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(11, 31, 51, 0.05);
+}
+.example-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--teal-50);
+  color: var(--teal-700);
+}
+.example-text {
+  display: grid;
+  gap: 0.15rem;
+}
+.example-text strong {
+  font-size: 0.9rem;
+  color: var(--slate-900);
+}
+.example-text span {
+  font-size: 0.84rem;
+  color: var(--slate-600);
+  line-height: 1.4;
+}
+.example:hover:not(:disabled) .example-icon {
+  background: var(--white);
+}
+.trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.2rem;
+  font-size: 0.8rem;
+  color: var(--slate-600);
+}
+.trust svg {
+  color: var(--teal-700);
+  flex: none;
+}
+.chat.is-compact .chat-empty {
+  margin: 0.75rem 0;
+}
+.chat.is-compact .chat-empty h2 {
+  font-size: 1.15rem;
+}
+.chat.is-compact .trust {
+  display: flex;
+  text-align: left;
+}
+.composer {
+  padding: 0.9rem 0 1.25rem;
+}
+.composer textarea {
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(11, 31, 51, 0.04);
+}
+.btn-send {
+  height: 2.9rem;
+  width: 2.9rem;
+  border-radius: 12px;
+}
+
+/* Methodology pipeline + weights */
+.pipeline {
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0 0;
+  display: flex;
+  align-items: stretch;
+  gap: 0.35rem;
+}
+.pipeline li:not(.pipeline-arrow) {
+  flex: 1;
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--slate-50);
+}
+.pipeline li.pipeline-final {
+  background: var(--navy-800);
+  border-color: var(--navy-800);
+}
+.pipeline-final .pipeline-step {
+  color: var(--white);
+}
+.pipeline-final .pipeline-detail {
+  color: #c9d6e3;
+}
+.pipeline-step {
+  font-weight: 650;
+  font-size: 0.88rem;
+}
+.pipeline-detail {
+  font-size: 0.78rem;
+  color: var(--slate-600);
+  line-height: 1.4;
+}
+.pipeline-arrow {
+  display: grid;
+  place-items: center;
+  color: var(--slate-500);
+}
+.weights-title {
+  margin-top: 1.2rem;
+}
+.weights {
+  display: flex;
+  gap: 3px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.weight-seg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+  min-width: 0;
+}
+.weight-seg.seg-0 {
+  background: var(--teal-700);
+  color: var(--white);
+}
+.weight-seg.seg-1 {
+  background: var(--navy-800);
+  color: var(--white);
+}
+.weight-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.read h2 {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--slate-100);
+}
+
+@media (max-width: 900px) {
+  .pipeline {
+    flex-direction: column;
+  }
+  .pipeline-arrow {
+    transform: rotate(90deg);
+  }
+  .weights {
+    flex-direction: column;
+    border-radius: 8px;
+  }
+}
+@media (max-width: 760px) {
+  .page-head h1 {
+    font-size: 1.2rem;
+  }
+  .chat-empty {
+    margin-top: 1rem;
+  }
+  .chat-empty .examples {
+    grid-template-columns: 1fr;
+  }
+  .trust {
+    display: flex;
+    text-align: left;
+  }
+}
+
+/* The profile sits in the map column: stack its sections by the panel's own width. */
+.profile-slot {
+  container-type: inline-size;
+}
+@container (max-width: 980px) {
+  .profile-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
   }
 }

@@ -1,13 +1,28 @@
-import { ArrowUp, Bot, RotateCcw, SquarePen } from 'lucide-react'
+import { ArrowLeftRight, ArrowUp, Bot, CalendarRange, Layers, RotateCcw, ShieldCheck, Snowflake, SquarePen } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { Health } from '../api/types'
-import { EXAMPLE_QUESTIONS } from '../examples'
+import { EXAMPLES } from '../examples'
 import type { ChatController } from '../hooks/useChat'
 import { AnswerCard } from './AnswerCard'
 import { Callout } from './ui'
 
 
 const SLOW_AFTER_S = 20
+
+const EXAMPLE_ICONS = { winter: Snowflake, compare: ArrowLeftRight, history: CalendarRange, drivers: Layers }
+
+/** WeatherLens Analyst mark: the brand lens with an insight spark (authored SVG). */
+export function AnalystMark({ size = 56 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden className="analyst-mark">
+      <rect width="56" height="56" rx="14" fill="#12304d" />
+      <circle cx="25" cy="29" r="12" fill="none" stroke="#2dd4bf" strokeWidth="3.5" />
+      <path d="M33.5 37.5 L41 45" stroke="#2dd4bf" strokeWidth="3.5" strokeLinecap="round" />
+      <path d="M20 31 l3.2 -4.4 3.4 2.6 4 -6" fill="none" stroke="#f2f5f8" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M41.5 9.5 l1.6 3.9 3.9 1.6 -3.9 1.6 -1.6 3.9 -1.6 -3.9 -3.9 -1.6 3.9 -1.6 z" fill="#f2c35a" />
+    </svg>
+  )
+}
 
 function Waiting({ startedAt }: { startedAt: number }) {
   const [now, setNow] = useState(() => Date.now())
@@ -48,6 +63,8 @@ export function ChatPanel({
   const llmDown = health != null && !health.llm.available
 
   useEffect(() => {
+    // only follow the conversation; never scroll the empty state away from its heading
+    if (chat.entries.length === 0 && !chat.pending) return
     endRef.current?.scrollIntoView?.({ block: 'end', behavior: 'smooth' })
   }, [chat.entries.length, chat.pending])
 
@@ -77,18 +94,37 @@ export function ChatPanel({
 
         {chat.entries.length === 0 && !chat.restoring && (
           <div className="chat-empty">
-            <h2>Ask about weather-hazard exposure across the hubs</h2>
-            <p className="muted">
-              Answers use only the WeatherLens analytics engine: every number is a verified fact with its source. Try one of the assignment
-              questions:
+            <AnalystMark size={compact ? 44 : 56} />
+            <h2>Your AI Weather Risk Analyst</h2>
+            <p className="chat-empty-lead">
+              Rank hubs by exposure, compare locations hazard by hazard, look up historical weather statistics and understand what drives a
+              hub’s score. Every answer is grounded in the WeatherLens analytics engine.
             </p>
             <div className="examples">
-              {EXAMPLE_QUESTIONS.map((q) => (
-                <button key={q} className="example" onClick={() => submit(q)} disabled={chat.pending || llmDown}>
-                  {q}
-                </button>
-              ))}
+              {EXAMPLES.map((ex) => {
+                const Icon = EXAMPLE_ICONS[ex.key]
+                return (
+                  <button
+                    key={ex.key}
+                    className="example"
+                    onClick={() => submit(ex.question)}
+                    disabled={chat.pending || llmDown}
+                  >
+                    <span className="example-icon" aria-hidden>
+                      <Icon size={18} />
+                    </span>
+                    <span className="example-text">
+                      <strong>{ex.title}</strong>
+                      <span>{ex.question}</span>
+                    </span>
+                  </button>
+                )
+              })}
             </div>
+            <p className="trust">
+              <ShieldCheck size={15} aria-hidden />
+              Public NOAA and FEMA data · Deterministic scoring · Every number checked against verified facts
+            </p>
           </div>
         )}
 

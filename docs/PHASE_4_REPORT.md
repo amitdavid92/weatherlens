@@ -168,6 +168,35 @@ Each question was clicked in a fresh conversation on the real UI. The displayed 
 
 Nothing has been pushed. `ASSIGNMENT.pdf` remains untracked.
 
+## 10a. Phase 4.1: final UI polish (2026-11-25)
+Scope: visual refinement only. Architecture, API contracts and scoring methodology are unchanged, no dependencies were added, and no values are hardcoded.
+
+| Area | Change |
+|---|---|
+| **Overview** | "Weather Risk Overview" heading with a product subtitle; the docked-analyst toggle moved into the heading row. The hub profile now fills the empty space under the map; it stacks its sections by its own width via a CSS container query. Tighter ranking rows. |
+| **Map tooltip** | Shows hub name · score · band (e.g. "Houston · 73.6 · High", "Miami · 61.3 · Moderate (partial)"), clamped inside the map. |
+| **Selection** | Shared between map, ranking and profile. The selected row is teal with an outline and teal rank/name; the selected map marker has a halo; the selected not-ranked entry is highlighted too. |
+| **AI Analyst empty state** | Authored WeatherLens Analyst mark; heading "Your AI Weather Risk Analyst"; capability description; four suggestion cards (Winter Exposure, Compare Hubs, Historical Analysis, Understand Risk Drivers) with icons. Each card **submits the original assignment question unchanged**. Trust line: "Public NOAA and FEMA data · Deterministic scoring · Every number checked against verified facts". Roomier composer. Structured answers, history and error handling are unchanged. |
+| **Methodology** | Pipeline diagram (Public data → Deterministic analytics → Five hazard dimensions → Weather Hazard Exposure Index), filled from `/api/methodology`. Hazard-weight bar from the backend's actual `hazard_weights`. Clearer section separation. **Wording fix:** "how often and how intensely" became "how often … event frequencies and counts of hazardous days … does not measure the severity or damage of individual events". |
+
+**Defects found while inspecting the polished screens, and fixed:**
+- The profile's completeness table was clipped in the narrower map column; fixed with the container query.
+- The tooltip clamping logic always returned 0 on the left edge; rewritten.
+- On mobile, the empty state auto-scrolled its heading and icon out of view (the chat log followed "end" even with no messages). It now scrolls only when there is conversation content.
+
+**Verification (actual):**
+- Vitest **10 passed** (new test: empty-state cards submit the original prompts); oxlint 0 findings; typecheck OK; build OK; `impeccable detect` `[]`; pytest **307 passed**; ruff clean.
+- Chromium inspection at 1440/1024/390: no console errors, no horizontal overflow, tooltip text verified, Denver 39.98 Low, Miami partial.
+
+**Screenshots:**
+- `desktop-1440-overview.png` and `desktop-1440-overview-miami.png` (dashboard, selection, tooltip);
+- `desktop-1440-analyst-empty.png`, `mobile-390-analyst-empty.png`;
+- `desktop-1440-analyst-answer.png` (a completed real Gemini answer, restored from its session);
+- `desktop-1440-methodology.png`;
+- `mobile-390-overview.png`, `mobile-390-analyst-answer.png`.
+
+The `real-gemini-*.png` answer screenshots are from the Phase 4 run. Answer rendering was not changed in 4.1, so no new LLM calls were made.
+
 ## 11. Readiness for Phase 5
 **Ready.** The full stack runs with one command and passes lint, type checks and tests from a clean clone. It has been checked in a real browser at three sizes and answered the four assignment questions end-to-end with real Gemini, with displayed values equal to the deterministic engine.
 

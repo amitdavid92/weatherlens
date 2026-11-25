@@ -1,3 +1,4 @@
+import { ChevronRight } from 'lucide-react'
 import type { Methodology as M, Overview } from '../api/types'
 import { FRESHNESS_LABEL, HAZARDS, indicatorLabel, SOURCE_LABEL } from '../format'
 import { Callout, Skeleton } from './ui'
@@ -18,10 +19,56 @@ export function Methodology({ m, overview, error }: { m: M | null; overview: Ove
           explains these results.
         </p>
         <Callout tone="info" title="Exposure, not disruption probability">
-          The index says how often and how intensely a location experiences weather hazards. It is not a probability of operational
-          disruption or a loss estimate: WeatherLens has no shipment, downtime, asset-vulnerability or cost data, and the index has not been
+          The index measures how often a location experiences weather hazards: event frequencies and counts of hazardous days. It
+          does not measure the severity or damage of individual events. It is not a probability of operational disruption or a loss
+          estimate: WeatherLens has no shipment, downtime, asset-vulnerability or cost data, and the index has not been
           validated against outcomes. The hubs are illustrative, not company facilities.
         </Callout>
+
+        <h2>From public data to one index</h2>
+        <ol className="pipeline" aria-label="Scoring pipeline">
+          <li>
+            <span className="pipeline-step">Public data</span>
+            <span className="pipeline-detail">
+              NOAA GHCN-Daily stations, {m.climate.period.start_year}–{m.climate.period.end_year} · FEMA National Risk Index ({m.nri_version})
+            </span>
+          </li>
+          <li aria-hidden className="pipeline-arrow">
+            <ChevronRight size={18} />
+          </li>
+          <li>
+            <span className="pipeline-step">Deterministic analytics</span>
+            <span className="pipeline-detail">
+              Coverage checks (≥ {pct(m.climate.min_coverage)} valid days), fixed climate anchors, {n.method} FEMA normalization
+            </span>
+          </li>
+          <li aria-hidden className="pipeline-arrow">
+            <ChevronRight size={18} />
+          </li>
+          <li>
+            <span className="pipeline-step">Five hazard dimensions</span>
+            <span className="pipeline-detail">{HAZARDS.map((h) => h.short).join(' · ')}, each scored 0–100</span>
+          </li>
+          <li aria-hidden className="pipeline-arrow">
+            <ChevronRight size={18} />
+          </li>
+          <li className="pipeline-final">
+            <span className="pipeline-step">Weather Hazard Exposure Index</span>
+            <span className="pipeline-detail">
+              0–100 with {m.bands.map((b) => b.label).join(' / ')} bands · methodology {m.methodology_version}
+            </span>
+          </li>
+        </ol>
+
+        <h3 className="weights-title">Hazard weights in the index</h3>
+        <div className="weights" role="img" aria-label={HAZARDS.map(({ key, label }) => `${label} ${pct(m.hazard_weights[key])}`).join(', ')}>
+          {HAZARDS.map(({ key, short }, i) => (
+            <div key={key} className={`weight-seg seg-${i % 2}`} style={{ flexGrow: m.hazard_weights[key] }}>
+              <span className="weight-name">{short}</span>
+              <span className="weight-val num">{pct(m.hazard_weights[key])}</span>
+            </div>
+          ))}
+        </div>
 
         <h2>Five hazard dimensions</h2>
         <div className="table-scroll">
