@@ -210,7 +210,9 @@ def raw() -> dict:
 
 
 def test_config_loads_with_version(cfg):
-    assert cfg.methodology_version == "1.0.0"
+    assert cfg.methodology_version == "1.1.0"
+    assert cfg.nri_normalization.method == "hybrid"
+    assert cfg.nri_normalization.relative_weight == 0.5
     assert set(cfg.hazard_weights.values()) == {0.2}
     assert cfg.climate.min_coverage == 0.9
 
@@ -241,3 +243,67 @@ def test_invalid_configs_rejected(raw, mutate, match):
     mutate(bad)
     with pytest.raises(ValidationError, match=match):
         ScoringConfig.model_validate(bad)
+
+
+# ------------------------------------------------------------------ v1.1.0 normalization methods
+from weather_risk.analytics.config import NriNormalization  # noqa: E402
+from weather_risk.analytics.percentiles import absolute_log_score  # noqa: E402
+
+
+@pytest.mark.parametrize(
+    "x,expected",
+    [(0.001, 0.0), (0.01, 0.0), (0.1, 50.0), (1.0, 100.0), (10.0, 100.0), (0.0, 0.0),
+     (10 ** -1.5, 25.0)],
+)  # fmt: skip
+def test_absolute_log_score_hand_computed(x, expected):
+    assert absolute_log_score(x, 0.01, 1.0) == pytest.approx(expected)
+
+
+def test_conditional_percentile_hand_computed():
+    from tests.unit.analytics_helpers import CANONICAL_SPECS
+
+    pct = NationalPercentiles(canonical_population(),
+                              NriNormalization(method="conditional_percentile"))  # fmt: skip
+    # positives [1, 2, 2, 3]: 1 -> 12.5, 2 -> 50 (tie), 3 -> 87.5; zero/NA -> 0
+    exp = {"00001": 0.0, "00002": 0.0, "00003": 12.5, "00004": 50.0, "00005": 50.0, "00006": 87.5}
+    for fips, e in exp.items():
+        assert pct.score(
+            county(fips, CANONICAL_SPECS[fips]), HazardCode.HAIL
+        ).score == pytest.approx(e)
+
+
+def test_hybrid_is_blend_and_preserves_order():
+    from tests.unit.analytics_helpers import CANONICAL_SPECS
+
+    pct = NationalPercentiles(canonical_population(),
+                              NriNormalization(method="hybrid", relative_weight=0.5))  # fmt: skip
+    # value 1.0/yr: relative 41.667, absolute 100 -> 70.833 ; 0/NA -> 0 ; ID -> None
+    r = pct.score(county("00003", 1.0), HazardCode.HURRICANE)
+    assert r.relative_score == pytest.approx(2.5 * P) and r.absolute_score == pytest.approx(100)
+    assert r.score == pytest.approx(0.5 * 2.5 * P + 50)
+    assert pct.score(county("00001", 0), HazardCode.HURRICANE).score == 0.0
+    assert pct.score(county("00002", "NA"), HazardCode.HURRICANE).score == 0.0
+    assert pct.score(county("00007", "ID"), HazardCode.HURRICANE).score is None
+    scores = [pct.score(county(f, CANONICAL_SPECS[f]), HazardCode.HURRICANE).score
+              for f in ("00003", "00004", "00006")]  # fmt: skip
+    assert scores == sorted(scores)  # monotone in frequency -> rankings within a hazard unchanged
+
+
+def test_rare_positive_frequency_no_longer_mid_scale():
+    """Regression for D-021: a 1-in-87-year frequency ranked above a large no-exposure tier."""
+    from tests.unit.analytics_helpers import population
+
+    recs = [county(f"{i:05d}", "NA") for i in range(1, 51)] + [county("00051", 1 / 87)]
+    recs += [county(f"{i:05d}", 0.5) for i in range(52, 101)]
+    rare = recs[50]
+    pctl = NationalPercentiles(population(recs)).score(rare, HazardCode.HURRICANE).score
+    hyb = NationalPercentiles(population(recs), NriNormalization(method="hybrid")).score(
+        rare, HazardCode.HURRICANE).score  # fmt: skip
+    assert pctl == pytest.approx(50.5)  # (50 + 0.5) / 100
+    assert hyb == pytest.approx(0.5 * 50.5 + 0.5 * absolute_log_score(1 / 87, 0.01, 1.0))
+    assert hyb < pctl
+
+
+def test_invalid_log_anchor_rejected():
+    with pytest.raises(ValidationError):
+        NriNormalization(method="hybrid", absolute_anchor={"low": 0, "high": 1})

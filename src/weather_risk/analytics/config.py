@@ -126,6 +126,26 @@ class CoveragePolicy(BaseModel):
     rank_partial_results: bool = False
 
 
+class NriNormalization(BaseModel):
+    """How FEMA AFREQ values become 0–100 indicator scores (see SCORING_METHODOLOGY.md §3.2)."""
+
+    model_config = ConfigDict(frozen=True)
+    method: Literal["percentile", "conditional_percentile", "hybrid"] = "percentile"
+    relative_weight: float = Field(default=0.5, ge=0, le=1)  # hybrid only
+    absolute_anchor: Anchor = Anchor(low=0.01, high=1.0)  # events/yr, log10 scale (hybrid only)
+    absolute_anchor_by_hazard: dict[HazardCode, Anchor] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def _positive(self) -> NriNormalization:
+        anchors = [self.absolute_anchor, *self.absolute_anchor_by_hazard.values()]
+        if any(a.low <= 0 for a in anchors):
+            raise ValueError("log-scale absolute anchors must be > 0")
+        return self
+
+    def anchor_for(self, hazard: HazardCode) -> Anchor:
+        return self.absolute_anchor_by_hazard.get(hazard, self.absolute_anchor)
+
+
 class ScoringConfig(BaseModel):
     model_config = ConfigDict(frozen=True)
 
@@ -134,6 +154,7 @@ class ScoringConfig(BaseModel):
     thresholds: Thresholds
     coverage: CoveragePolicy
     bands: list[Band] = Field(min_length=1)
+    nri_normalization: NriNormalization = NriNormalization()
     hazard_weights: dict[Hazard, float]
     hazards: dict[Hazard, HazardConfig]
 

@@ -53,7 +53,7 @@ def render_scenarios(engine: AnalyticsEngine, *, offline: bool) -> str:
     w("## Scenario 1 — Which Midwest hubs are most exposed to winter disruption?\n")
     r1 = engine.rank_hubs(hazard="winter", region="Midwest")
     w("| Rank | Hub | Winter score | Snow days/yr | Heavy-snow days/yr | Freezing days/yr | "
-      "WNTW AFREQ (pctl) | ISTM AFREQ (pctl) | CWAV AFREQ (pctl) |")  # fmt: skip
+      "WNTW AFREQ (score) | ISTM AFREQ (score) | CWAV AFREQ (score) |")  # fmt: skip
     w("|---|---|---|---|---|---|---|---|---|")
     for e in r1.ranked + r1.not_ranked:
         inds = {
@@ -73,7 +73,7 @@ def render_scenarios(engine: AnalyticsEngine, *, offline: bool) -> str:
           f"{c('heavy_snow_days')} | {c('freezing_days')} | {n('nri_winter_weather')} | "
           f"{n('nri_ice_storm')} | {n('nri_cold_wave')} |")  # fmt: skip
     w("\nClimate columns: 2016–2025 annual averages from NOAA airport stations (indicator score in "
-      "parentheses). NRI columns: annualized frequency (national percentile score).\n")  # fmt: skip
+      "parentheses). NRI columns: annualized frequency (indicator score: hybrid of national percentile and absolute frequency, see SCORING_METHODOLOGY.md §3.2).\n")  # fmt: skip
 
     # ------------------------------------------------------------- scenario 2
     w("## Scenario 2 — Miami vs Houston: hurricane and flood exposure\n")
@@ -83,7 +83,7 @@ def render_scenarios(engine: AnalyticsEngine, *, offline: bool) -> str:
     for row in c2.rows:
         w(f"| {row.hazard.value} | {_f(row.hub_scores['miami_fl'])} | "
           f"{_f(row.hub_scores['houston_tx'])} | {row.leader or 'tie/—'} | {_f(row.difference)} |")  # fmt: skip
-    w("\n| NRI hazard | Miami AFREQ | Miami pctl | Houston AFREQ | Houston pctl |")
+    w("\n| NRI hazard | Miami AFREQ | Miami score | Houston AFREQ | Houston score |")
     w("|---|---|---|---|---|")
     for code in (HazardCode.HURRICANE, HazardCode.COASTAL_FLOODING, HazardCode.INLAND_FLOODING):
         cells = []
@@ -136,35 +136,53 @@ def render_scenarios(engine: AnalyticsEngine, *, offline: bool) -> str:
           f"{_f(h.contribution_to_overall, 2)} |")  # fmt: skip
     w(f"| **overall** | **{_f(e4.overall_score)}** | **{e4.overall_band}** | 1.00 | "
       f"{_f(e4.overall_score, 2)} |\n")  # fmt: skip
-    w("Top indicators by contribution to the overall index:\n")
+    w(f"**Primary driver (hazard level): `{e4.primary_driver}`.** Hazard contributions above sum "
+      "to the overall index.\n")  # fmt: skip
+    w("Largest individual indicators (indicator level; a single-indicator hazard such as hurricane "
+      "concentrates its whole weight in one indicator, so this list is not a hazard ranking):\n")  # fmt: skip
+    w("| Indicator | Raw | Score | Weight in hazard | → hazard pts | → overall pts |")
+    w("|---|---|---|---|---|---|")
     for i in e4.top_indicators:
-        w(f"- `{i.hazard.value}.{i.indicator_id}`: raw {_g(i.raw_value)} {i.raw_unit} → score "
-          f"{_f(i.score)} ({i.normalization})")  # fmt: skip
+        w(f"| `{i.hazard.value}.{i.indicator_id}` | {_g(i.raw_value)} | {_f(i.score)} | "
+          f"{i.effective_weight_in_hazard:.3f} | {_f(i.contribution_to_hazard, 2)} | "
+          f"{_f(i.contribution_to_overall, 2)} |")  # fmt: skip
     w(f"\nNot applicable (scored 0, kept in denominators): {e4.not_applicable or 'none'}. "
       f"Unavailable: {e4.unavailable or 'none'}.\n")  # fmt: skip
 
-    # ------------------------------------------------------------- diagnostics
-    w("## Methodology diagnostics (for review — no weights or thresholds were changed)\n")
-    w("Hurricane percentile vs. raw frequency (all hubs). A mid-rank percentile ranks every "
-      "positive frequency above the national no-exposure tier, so very small modeled "
-      "frequencies at inland counties receive mid-range scores.\n")  # fmt: skip
-    d = pct.distributions[HazardCode.HURRICANE]
-    w(f"Reference for HRCN: eligible N = {d.n_eligible} (positive {len(d.positives)}, "
-      f"observed-zero {d.n_observed_zero}, not-applicable {d.n_not_applicable}); excluded "
-      f"unavailable {d.n_excluded_unavailable}, territories {d.n_excluded_territories}.\n")  # fmt: skip
-    w("| Hub | HRCN AFREQ (/yr) | ≈ 1 event per N years | Score (approved: NA in reference) | "
-      "Score if NA were excluded (diagnostic only) |")  # fmt: skip
-    w("|---|---|---|---|---|")
+    # ------------------------------------------------------------- eligibility
+    w("## Ranking eligibility (explicit)\n")
+    w("| Hub | Overall eligible | Hazards not eligible | Reason |")
+    w("|---|---|---|---|")
+    for h in engine.catalog.hubs:
+        el = engine.get_hub_profile(h).ranking_eligibility
+        bad = [k for k, v in el.items() if k != "overall" and not v.eligible]
+        reason = el["overall"].reason or "—"
+        w(f"| {h.id} | {el['overall'].eligible} | {', '.join(bad) or '—'} | {reason} |")
+    r_h = engine.rank_hubs(hazard="hurricane")
+    r_f = engine.rank_hubs(hazard="flood")
+    w(f"\nMiami in hurricane ranking: rank "
+      f"{next((e.rank for e in r_h.ranked if e.hub_id == 'miami_fl'), None)}; in flood ranking: "
+      f"rank {next((e.rank for e in r_f.ranked if e.hub_id == 'miami_fl'), None)} "
+      "(complete hazards stay rankable even though Miami's overall score is partial).\n")  # fmt: skip
+
+    # ------------------------------------------------------------- normalization
+    w("## FEMA normalization in effect\n")
+    norm = cfg.nri_normalization
+    w(f"Method `{norm.method}`"
+      + (f", relative weight {norm.relative_weight:g}, absolute log anchors "
+         f"{norm.absolute_anchor.low:g}/yr → 0 and {norm.absolute_anchor.high:g}/yr → 100"
+         if norm.method == "hybrid" else "")
+      + ". See `docs/PHASE_2_SENSITIVITY.md` for the comparison with alternatives.\n")  # fmt: skip
+    w("| Hub | HRCN AFREQ (/yr) | ≈ 1 event per N years | Relative (national pctl) | "
+      "Absolute (log) | Final indicator score |")  # fmt: skip
+    w("|---|---|---|---|---|---|")
     for h in engine.catalog.hubs:
         rec = engine.county(h)
         v = rec.hazards[HazardCode.HURRICANE]
         r = pct.score(rec, HazardCode.HURRICANE)
-        alt = "—"
-        if r.n_below is not None:
-            alt = _f(100 * (r.n_below - d.n_not_applicable) / (d.n_eligible - d.n_not_applicable))
         per = f"{1 / v.annualized_frequency:.0f}" if v.annualized_frequency else "—"
-        w(f"| {h.id} | {_g(v.annualized_frequency)} ({v.status.value}) | {per} | {_f(r.score)} | "
-          f"{alt} |")  # fmt: skip
+        w(f"| {h.id} | {_g(v.annualized_frequency)} ({v.status.value}) | {per} | "
+          f"{_f(r.relative_score)} | {_f(r.absolute_score)} | {_f(r.score)} |")  # fmt: skip
     w("")
     w(f"Generated in {(datetime.now(UTC) - started).total_seconds():.1f} s.")
     return "\n".join(out) + "\n"

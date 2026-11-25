@@ -2,9 +2,11 @@
 #
 # HEURISTIC index of weather-hazard EXPOSURE (0–100). It is NOT a probability of disruption and NOT
 # a loss prediction. Anchors and weights below are transparent judgment calls, documented in
-# docs/SCORING_METHODOLOGY.md, and were fixed BEFORE any hub scores were computed.
+# docs/SCORING_METHODOLOGY.md. v1.0.0 parameters were fixed before any hub score was computed.
+# v1.1.0 changed only the FEMA normalization, after a sensitivity analysis
+# (docs/PHASE_2_SENSITIVITY.md); its absolute anchors follow a hub-independent return-period rule.
 
-methodology_version: "1.0.0"
+methodology_version: "1.1.0"   # 1.1.0: hybrid FEMA normalization (was percentile-only)
 
 climate:
   source: noaa_ghcn_daily            # one source per statistic/ranking (never mixed)
@@ -25,6 +27,16 @@ bands:                               # heuristic labels on the 0–100 scale
   - {label: Low, min: 0}
   - {label: Moderate, min: 40}
   - {label: High, min: 70}
+
+nri_normalization:
+  # FEMA AFREQ -> 0–100: blend of relative (national mid-rank percentile) and absolute frequency.
+  # Absolute part: log10 scale between a 1-in-100-year return period (0.01/yr, the US
+  # 1%-annual-chance planning standard) -> 0 and an annual occurrence (1/yr) -> 100.
+  # One rule for every hazard (not tuned per hazard or per hub); saturates at 100 for hazards
+  # occurring at least yearly, where the relative half then carries the comparison.
+  method: hybrid
+  relative_weight: 0.5
+  absolute_anchor: {low: 0.01, high: 1.0}
 
 hazard_weights:                      # equal by default: transparency, not validated priorities
   winter: 0.2

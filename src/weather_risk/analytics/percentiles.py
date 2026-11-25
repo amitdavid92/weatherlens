@@ -16,10 +16,12 @@ The result is bounded: 0 ≤ score < 100.
 
 from __future__ import annotations
 
+import math
 from bisect import bisect_left, bisect_right
 
 from pydantic import BaseModel, ConfigDict
 
+from weather_risk.analytics.config import NriNormalization
 from weather_risk.data.errors import DatasetVersionMismatchError
 from weather_risk.data.models import (
     CountyHazardRecord,
@@ -61,6 +63,8 @@ class PercentileResult(BaseModel):
     n_eligible: int
     n_below: float | None  # Z + L + 0.5·E (None if not ranked)
     method: str
+    relative_score: float | None = None  # national mid-rank percentile component
+    absolute_score: float | None = None  # log-scale absolute-frequency component (hybrid)
 
 
 def build_distribution(ref: HazardReferencePopulation, hazard: HazardCode) -> HazardDistribution:
@@ -88,10 +92,20 @@ def build_distribution(ref: HazardReferencePopulation, hazard: HazardCode) -> Ha
     )
 
 
+def absolute_log_score(x: float, low: float, high: float) -> float:
+    """100 · clip(log10(x/low) / log10(high/low), 0, 1) — absolute frequency on a log scale."""
+    if x <= 0:
+        return 0.0
+    return 100.0 * min(max(math.log10(x / low) / math.log10(high / low), 0.0), 1.0)
+
+
 class NationalPercentiles:
-    def __init__(self, ref: HazardReferencePopulation) -> None:
+    def __init__(
+        self, ref: HazardReferencePopulation, normalization: NriNormalization | None = None
+    ) -> None:
         self.nri_version = ref.nri_version
         self.total_records = ref.total_count
+        self.normalization = normalization or NriNormalization()
         self.distributions = {h: build_distribution(ref, h) for h in HazardCode}
 
     def score(self, record: CountyHazardRecord, hazard: HazardCode) -> PercentileResult:
@@ -102,7 +116,6 @@ class NationalPercentiles:
             )
         dist = self.distributions[hazard]
         v = record.hazards[hazard]
-        method = "national mid-rank percentile among eligible counties (50 states + DC)"
         if v.status in NO_EXPOSURE:
             return PercentileResult(hazard=hazard, status=v.status, afreq=v.annualized_frequency,
                                     score=0.0, n_eligible=dist.n_eligible, n_below=None,
@@ -116,7 +129,27 @@ class NationalPercentiles:
         lo = bisect_left(dist.positives, x)
         hi = bisect_right(dist.positives, x)
         n_below = dist.n_no_exposure + lo + 0.5 * (hi - lo)
-        score = 100.0 * n_below / dist.n_eligible
+        relative = 100.0 * n_below / dist.n_eligible
+        norm = self.normalization
+        absolute = None
+        if norm.method == "percentile":
+            score = relative
+            method = f"national mid-rank percentile among {dist.n_eligible} eligible counties"
+        elif norm.method == "conditional_percentile":
+            n_pos = len(dist.positives)
+            score = 100.0 * (lo + 0.5 * (hi - lo)) / n_pos
+            relative = score
+            method = f"mid-rank percentile among {n_pos} counties with positive frequency"
+        else:
+            a = norm.anchor_for(hazard)
+            absolute = absolute_log_score(x, a.low, a.high)
+            w = norm.relative_weight
+            score = w * relative + (1 - w) * absolute
+            method = (
+                f"hybrid: {w:g}·national percentile ({relative:.1f}) + {1 - w:g}·absolute log "
+                f"frequency ({absolute:.1f}; {a.low:g}/yr -> 0, {a.high:g}/yr -> 100)"
+            )
         return PercentileResult(hazard=hazard, status=v.status, afreq=x,
                                 score=min(max(score, 0.0), 100.0), n_eligible=dist.n_eligible,
-                                n_below=n_below, method=method)  # fmt: skip
+                                n_below=n_below, method=method, relative_score=relative,
+                                absolute_score=absolute)  # fmt: skip

@@ -95,6 +95,33 @@ class HazardResult(BaseModel):
     notes: list[str] = Field(default_factory=list)
 
 
+class RankingEligibility(BaseModel):
+    """Whether a score may enter a ranking, and why not (explicit, per scope)."""
+
+    model_config = ConfigDict(frozen=True)
+
+    scope: str  # "overall" or a hazard value
+    eligible: bool
+    status: str
+    reason: str | None = None
+
+
+class IndicatorContribution(BaseModel):
+    """One indicator's contribution, at both levels (to its hazard and to the overall index)."""
+
+    model_config = ConfigDict(frozen=True)
+
+    hazard: Hazard
+    indicator_id: str
+    label: str
+    raw_value: float | None
+    raw_unit: str
+    score: float | None
+    effective_weight_in_hazard: float
+    contribution_to_hazard: float  # points of the hazard score
+    contribution_to_overall: float  # points of the overall index = hazard weight × the above
+
+
 class HubProfile(BaseModel):
     model_config = ConfigDict(frozen=True)
 
@@ -111,6 +138,7 @@ class HubProfile(BaseModel):
     overall_band: str | None
     overall_status: Literal["complete", "partial", "unavailable"]
     hazards: dict[Hazard, HazardResult]
+    ranking_eligibility: dict[str, RankingEligibility]
     facts: list[Fact]
     sources: list[SourceRef]
     assumptions: list[str]
@@ -150,6 +178,8 @@ class RankingEntry(BaseModel):
     status: str
     top_contributors: list[str]
     fact_id: str
+    eligible: bool = True
+    exclusion_reason: str | None = None
 
 
 class RankingResult(BaseModel):
@@ -212,8 +242,10 @@ class Explanation(BaseModel):
     overall_status: str
     rank_among_catalog: int | None
     catalog_size_ranked: int
-    hazards_by_contribution: list[HazardResult]
-    top_indicators: list[IndicatorResult]
+    primary_driver: str | None  # hazard with the largest contribution to the overall index
+    hazards_by_contribution: list[HazardResult]  # hazard-level contributions (sum = overall)
+    top_indicators: list[IndicatorContribution]  # indicator-level; see contribution_to_overall
+    indicator_contribution_note: str
     not_applicable: list[str]
     unavailable: list[str]
     premise_check: PremiseCheck | None

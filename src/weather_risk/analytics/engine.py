@@ -22,8 +22,9 @@ from weather_risk.analytics.models import (
     Fact,
     HazardResult,
     HubProfile,
-    IndicatorResult,
+    IndicatorContribution,
     PremiseCheck,
+    RankingEligibility,
     RankingEntry,
     RankingResult,
     SourceRef,
@@ -149,7 +150,9 @@ class AnalyticsEngine:
 
     def percentiles(self) -> NationalPercentiles:
         if self._pct is None:
-            self._pct = NationalPercentiles(self.repo.get_hazard_reference())
+            self._pct = NationalPercentiles(
+                self.repo.get_hazard_reference(), self.cfg.nri_normalization
+            )
         return self._pct
 
     def county(self, hub: Hub) -> CountyHazardRecord:
@@ -279,6 +282,38 @@ class AnalyticsEngine:
             assumptions=assumptions, limitations=limitations,
         )  # fmt: skip
 
+    def _rankable(self, status: str, score: float | None) -> bool:
+        if score is None:
+            return False
+        return status == "complete" or (
+            status == "partial" and self.cfg.coverage.rank_partial_results
+        )
+
+    def _eligibility(self, hazards: dict[Hazard, HazardResult], overall: float | None,
+                     overall_status: str) -> dict[str, RankingEligibility]:  # fmt: skip
+        def hazard_reason(r: HazardResult) -> str:
+            missing = [f"{i.indicator_id} ({i.raw_status})" for i in r.indicators
+                       if i.score is None]  # fmt: skip
+            return (f"{r.hazard.value} is {r.status}: {r.available_weight_fraction:.0%} of "
+                    f"indicator weight available; missing {', '.join(missing) or 'none'}")  # fmt: skip
+
+        out: dict[str, RankingEligibility] = {}
+        for hz, r in hazards.items():
+            ok = self._rankable(r.status, r.score)
+            out[hz.value] = RankingEligibility(
+                scope=hz.value, eligible=ok, status=r.status,
+                reason=None if ok else hazard_reason(r) + "; not comparable, so not ranked",
+            )  # fmt: skip
+        ok = self._rankable(overall_status, overall)
+        reasons = [hazard_reason(r) for r in hazards.values() if r.status != "complete"]
+        out["overall"] = RankingEligibility(
+            scope="overall", eligible=ok, status=overall_status,
+            reason=None if ok else f"overall is {overall_status} because " + "; ".join(reasons)
+            + ". Missing data is never treated as zero, so the overall score is excluded from "
+            "the default overall ranking (it remains eligible for complete hazard rankings).",
+        )  # fmt: skip
+        return out
+
     # ------------------------------------------------------------------ 2. profile
     def get_hub_profile(self, hub: str | Hub) -> HubProfile:
         h = self.hub(hub)
@@ -338,7 +373,8 @@ class AnalyticsEngine:
             methodology_version=self.cfg.methodology_version, nri_version=pct.nri_version,
             climate_source=source, climate_period=period.label, fema_period_note=FEMA_PERIOD_NOTE,
             overall_score=overall, overall_band=self.cfg.band_for(overall), overall_status=status,
-            hazards=hazards, facts=facts, sources=sources, assumptions=assumptions,
+            hazards=hazards, ranking_eligibility=self._eligibility(hazards, overall, status),
+            facts=facts, sources=sources, assumptions=assumptions,
             limitations=self._base_limitations(),
         )  # fmt: skip
         self._profiles[h.id] = profile
@@ -389,27 +425,23 @@ class AnalyticsEngine:
                     f"{r.hazard.value} ({r.score:.1f})" for r in ordered[:2] if r.score is not None
                 ]
                 fid = f"{p.hub_id}.overall.score"
+                elig = p.ranking_eligibility["overall"]
             else:
                 r = p.hazards[hz]
                 score, status, band = r.score, r.status, r.band
                 inds = sorted(r.indicators, key=lambda i: (-i.contribution, i.indicator_id))
                 top = [f"{i.indicator_id} ({i.score:.1f})" for i in inds[:2] if i.score is not None]
                 fid = f"{p.hub_id}.{hz.value}.score"
-            rows.append((p, score, status, band, top, fid))
-
-        def rankable(status: str, score: float | None) -> bool:
-            if score is None:
-                return False
-            return status == "complete" or (status == "partial" and
-                                            self.cfg.coverage.rank_partial_results)  # fmt: skip
+                elig = p.ranking_eligibility[hz.value]
+            rows.append((p, score, status, band, top, fid, elig))
 
         ranked_rows = sorted(
-            [r for r in rows if rankable(r[2], r[1])],
+            [r for r in rows if r[6].eligible],
             key=lambda r: (-round(r[1], 9), r[0].hub_id),
         )
         ranked: list[RankingEntry] = []
         prev_score, prev_rank = None, 0
-        for i, (p, score, status, band, top, fid) in enumerate(ranked_rows, start=1):
+        for i, (p, score, status, band, top, fid, _) in enumerate(ranked_rows, start=1):
             rank = prev_rank if prev_score is not None and round(score, 9) == prev_score else i
             prev_score, prev_rank = round(score, 9), rank
             ranked.append(RankingEntry(rank=rank, hub_id=p.hub_id, display_name=p.display_name,
@@ -417,9 +449,10 @@ class AnalyticsEngine:
                                        top_contributors=top, fact_id=fid))  # fmt: skip
         not_ranked = [
             RankingEntry(rank=None, hub_id=p.hub_id, display_name=p.display_name, score=score,
-                         band=band, status=status, top_contributors=top, fact_id=fid)
-            for (p, score, status, band, top, fid) in sorted(rows, key=lambda r: r[0].hub_id)
-            if not rankable(status, score)
+                         band=band, status=status, top_contributors=top, fact_id=fid,
+                         eligible=False, exclusion_reason=elig.reason)
+            for (p, score, status, band, top, fid, elig) in sorted(rows, key=lambda r: r[0].hub_id)
+            if not elig.eligible
         ]  # fmt: skip
         scope_key = hz.value if hz else "overall"
         region_key = (Region(region).value if region else "all") if not hubs else "custom"
@@ -431,9 +464,9 @@ class AnalyticsEngine:
         limitations = self._base_limitations()
         if not_ranked:
             limitations.append(
-                "Hubs with partial or unavailable results are listed separately and not ranked, "
-                "because their scores are not directly comparable: "
-                + ", ".join(f"{e.hub_id} ({e.status})" for e in not_ranked)
+                "Hubs with partial or unavailable results for this scope are listed separately and "
+                "not ranked, because their scores are not directly comparable: "
+                + "; ".join(f"{e.hub_id}: {e.exclusion_reason}" for e in not_ranked)
             )
         return RankingResult(
             scope="hazard" if hz else "overall", hazard=hz,
@@ -500,13 +533,29 @@ class AnalyticsEngine:
         rank = next((e.rank for e in ranking.ranked if e.hub_id == p.hub_id), None)
         by_contrib = sorted(p.hazards.values(),
                             key=lambda r: (-(r.contribution_to_overall or -1), r.hazard.value))  # fmt: skip
-        # indicator contribution to the OVERALL score = hazard weight · indicator contribution
-        weighted: list[tuple[float, IndicatorResult]] = []
-        for hz in p.hazards.values():
-            for ind in hz.indicators:
-                if ind.score is not None and hz.score is not None:
-                    weighted.append((hz.weight_in_overall * ind.contribution, ind))
-        top = [i for _, i in sorted(weighted, key=lambda t: (-t[0], t[1].indicator_id))[:5]]
+        # Two levels, kept distinct:
+        #   hazard -> overall:     W_h · H_h                    (hazards_by_contribution; sum = O)
+        #   indicator -> overall:  W_h · w_i_eff · s_i          (top_indicators; sum = O)
+        contributions = [
+            IndicatorContribution(
+                hazard=hz.hazard, indicator_id=ind.indicator_id, label=ind.label,
+                raw_value=ind.raw_value, raw_unit=ind.raw_unit, score=ind.score,
+                effective_weight_in_hazard=ind.effective_weight,
+                contribution_to_hazard=ind.contribution,
+                contribution_to_overall=hz.weight_in_overall * ind.contribution,
+            )
+            for hz in p.hazards.values() if hz.score is not None
+            for ind in hz.indicators if ind.score is not None
+        ]  # fmt: skip
+        top = sorted(contributions, key=lambda c: (-c.contribution_to_overall, c.indicator_id))[:5]
+        primary = (by_contrib[0].hazard.value
+                   if by_contrib and by_contrib[0].contribution_to_overall is not None else None)  # fmt: skip
+        note = (
+            "Hazard-level contributions (W_h·H_h) are the primary explanation and sum to the "
+            "overall index. Indicator-level contributions (W_h·w_i·s_i) also sum to it, but a "
+            "hazard with a single indicator (hurricane) concentrates its whole weight in one "
+            "indicator, so indicator rankings must not be read as hazard rankings."
+        )
         na = [f"{hz.hazard.value}.{i.indicator_id}" for hz in p.hazards.values()
               for i in hz.indicators if i.raw_status == "not_applicable"]  # fmt: skip
         unavailable = [f"{hz.hazard.value}.{i.indicator_id} ({i.raw_status})"
@@ -536,8 +585,9 @@ class AnalyticsEngine:
         return Explanation(
             hub_id=p.hub_id, overall_score=p.overall_score, overall_band=p.overall_band,
             overall_status=p.overall_status, rank_among_catalog=rank,
-            catalog_size_ranked=len(ranking.ranked), hazards_by_contribution=by_contrib,
-            top_indicators=top, not_applicable=na, unavailable=unavailable,
+            catalog_size_ranked=len(ranking.ranked), primary_driver=primary,
+            hazards_by_contribution=by_contrib, top_indicators=top,
+            indicator_contribution_note=note, not_applicable=na, unavailable=unavailable,
             premise_check=premise, methodology_version=p.methodology_version, facts=p.facts,
             assumptions=p.assumptions, limitations=p.limitations,
         )  # fmt: skip

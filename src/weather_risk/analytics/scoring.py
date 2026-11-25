@@ -85,7 +85,7 @@ def _indicator_raw(
     elif pr.score is None:
         norm = f"{pr.status.value}: unavailable, not scored"
     else:
-        norm = f"national mid-rank percentile among {pr.n_eligible} eligible counties"
+        norm = pr.method
     return dict(
         label=f"FEMA NRI {ind.nri_hazard.name.replace('_', ' ').lower()} annualized frequency",
         raw_value=value.annualized_frequency,

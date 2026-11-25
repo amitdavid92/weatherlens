@@ -276,3 +276,47 @@ def test_scenario_report_renders_all_sections(engine):
         assert heading in md
     for h in engine.catalog.hubs:
         assert f"| {h.id} |" in md
+
+
+def test_miami_partial_overall_but_eligible_for_complete_hazard_rankings(engine):
+    p = engine.get_hub_profile("Miami")
+    el = p.ranking_eligibility
+    assert el["overall"].eligible is False and "winter is partial" in el["overall"].reason
+    assert "snow_days_measurable (insufficient_coverage)" in el["overall"].reason
+    assert el["winter"].eligible is False
+    assert el["hurricane"].eligible and el["flood"].eligible
+    for hz in ("hurricane", "flood"):
+        r = engine.rank_hubs(hazard=hz)
+        assert "miami_fl" in [e.hub_id for e in r.ranked]
+    overall = engine.rank_hubs()
+    entry = next(e for e in overall.not_ranked if e.hub_id == "miami_fl")
+    assert entry.eligible is False and entry.exclusion_reason == el["overall"].reason
+    assert entry.score is not None  # visible, not hidden
+    winter = engine.rank_hubs(hazard="winter")
+    assert "miami_fl" in [e.hub_id for e in winter.not_ranked]
+
+
+def test_explanation_contribution_levels_are_consistent(engine):
+    """Regression: hazard-level vs indicator-level contributions (Dallas review finding)."""
+    e = engine.explain_hub_score("Dallas")
+    p = engine.get_hub_profile("Dallas")
+    hazard_contrib = {hz.value: r.weight_in_overall * r.score for hz, r in p.hazards.items()}
+    # primary driver = argmax of independently recomputed hazard contributions
+    assert e.primary_driver == max(hazard_contrib, key=hazard_contrib.get)
+    assert sum(hazard_contrib.values()) == pytest.approx(e.overall_score)
+    # indicator-level contributions over ALL indicators also sum to the overall score
+    all_ind = sum(r.weight_in_overall * i.contribution for r in p.hazards.values()
+                  for i in r.indicators)  # fmt: skip
+    assert all_ind == pytest.approx(e.overall_score)
+    for c in e.top_indicators:
+        hz = p.hazards[c.hazard]
+        assert c.contribution_to_overall == pytest.approx(
+            hz.weight_in_overall * c.contribution_to_hazard
+        )
+    # a hazard's indicators never sum to more than that hazard's contribution
+    by_hazard: dict[str, float] = {}
+    for c in e.top_indicators:
+        by_hazard[c.hazard.value] = by_hazard.get(c.hazard.value, 0) + c.contribution_to_overall
+    for hz, total in by_hazard.items():
+        assert total <= hazard_contrib[hz] + 1e-9
+    assert "single indicator" in e.indicator_contribution_note
