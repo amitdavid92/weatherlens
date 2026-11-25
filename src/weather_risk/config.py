@@ -23,6 +23,18 @@ class Settings(BaseSettings):
 
     # LLM — declared for later phases; unused in the data layer.
     gemini_api_key: SecretStr | None = Field(default=None, alias="GEMINI_API_KEY")
+    gemini_model: str = Field(default="gemini-3.5-flash-lite", alias="WEATHER_RISK_GEMINI_MODEL")
+    gemini_fallback_model: str | None = Field(
+        default="gemini-3.5-flash", alias="WEATHER_RISK_GEMINI_FALLBACK_MODEL"
+    )
+    llm_timeout_seconds: float = Field(default=45.0, alias="WEATHER_RISK_LLM_TIMEOUT_SECONDS")
+    llm_max_attempts: int = Field(default=3, alias="WEATHER_RISK_LLM_MAX_ATTEMPTS")
+    sessions_path: Path = Field(
+        default=PROJECT_ROOT / "data" / "cache" / "sessions.db", alias="WEATHER_RISK_SESSIONS_PATH"
+    )
+    cors_origins: str = Field(
+        default="http://localhost:5173,http://127.0.0.1:5173", alias="WEATHER_RISK_CORS_ORIGINS"
+    )
 
     cache_path: Path = Field(
         default=PROJECT_ROOT / "data" / "cache" / "cache.db", alias="WEATHER_RISK_CACHE_PATH"
