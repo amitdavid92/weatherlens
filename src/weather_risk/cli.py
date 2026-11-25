@@ -311,13 +311,18 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("hubs")
     sub.add_parser("build-snapshot")
     sub.add_parser("verify-snapshot")
+    sc = sub.add_parser("scenarios", help="Phase 2: run the 4 assignment scenarios (no LLM)")
+    sc.add_argument("--offline", action="store_true", help="cache/snapshot only; no network")
+    sc.add_argument("--out", type=Path, default=None, help="write markdown report to this path")
     v = sub.add_parser("validate-data")
     v.add_argument("--offline", action="store_true", help="cache/snapshot only; no network")
     v.add_argument("--out", type=Path, default=None, help="write markdown report to this path")
     args = parser.parse_args(argv)
 
     settings = get_settings()
-    configure_logging(settings.log_level if args.cmd != "validate-data" else "WARNING")
+    configure_logging(
+        settings.log_level if args.cmd not in ("validate-data", "scenarios") else "WARNING"
+    )
     catalog = load_catalog(settings.hubs_path)
 
     if args.cmd == "hubs":
@@ -335,6 +340,23 @@ def main(argv: list[str] | None = None) -> int:
         problems = store.verify()
         print(f"{len(store)} entries; problems: {problems or 'none'}")
         return 1 if problems else 0
+    if args.cmd == "scenarios":
+        from weather_risk.analytics.config import load_scoring_config
+        from weather_risk.analytics.engine import AnalyticsEngine
+        from weather_risk.analytics.report import render_scenarios
+
+        repo = build_repository(settings.model_copy(update={"offline": args.offline}))
+        engine = AnalyticsEngine(
+            repo, catalog, load_scoring_config(PROJECT_ROOT / "config" / "scoring.yaml")
+        )
+        report = render_scenarios(engine, offline=args.offline)
+        if args.out:
+            out = args.out if args.out.is_absolute() else PROJECT_ROOT / args.out
+            out.write_text(report)
+            print(f"wrote {out}")
+        else:
+            print(report)
+        return 0
     if args.cmd == "validate-data":
         s = settings.model_copy(update={"offline": args.offline})
         repo = build_repository(s)

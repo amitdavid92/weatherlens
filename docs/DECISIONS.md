@@ -123,3 +123,83 @@ The snapshot makes the **data layer** work offline. A real LLM conversation stil
 - It is typed as `SecretStr`, so it is redacted in repr and logs.
 - `.env.example` has empty values only.
 - Claude Code never reads `.env`.
+
+---
+
+## Phase 2 (2026-11-25)
+
+### D-014: Scoring parameters live in versioned, validated config
+`config/scoring.yaml` holds the following, all with `methodology_version: 1.0.0`:
+- climate source and period (NOAA, 2016–2025);
+- minimum coverage (0.90);
+- quality-flag exclusion;
+- thresholds (4 in heavy snow, TMIN ≤ 0 °C, TMAX ≥ 35 °C);
+- climate anchors;
+- indicator and hazard weights (equal 0.2);
+- partial-hazard threshold (0.60);
+- bands.
+
+Load-time validation rejects weights that don't sum to 1, non-positive hazard weights, missing hazards, inverted anchors, inconsistent indicator kinds and non-increasing bands. The parameters were fixed before any scores were computed.
+
+### D-015: Not-applicable FEMA counties belong to the reference population as a no-exposure tier
+**Refines Phase 0 Addendum A2**, which excluded them.
+- FEMA defines "Not Applicable" as *community not considered at risk*, which is known absence of exposure, not missing data.
+- `not_applicable` and `observed_zero` counties stay in the per-hazard denominator, ranked below all positives, and score 0 themselves.
+- Only territories, `insufficient_data` and `unknown` are excluded.
+
+Excluding not-applicable counties would rank, say, Dallas's hurricane frequency only against coastal-adjacent counties. Its percentile would fall from 50.8 to 35.5, but for the wrong reason: absent-exposure counties would be dropped instead of counted below it.
+
+### D-016: Not-applicable hazards in hub scores: score 0, keep the weight
+A not-applicable indicator contributes 0 and stays in the hazard and overall denominators, so removing it cannot inflate a score (Dallas flood = 48.9, not 97.8). Unknown or insufficient data is never 0. It makes the hazard `partial` (renormalized, if ≥ 60% of weight is available) or `unavailable`, and an unavailable hazard makes the overall index unavailable.
+
+### D-017: Partial results are reported but not ranked
+`rank_partial_results: false`. A hub with any partial hazard appears in rankings under `not_ranked` with its score and status. Example: Miami's winter score lacks the snow indicators (20.5% coverage).
+
+### D-018: Annual averages use observed-rate scaling
+`annual = (event_days / valid_days) · (expected_days / n_years)`. This assumes missing days resemble observed ones and never treats them as zero. It applies only when coverage is ≥ 90%.
+
+### D-019: Engine contracts carry stable fact ids
+Every result (`WeatherStatResult`, `HubProfile`, `RankingResult`, `ComparisonResult`, `Explanation`) carries `Fact`s with ids such as `denver_co.stat.snow_days_measurable.2025-01-01_2025-12-31.noaa_ghcn_daily.percent`, `dallas_tx.overall.score` and `dallas_tx.extreme_heat.nri_heat_wave.score`. Each fact also carries units, sources, period and status. Phase 3 renders critical numbers from these ids (D-012).
+
+### D-020: Premise checks are deterministic
+`explain_hub_score(hub, claimed_band)` compares the claim with the configured bands and reports `supported: true/false/None` with reasoning. For Dallas, the claim "High" is **not supported** (59.7, Moderate; rank 2 of 11 ranked hubs). Thresholds were not adjusted.
+
+### D-021 (resolved by D-022): percentile compression near zero
+The approved mid-rank percentile gives tiny but positive modeled frequencies mid-range scores. Examples: hurricane, Dallas ≈ 1/87 yr → 50.8; coastal flood, any coastal county ≥ ~85.
+
+Options for a v1.1:
+- (a) keep it, and disclose it (current behavior);
+- (b) blend the percentile with an absolute log-scale anchor on AFREQ;
+- (c) apply a minimum material frequency, e.g. treat < 0.02/yr as the no-exposure tier.
+
+Not changed in Phase 2.
+
+## Phase 2 refinement (2026-11-25, methodology 1.1.0)
+
+### D-022: Hybrid FEMA normalization (methodology 1.1.0)
+`s = 0.5·national mid-rank percentile + 0.5·absolute log-frequency`. The absolute half uses one return-period rule for every hazard: 0.01/yr (the 1%-annual-chance "100-year" planning standard) → 0, and 1/yr → 100, on a log10 scale.
+
+- **Chosen over** percentile-only (v1.0.0) and conditional (positive-only) percentiles after a sensitivity analysis (`docs/PHASE_2_SENSITIVITY.md`). The conditional version fixes hurricane but drops Miami's coastal-flood score to 44.0, because coastal counties are then compared only with each other.
+- **The hybrid is monotone in frequency,** so every within-hazard ranking is unchanged; magnitudes for rare hazards fall (Dallas hurricane 50.8 → 27.0).
+- **No minimum-frequency cutoff:** every positive frequency still scores above 0.
+- **Known effect:** for hazards that occur at least yearly almost everywhere, the absolute half saturates at 100, so overall *levels* rose (e.g. Houston 68.3 → 73.6, now in the High band). Overall rank order changed only for two adjacent pairs (Atlanta/Kansas City, Minneapolis/Indianapolis).
+- **Not chosen per hub or per hazard.** Hazard-specific severity anchors were out of scope for the timebox.
+
+### D-023: Contribution levels are reported explicitly
+**Problem:** the Phase 2 report and summary said Dallas's hurricane indicator was "the single largest contributor to the overall score".
+- At **indicator level** that was true: hurricane is the only indicator of its hazard, so it gets the full hazard weight (10.2 points).
+- At **hazard level** it was third (severe convective 17.9, heat 16.2, hurricane 10.2).
+- The arithmetic was consistent; the wording conflated the two levels.
+
+**Fix:**
+- `Explanation` now has `primary_driver` (hazard level), `hazards_by_contribution` (`W_h·H_h`; sums to the overall score), `top_indicators` with both `contribution_to_hazard` and `contribution_to_overall`, and an explanatory note.
+- Regression tests check that the primary driver is the argmax of independently recomputed hazard contributions, and that both levels sum to the overall score.
+
+### D-024: Ranking eligibility is per scope, with explicit reasons
+- Every `HubProfile` exposes `ranking_eligibility[overall | <hazard>]` with `eligible`, `status` and `reason`.
+- `RankingEntry` carries `eligible` and `exclusion_reason`.
+- Partial overall scores stay visible but are excluded from the default overall ranking.
+- A hazard ranking includes every hub whose *hazard* is complete. Miami is ranked #1 for hurricane and #2 for flood; it is excluded only from the overall and winter rankings, because its snowfall coverage is 20.5% (missing is never treated as 0).
+
+### D-025: AI session export placement and review
+The user's `/export` (Phases 0–1) was moved unmodified to `docs/ai-session/session-phase-0-1.txt` after a pattern review: no credentials; personal data limited to the chosen GitHub noreply address and local paths. A real-looking Gemini key was later typed into the tracked `.env.example` and echoed into this session. That file was never staged. The key must be rotated and redacted from the next export.

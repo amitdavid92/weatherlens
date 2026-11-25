@@ -25,9 +25,17 @@ The assignment requires submitting the full session with the AI agent. This fold
 ## Index
 | File | Phases | Session id | Notes |
 |---|---|---|---|
-| _(pending user `/export`)_ | 0–1 | 5281f355-2997-426b-847f-1827c1714b11 | Planning, research, Phase 1 data layer |
+| [session-phase-0-1.txt](session-phase-0-1.txt) | 0–1 | 5281f355-2997-426b-847f-1827c1714b11 | `/export` by the user (94,157 bytes), moved into the repo unmodified. Covers Phase 0 planning/research and the Phase 1 data layer. |
+| _(pending `/export`)_ | 2 and later | 5281f355-2997-426b-847f-1827c1714b11 | Same session, continued. **Needs one redaction before committing** (see below). |
+
+## Review log
+| File | Reviewed | Findings | Action |
+|---|---|---|---|
+| session-phase-0-1.txt | 2026-11-25 (pattern scan: Google `AIza…`/`AQ.…` keys, `sk-`, `ghp_`, non-empty `GEMINI_API_KEY=`, private keys, email addresses, local paths) | No credentials. The two `GEMINI_API_KEY=` matches are the placeholder `your-key-here`. Personal data: the GitHub noreply author address (already public in commit metadata, by choice) and local `/Users/amitdavid/...` paths. No private email address. | None. Content preserved verbatim. |
 
 ## Redaction log
 | File | Location | What | Why |
 |---|---|---|---|
-| — | — | — | — |
+| — | — | No redactions so far | — |
+
+> **Known item for the next export:** during Phase 2 a real-looking Gemini API key was typed into the tracked `.env.example`. A file-change notification echoed it into this session, so the Phase 2+ transcript contains it. Before that export is committed, the key must be replaced with `[REDACTED: API key]` and logged here, and the key must be rotated. `.env.example` itself was never staged or committed.

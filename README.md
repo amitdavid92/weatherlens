@@ -2,7 +2,7 @@
 
 An AI agent that helps logistics analysts see which US distribution hubs are most exposed to weather hazards. It uses public data and deterministic analytics; the LLM never computes numbers or rankings.
 
-> **Status: Phase 1 (foundation and data layer) complete.** The risk engine (Phase 2), the agent and API (Phase 3) and the chat UI (Phase 4) come next. See [docs/PHASE_0_PLAN.md](docs/PHASE_0_PLAN.md) and [docs/PHASE_1_REPORT.md](docs/PHASE_1_REPORT.md).
+> **Status: Phase 2 (deterministic risk engine) complete.** Next: agent and API (Phase 3), then the chat UI (Phase 4). See [docs/PHASE_2_REPORT.md](docs/PHASE_2_REPORT.md) and [docs/SCORING_METHODOLOGY.md](docs/SCORING_METHODOLOGY.md).
 
 **Scope and framing:** the product computes a **Weather Hazard Exposure Index**. It does not measure operational disruption risk, because we have no shipment, downtime or loss data. The 12 hubs in [config/hubs.yaml](config/hubs.yaml) are **illustrative examples**, not real company facilities.
 
@@ -50,6 +50,13 @@ make snapshot           # re-fetch everything into data/snapshot/ (~6-8 min, net
 
 Set `WEATHER_RISK_OFFLINE=true` to skip the network entirely.
 
+## Running the risk engine (Phase 2, no LLM)
+```bash
+make scenarios          # 4 assignment scenarios + 12-hub score table from the snapshot -> docs/PHASE_2_VALIDATION.md
+make scenarios-live     # same, resolving data live (cache -> network -> snapshot)
+```
+Scores are a heuristic **Weather Hazard Exposure Index** (0–100) over five hazards: winter, hurricane, flood, severe convective storms and extreme heat. The parameters are in [config/scoring.yaml](config/scoring.yaml) and the method is documented in [docs/SCORING_METHODOLOGY.md](docs/SCORING_METHODOLOGY.md).
+
 ## Repository layout (so far)
 ```
 config/hubs.yaml                 illustrative hub catalog (verified stations/counties)
@@ -61,6 +68,11 @@ src/weather_risk/
     models.py                    typed contracts (provenance, statuses, datasets, NRI records)
     adapters/{noaa_ghcn,open_meteo,fema_nri}.py   source-specific request/parse only
     http.py  cache.py  snapshot.py  repository.py  periods.py  errors.py
+  analytics/
+    config.py  periods.py  stats.py  percentiles.py  scoring.py   pure deterministic logic
+    engine.py                    get_weather_stat / get_hub_profile / rank_hubs / compare_hubs / explain_hub_score
+    models.py  report.py         typed result contracts with fact ids; scenario report
+config/scoring.yaml              methodology 1.0.0: anchors, weights, thresholds, coverage policy
 data/snapshot/                   committed raw-response snapshot + manifest.json
 tests/unit/                      offline tests (real recorded fixtures in tests/fixtures/)
 tests/integration/               opt-in live tests (-m live)
