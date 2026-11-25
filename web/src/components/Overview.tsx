@@ -48,7 +48,7 @@ export function Overview({
     return (
       <div className="page">
         <Callout tone="error" title="Analytical data is unavailable">
-          {error} Start the backend (<code>make api</code>) and reload.
+          {error}
         </Callout>
       </div>
     )

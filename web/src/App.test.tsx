@@ -67,6 +67,18 @@ describe('Overview dashboard', () => {
     expect(within(profile).getByRole('button', { name: /Ask the AI Analyst/ })).toBeEnabled()
   })
 
+  it('explains an unreachable backend (dev-proxy 502) on every view instead of "Bad Gateway"', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('Bad Gateway', { status: 502, statusText: 'Bad Gateway' })))
+    render(<App />)
+    expect(await screen.findByText('Analytical data is unavailable')).toBeInTheDocument()
+    expect(screen.getByText(/API server is not reachable/)).toBeInTheDocument()
+    expect(await screen.findByText(/Analytics unavailable/)).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Methodology & Data' }))
+    expect(await screen.findByText('Methodology unavailable')).toBeInTheDocument()
+    expect(screen.getByText(/make api/)).toBeInTheDocument()
+    expect(screen.queryByText('Bad Gateway')).not.toBeInTheDocument()
+  })
+
   it('renders an error state when analytics are unavailable', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => json({ error: 'data_unavailable', detail: 'Data unavailable' }, 503)))
     render(<App />)
@@ -138,6 +150,16 @@ describe('AI Analyst', () => {
     await screen.findByRole('article', { name: 'AI Analyst answer' })
     expect(screen.getAllByText(q, { selector: '.msg-user p' })).toHaveLength(1) // one user turn, not two
     expect(calls.filter((c) => c.url === '/api/chat').map((c) => (c.body as { message: string }).message)).toEqual([q, q])
+  })
+
+  it('explains an unreachable backend in the chat with a retry', async () => {
+    mockApi({ chat: () => new Response('Bad Gateway', { status: 502 }) })
+    render(<App />)
+    await goToAnalyst()
+    await userEvent.click(await screen.findByRole('button', card('What percentage of days in Denver last year had snowfall?')))
+    const alert = await screen.findByRole('alert')
+    expect(alert).toHaveTextContent('The WeatherLens server is not reachable')
+    expect(within(alert).getByRole('button', { name: /Retry/ })).toBeInTheDocument()
   })
 
   it('handles network errors', async () => {

@@ -22,6 +22,9 @@ export class ApiError extends Error {
   }
 }
 
+export const BACKEND_UNREACHABLE =
+  'The WeatherLens API server is not reachable. Start it with “make api” (or the full stack with “make dev”), then reload.'
+
 const CHAT_TIMEOUT_MS = 120_000 // real Gemini turns take 5–45 s; backend bounds its own retries
 const READ_TIMEOUT_MS = 30_000
 
@@ -42,7 +45,7 @@ async function request<T>(path: string, init: RequestInit = {}, timeoutMs = READ
       aborted ? 'client_timeout' : 'network_error',
       aborted
         ? 'The request took longer than expected and was stopped.'
-        : 'Could not reach the WeatherLens server. Check that the backend is running.',
+        : BACKEND_UNREACHABLE,
       true,
     )
   } finally {
@@ -54,6 +57,11 @@ async function request<T>(path: string, init: RequestInit = {}, timeoutMs = READ
       body = await res.json()
     } catch {
       /* non-JSON error body */
+    }
+    // A gateway error without the backend's structured body means the dev proxy could not reach
+    // FastAPI (server not running); backend-originated 503s always carry {error, detail}.
+    if (!body.error && [502, 503, 504].includes(res.status)) {
+      throw new ApiError(res.status, 'backend_unreachable', BACKEND_UNREACHABLE, true)
     }
     throw new ApiError(res.status, body.error ?? 'http_error', body.detail ?? res.statusText, body.retryable ?? res.status >= 500)
   }
@@ -105,6 +113,8 @@ export function describeChatError(e: unknown): { title: string; detail: string; 
       }
     case 'unknown_session':
       return { title: 'This conversation has expired', detail: 'Start a new conversation to continue.', retryable: false }
+    case 'backend_unreachable':
+      return { title: 'The WeatherLens server is not reachable', detail: e.message, retryable: true }
     case 'client_timeout':
     case 'network_error':
       return { title: e.code === 'client_timeout' ? 'No answer yet' : 'Connection problem', detail: e.message, retryable: true }
