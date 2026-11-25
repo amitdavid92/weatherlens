@@ -21,7 +21,7 @@ from pydantic import ValidationError
 
 from weather_risk.agent.facts import FactRegistry
 from weather_risk.agent.grounding import deterministic_summary, render, validate
-from weather_risk.agent.llm import ChatMessage, LLMProvider, Usage
+from weather_risk.agent.llm import ChatMessage, LLMAuthError, LLMError, LLMProvider, Usage
 from weather_risk.agent.schema import (
     AgentInfo,
     Analysis,
@@ -172,14 +172,38 @@ class Agent:
         registry = FactRegistry()
         toolbox = ToolBox(self.engine, registry)
         usage = Usage()
+        call_log: list[dict] = []
+        if hasattr(self.provider, "call_log"):
+            self.provider.call_log = call_log  # type: ignore[attr-defined]
+        self._timing = {"validation_ms": 0.0}
+        t_tools = time.perf_counter()
         execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+        tool_phase_ms = (time.perf_counter() - t_tools) * 1000
+        t_syn = time.perf_counter()
         response = self._synthesize(message, history, execs, registry, usage, notes)
+        synthesis_phase_ms = (time.perf_counter() - t_syn) * 1000
         model_version = response.pop("_model_version", None) or model_version
 
+        def llm_ms(phase: str) -> float:
+            return round(
+                sum(c.get("latency_ms", 0) for c in call_log if c.get("phase") == phase), 1
+            )
+
+        timings = {
+            "tool_phase_ms": round(tool_phase_ms, 1),
+            "tool_selection_llm_ms": llm_ms("tool_selection"),
+            "tool_execution_ms": round(sum(e.latency_ms for e in execs), 1),
+            "synthesis_phase_ms": round(synthesis_phase_ms, 1),
+            "synthesis_llm_ms": llm_ms("synthesis"),
+            "validation_ms": round(self._timing["validation_ms"], 1),
+            "provider_wait_ms": float(sum(c.get("wait_ms", 0) for c in call_log)),
+            "synthesis_prompt_chars": float(self._timing.get("synthesis_prompt_chars", 0)),
+        }
         resp = self._build_response(
             sid=sid, turn=turn, message=message, execs=execs, registry=registry, usage=usage,
             iterations=iterations, model_version=model_version,
-            latency_ms=(time.perf_counter() - t0) * 1000, **response,
+            latency_ms=(time.perf_counter() - t0) * 1000, timings=timings,
+            llm_calls=list(call_log), **response,
         )  # fmt: skip
         self.sessions.append(sid, turn, message, resp.model_dump(mode="json"))
         log.info("chat_turn", extra={"turn": turn, "status": resp.status,
@@ -261,14 +285,17 @@ class Agent:
         return (
             f"Previous turn context: {ctx}\n\n{_wrap_user(message)}\n\n"
             f"Tool results (authoritative; values must be cited via their fact ids):\n"
-            f"{json.dumps(results, default=str)}\n\n"
+            f"{json.dumps(results, default=str, separators=(',', ':'), ensure_ascii=False)}\n\n"
             + (f"Agent notes: {'; '.join(notes)}\n" if notes else "")
-            + ("No tools were called. If the question needs data, ask for clarification or "
-               "mark it unsupported; do not answer from memory." if not execs else "")
+            + ("No tools were called, so there are NO facts: do not write any {{fact:...}} "
+               "placeholders and no numbers. If the question needs data, set status "
+               "needs_clarification (asking which hub/period/metric) or unsupported; do not answer "
+               "from memory." if not execs else "")
         )  # fmt: skip
 
     def _synthesize(self, message, history, execs, registry, usage, notes) -> dict[str, Any]:
         prompt = self._synthesis_prompt(message, history, execs, notes)
+        self._timing["synthesis_prompt_chars"] = len(prompt)
         schema = LLMAnswer.model_json_schema()
         issues: list[str] = []
         attempts = 0
@@ -277,10 +304,22 @@ class Agent:
         answer: LLMAnswer | None = None
         retry_reasons: list[str] = []
         for attempts in (1, 2):
-            text, u, _, model_version = self.provider.structured(
-                system=SYNTHESIS_SYSTEM, prompt=prompt + feedback, schema=schema
-            )
+            try:
+                text, u, _, model_version = self.provider.structured(
+                    system=SYNTHESIS_SYSTEM, prompt=prompt + feedback, schema=schema
+                )
+            except LLMError as exc:
+                # Provider failed during synthesis. If tools already produced verified results,
+                # degrade to the labeled deterministic summary instead of failing the request
+                # (D-038); with no results the provider error propagates (HTTP 503/429/504).
+                if not any(e.ok for e in execs) or isinstance(exc, LLMAuthError):
+                    raise
+                log.warning("synthesis_provider_error", extra={"kind": exc.kind})
+                issues = [f"synthesis unavailable: provider {exc.kind} ({exc})"]
+                answer = None
+                break
             usage.add(u)
+            t_val = time.perf_counter()
             try:
                 answer = LLMAnswer.model_validate_json(text)
                 issues = validate(answer, registry=registry, catalog=self.engine.catalog,
@@ -289,6 +328,7 @@ class Agent:
                 answer = None
                 issues = [f"schema: {'.'.join(map(str, e['loc']))}: {e['msg']}"
                           for e in exc.errors()][:8]  # fmt: skip
+            self._timing["validation_ms"] += (time.perf_counter() - t_val) * 1000
             if not issues:
                 break
             log.warning("grounding_failed", extra={"attempt": attempts, "issues": issues[:5]})
@@ -302,7 +342,7 @@ class Agent:
     # ------------------------------------------------------------------ response
     def _build_response(self, *, sid, turn, message, execs: list[ToolExecution], registry,
                         usage: Usage, iterations, model_version, latency_ms, answer, issues,
-                        attempts, retry_reasons) -> ChatResponse:  # fmt: skip
+                        attempts, retry_reasons, timings=None, llm_calls=None) -> ChatResponse:  # fmt: skip
         valid = answer is not None
         if valid:
             text, used = render(answer.narrative, registry)
@@ -324,9 +364,10 @@ class Agent:
         elif any(e.ok for e in execs):
             summary = deterministic_summary(execs)
             text, used = render(summary, registry)
-            text = ("**Deterministic summary** — the AI-written answer failed validation, so "
-                    "these verified results are shown directly from the analytics engine:\n\n"
-                    + text)  # fmt: skip
+            text = ("**Deterministic summary** — the AI-written answer was unavailable or failed "
+                    "validation, so these verified results are shown directly from the analytics "
+                    "engine. Scores are a heuristic weather-hazard exposure index, not a "
+                    "probability of operational disruption.\n\n" + text)  # fmt: skip
             status, intent, source = "fallback", _intent_from(execs), "deterministic_fallback"
             resolved = _resolved_from(execs)
             follow_ups, premise, clarify = [], None, None
@@ -365,6 +406,7 @@ class Agent:
                             for e in execs],
                 input_tokens=usage.input_tokens, output_tokens=usage.output_tokens,
                 thinking_tokens=usage.thinking_tokens, latency_ms=round(latency_ms, 1),
+                timings_ms=timings or {}, llm_calls=llm_calls or [],
             ),
         )  # fmt: skip
 

@@ -42,6 +42,25 @@ The **Weather Risk Intelligence Agent** answers analysts' questions about weathe
 
 **Frontend state:** React state plus one `useChat` hook; no state library.
 
+### Provider resilience and observability (Phase 5)
+**Model chain** (`gemini-3.5-flash-lite` → `gemini-3.6-flash` → `gemini-3.5-flash`, thinking level `low`):
+- 503, timeout or 429: move to the next model immediately.
+- Whole-chain rounds are bounded.
+- Day-long quota 429s trip a per-model circuit breaker.
+- If synthesis cannot get any model after the tools succeeded, the response is the labeled deterministic summary.
+
+**Observability:** every response carries `agent.timings_ms`:
+- tool-selection LLM;
+- tool execution;
+- synthesis LLM;
+- validation;
+- provider waits;
+- prompt size.
+
+It also carries `agent.llm_calls`: every HTTP attempt, with model, latency, tokens and errors.
+
+**Evaluation:** `evals/run.py` drives the real API with `evals/cases.yaml` (see the README).
+
 ### Request flow for `POST /api/chat`
 1. **Load the session.** The server reads the last 6 turns and the latest resolved context (hubs, hazards, metric, period) from SQLite. A new session gets an unguessable id.
 2. **Tool phase,** at most 6 iterations and 12 tool calls. Gemini receives the system rules, the history and the six tool declarations. For each function call:
@@ -86,7 +105,8 @@ src/weather_risk/
 data/snapshot/ committed raw API responses + manifest (offline fallback)
 tests/unit/    offline tests (fixtures, snapshot-backed engine, FakeProvider)
 tests/integration/  opt-in live data-source tests (-m live)
-scripts/       record_fixtures.py, sensitivity.py, live_smoke.py (REAL Gemini)
+scripts/       record_fixtures.py, sensitivity.py, live_smoke.py, benchmark.py (REAL Gemini)
+evals/         cases.yaml (versioned dataset), run.py (runner), results/ (actual runs)
 web/           WeatherLens frontend (src/api, src/components, src/hooks, e2e/)
 docs/          plan, decisions, methodology, phase reports, screenshots, AI session export
 ```

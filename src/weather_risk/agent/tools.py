@@ -8,6 +8,7 @@ reference {"fact": id, "value": display}. The LLM never receives a bare number t
 from __future__ import annotations
 
 import json
+import logging
 import time
 from typing import Any, Literal
 
@@ -33,6 +34,7 @@ from weather_risk.data.errors import (
 from weather_risk.data.models import SourceId
 
 MAX_TOOL_PAYLOAD_CHARS = 24_000
+log = logging.getLogger("weather_risk.tools")
 
 HazardName = Literal["winter", "hurricane", "flood", "severe_convective", "extreme_heat"]
 RegionName = Literal["Midwest", "South", "West", "Northeast"]
@@ -174,6 +176,10 @@ class ToolBox:
         except DataLayerError as exc:  # invalid period/hazard/region etc.
             return done(ok=False, error=str(exc), error_type="invalid_request",
                         payload={"error": str(exc)})  # fmt: skip
+        except Exception:  # noqa: BLE001 - a tool bug must not become an HTTP 500
+            log.exception("tool_internal_error", extra={"tool": name})
+            return done(ok=False, error="internal tool error", error_type="internal_error",
+                        payload={"error": "internal tool error; do not estimate"})  # fmt: skip
         text = json.dumps(payload, default=str)
         if len(text) > MAX_TOOL_PAYLOAD_CHARS:
             return done(ok=False, error="tool payload too large", error_type="payload_too_large",
@@ -244,7 +250,9 @@ class ToolBox:
     def _rank_hubs(self, a: RankHubsArgs) -> tuple[dict, RankingResult]:
         r = self.engine.rank_hubs(hazard=a.hazard, region=a.region, hubs=a.hubs)
         topic = r.hazard.value if r.hazard else "overall"
-        scope = f"{topic}.{r.region or ('custom' if a.hubs else 'all')}"
+        # ranks depend on the hub set, so an explicit subset is part of the fact id
+        subset = "custom-" + "-".join(sorted(r.hub_ids)) if a.hubs else None
+        scope = f"{topic}.{subset or r.region or 'all'}"
 
         def entry(e) -> dict:
             p = self.engine.get_hub_profile(e.hub_id)
@@ -259,6 +267,19 @@ class ToolBox:
                                             tool="rank_hubs")  # fmt: skip
             else:
                 item["excluded_reason"] = e.exclusion_reason
+                # the incomplete hazard and its available indicator weight, as verified facts
+                partial = [h for h in p.hazards.values() if h.status != "complete"]
+                if r.hazard is not None:
+                    partial = [p.hazards[r.hazard]]
+                if partial:
+                    h = partial[0]
+                    item["incomplete_hazard"] = h.hazard.value
+                    item["available_weight"] = self.reg.add(
+                        f"{e.hub_id}.{h.hazard.value}.available_weight",
+                        label=f"{e.hub_id} share of {h.hazard.value} indicator weight with data",
+                        value=round(100 * h.available_weight_fraction), unit="%", kind="statistic",
+                        hub_id=e.hub_id, topic=h.hazard.value, tool="rank_hubs",
+                        display=f"{round(100 * h.available_weight_fraction)}%")  # fmt: skip
             if r.hazard is None:
                 drivers = sorted(p.hazards.values(),
                                  key=lambda h: -(h.contribution_to_overall or 0))[:2]  # fmt: skip

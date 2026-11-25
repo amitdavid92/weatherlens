@@ -1,0 +1,36 @@
+20261125T151306Z-full.json
+20261125T151306Z-full.md
+fail            A1-midwest-winter              14.6s
+fail            A2-miami-houston               13.0s
+fail            A3-denver-snow-2025            74.0s
+fail            A4-dallas-premise              18.4s
+fail            R1-overall-partial-miami       44.3s
+pass            R2-hurricane-miami-ranked      19.4s
+fail            R3-south-heat                  36.1s
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/evals/run.py", line 492, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/evals/run.py", line 473, in main
+    res = run_case(case, engine, clients)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/evals/run.py", line 338, in run_case
+    r, notes = post(client, turn["say"], sid)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/evals/run.py", line 320, in post
+    d = resp.json()
+        ^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/httpx/_models.py", line 832, in json
+    return jsonlib.loads(self.content, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+[exited with code 0]

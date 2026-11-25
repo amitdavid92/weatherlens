@@ -74,7 +74,8 @@ def build_state(settings: Settings, *, provider: LLMProvider | None = None,
             provider = GeminiProvider(api_key=key, model=settings.gemini_model,
                                       fallback_model=settings.gemini_fallback_model,
                                       timeout_seconds=settings.llm_timeout_seconds,
-                                      max_attempts=settings.llm_max_attempts)  # fmt: skip
+                                      max_attempts=settings.llm_max_attempts,
+                                      thinking_level=settings.llm_thinking_level or None)  # fmt: skip
         except LLMNotConfiguredError as exc:
             provider, error = None, str(exc)
     return AppState(settings, engine, provider, error, SessionStore(settings.sessions_path))
@@ -128,6 +129,11 @@ def create_app(state: AppState | None = None) -> FastAPI:
         d = exc.detail if isinstance(exc.detail, dict) else {"error": "http_error",
                                                               "detail": str(exc.detail)}  # fmt: skip
         return err(exc.status_code, d["error"], d["detail"], d.get("retryable", False))
+
+    @app.exception_handler(Exception)
+    async def unhandled(_: Request, exc: Exception):
+        log.error("unhandled_error", exc_info=exc)
+        return err(500, "internal_error", "The server could not process the request.")
 
     @app.get("/api/health", tags=["system"], summary="Service, data and LLM status")
     def health(request: Request) -> dict[str, Any]:

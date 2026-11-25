@@ -1,0 +1,722 @@
+{
+ "summary": {
+  "run_id": "20261125T154224Z-rerun-failed",
+  "model": "gemini-3.5-flash-lite",
+  "fallbacks": "gemini-3.6-flash,gemini-3.5-flash",
+  "thinking": "low",
+  "methodology": "1.1.0",
+  "dataset_version": "1.0",
+  "selected_cases": [
+   "A1-midwest-winter",
+   "A2-miami-houston",
+   "A3-denver-snow-2025",
+   "A4-dallas-premise",
+   "R1-overall-partial-miami",
+   "C1-three-hub-winter",
+   "S1-session-isolation",
+   "F1-denver-false-premise"
+  ],
+  "cases": 8,
+  "n_pass": 0,
+  "n_pass_fallback": 1,
+  "n_fail": 7,
+  "n_provider_error": 0,
+  "ids": {
+   "pass": [],
+   "pass_fallback": [
+    "A1-midwest-winter"
+   ],
+   "fail": [
+    "A2-miami-houston",
+    "A3-denver-snow-2025",
+    "A4-dallas-premise",
+    "R1-overall-partial-miami",
+    "C1-three-hub-winter",
+    "S1-session-isolation",
+    "F1-denver-false-premise"
+   ],
+   "provider_error": []
+  },
+  "case_pass_rate": 0.0,
+  "case_pass_rate_incl_fallback": 0.125,
+  "assertions": 43,
+  "assertions_passed": 16,
+  "assertion_pass_rate": 0.372,
+  "critical_failures": [
+   [
+    "A2-miami-houston",
+    "comparison_leader",
+    "no comparison/ranking for hazard"
+   ],
+   [
+    "A2-miami-houston",
+    "comparison_leader",
+    "no comparison/ranking for hazard"
+   ],
+   [
+    "A3-denver-snow-2025",
+    "weather_stat",
+    "stats=[]"
+   ],
+   [
+    "A3-denver-snow-2025",
+    "answer_contains_all",
+    "missing=['7.14%', '2025']"
+   ],
+   [
+    "A4-dallas-premise",
+    "explanation",
+    "no explanation"
+   ],
+   [
+    "A4-dallas-premise",
+    "premise_corrected",
+    "premise=''"
+   ],
+   [
+    "R1-overall-partial-miami",
+    "ranking_excludes",
+    "no overall ranking in analysis"
+   ],
+   [
+    "R1-overall-partial-miami",
+    "engine_overall_ranking",
+    "got=None"
+   ],
+   [
+    "C1-three-hub-winter",
+    "comparison_leader",
+    "no comparison/ranking for hazard"
+   ],
+   [
+    "F1-denver-false-premise",
+    "premise_corrected",
+    "premise=''"
+   ]
+  ],
+  "turns": 9,
+  "llm_retries": 0,
+  "deterministic_fallbacks": 1,
+  "provider_errors": 0,
+  "turns_using_fallback_model": 0,
+  "latency_ms": {
+   "median": 15868,
+   "p90": 15868,
+   "max": 15868
+  },
+  "complete": true
+ },
+ "results": [
+  {
+   "id": "A1-midwest-winter",
+   "category": "assignment",
+   "criticality": "critical",
+   "outcome": "pass_fallback",
+   "critical_failures": [],
+   "turns": [
+    {
+     "say": "Which hubs in the Midwest are most exposed to winter disruption?",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 200,
+     "error": null,
+     "status": "fallback",
+     "narrative_source": "deterministic_fallback",
+     "wall_ms": 15868,
+     "validation": {
+      "valid": false,
+      "attempts": 1,
+      "issues": [
+       "synthesis unavailable: provider unavailable (Gemini API error 503: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}})"
+      ],
+      "retry_reasons": [],
+      "fallback_used": true
+     },
+     "notes": [],
+     "tools": [
+      [
+       "rank_hubs",
+       {
+        "region": "Midwest",
+        "hazard": "winter"
+       }
+      ]
+     ],
+     "models_used": [
+      "gemini-3.5-flash-lite"
+     ],
+     "llm_errors": [
+      "unavailable",
+      "daily_quota_exhausted",
+      "daily_quota_exhausted",
+      "unavailable",
+      "unavailable"
+     ],
+     "timings_ms": {
+      "tool_phase_ms": 2021.6,
+      "tool_selection_llm_ms": 1992.4,
+      "tool_execution_ms": 4.3,
+      "synthesis_phase_ms": 13832.9,
+      "synthesis_llm_ms": 10827.7,
+      "validation_ms": 0.0,
+      "provider_wait_ms": 3000.0,
+      "synthesis_prompt_chars": 3627.0
+     },
+     "answer": "**Deterministic summary** \u2014 the AI-written answer was unavailable or failed validation, so these verified results are shown directly from the analytics engine. Scores are a heuristic weather-hazard exposure index, not a probability of operational disruption.\n\n**Ranking by winter in the Midwest:**\n- #1 Minneapolis Hub: 74.0 (High)\n- #2 Detroit Hub: 71.4 (High)\n- #3 Chicago Hub: 62.9 (Moderate)\n- #4 Columbus Hub: 58.8 (Moderate)\n- #5 Kansas City Hub: 57.2 (Moderate)\n- #6 Indianapolis Hub: 57.1 (Moderate)",
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "status_in",
+       "ok": true,
+       "critical": false,
+       "detail": "status=fallback"
+      },
+      {
+       "type": "tool_called",
+       "ok": true,
+       "critical": false,
+       "detail": "rank_hubs({'region': 'Midwest', 'hazard': 'winter'})"
+      },
+      {
+       "type": "ranking_order",
+       "ok": true,
+       "critical": true,
+       "detail": "got=['minneapolis_mn', 'detroit_mi', 'chicago_il', 'columbus_oh', 'kansas_city_mo', 'indianapolis_in']"
+      },
+      {
+       "type": "answer_contains_all",
+       "ok": true,
+       "critical": false,
+       "detail": "missing=[]"
+      },
+      {
+       "type": "exposure_framing",
+       "ok": true,
+       "critical": false,
+       "detail": "mentions exposure"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      },
+      {
+       "type": "freshness_only",
+       "ok": true,
+       "critical": false,
+       "detail": "freshness={'snapshot'}"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "A2-miami-houston",
+   "category": "assignment",
+   "criticality": "critical",
+   "outcome": "fail",
+   "critical_failures": [
+    {
+     "type": "comparison_leader",
+     "ok": false,
+     "critical": true,
+     "detail": "no comparison/ranking for hazard"
+    },
+    {
+     "type": "comparison_leader",
+     "ok": false,
+     "critical": true,
+     "detail": "no comparison/ranking for hazard"
+    }
+   ],
+   "turns": [
+    {
+     "say": "Compare Miami and Houston in terms of hurricane and flood exposure.",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 500,
+     "error": "internal_error",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 20,
+     "validation": null,
+     "notes": [
+      "provider llm_quota_exceeded -> waited 65s and retried once"
+     ],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "status_in",
+       "ok": false,
+       "critical": false,
+       "detail": "status=None"
+      },
+      {
+       "type": "tool_called",
+       "ok": false,
+       "critical": false,
+       "detail": "calls=[]"
+      },
+      {
+       "type": "comparison_leader",
+       "ok": false,
+       "critical": true,
+       "detail": "no comparison/ranking for hazard"
+      },
+      {
+       "type": "comparison_leader",
+       "ok": false,
+       "critical": true,
+       "detail": "no comparison/ranking for hazard"
+      },
+      {
+       "type": "resolved_hubs_include",
+       "ok": false,
+       "critical": false,
+       "detail": "resolved=[]"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      },
+      {
+       "type": "fact_attribution",
+       "ok": true,
+       "critical": true,
+       "detail": "facts outside resolved hubs=[]"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "A3-denver-snow-2025",
+   "category": "assignment",
+   "criticality": "critical",
+   "outcome": "fail",
+   "critical_failures": [
+    {
+     "type": "weather_stat",
+     "ok": false,
+     "critical": true,
+     "detail": "stats=[]"
+    },
+    {
+     "type": "answer_contains_all",
+     "ok": false,
+     "critical": true,
+     "detail": "missing=['7.14%', '2025']"
+    }
+   ],
+   "turns": [
+    {
+     "say": "What percentage of days in Denver last year had snowfall?",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 500,
+     "error": "internal_error",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 11,
+     "validation": null,
+     "notes": [],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "status_in",
+       "ok": false,
+       "critical": false,
+       "detail": "status=None"
+      },
+      {
+       "type": "tool_called",
+       "ok": false,
+       "critical": false,
+       "detail": "calls=[]"
+      },
+      {
+       "type": "weather_stat",
+       "ok": false,
+       "critical": true,
+       "detail": "stats=[]"
+      },
+      {
+       "type": "answer_contains_all",
+       "ok": false,
+       "critical": true,
+       "detail": "missing=['7.14%', '2025']"
+      },
+      {
+       "type": "answer_contains_any",
+       "ok": false,
+       "critical": false,
+       "detail": "none of ['missing', '2025-05-21']"
+      },
+      {
+       "type": "answer_contains_any",
+       "ok": false,
+       "critical": false,
+       "detail": "none of ['trace']"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "A4-dallas-premise",
+   "category": "assignment",
+   "criticality": "critical",
+   "outcome": "fail",
+   "critical_failures": [
+    {
+     "type": "explanation",
+     "ok": false,
+     "critical": true,
+     "detail": "no explanation"
+    },
+    {
+     "type": "premise_corrected",
+     "ok": false,
+     "critical": true,
+     "detail": "premise=''"
+    }
+   ],
+   "turns": [
+    {
+     "say": "Why is the Dallas hub's weather disruption risk high?",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 500,
+     "error": "internal_error",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 10,
+     "validation": null,
+     "notes": [],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "status_in",
+       "ok": false,
+       "critical": false,
+       "detail": "status=None"
+      },
+      {
+       "type": "tool_called",
+       "ok": false,
+       "critical": false,
+       "detail": "calls=[]"
+      },
+      {
+       "type": "explanation",
+       "ok": false,
+       "critical": true,
+       "detail": "no explanation"
+      },
+      {
+       "type": "premise_corrected",
+       "ok": false,
+       "critical": true,
+       "detail": "premise=''"
+      },
+      {
+       "type": "answer_or_premise_contains_all",
+       "ok": false,
+       "critical": false,
+       "detail": "missing=['Moderate']"
+      },
+      {
+       "type": "answer_contains_any",
+       "ok": false,
+       "critical": false,
+       "detail": "none of ['severe convective', 'Severe Convective', 'severe storms', 'convective']"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "R1-overall-partial-miami",
+   "category": "partial_data",
+   "criticality": "high",
+   "outcome": "fail",
+   "critical_failures": [
+    {
+     "type": "ranking_excludes",
+     "ok": false,
+     "critical": true,
+     "detail": "no overall ranking in analysis"
+    },
+    {
+     "type": "engine_overall_ranking",
+     "ok": false,
+     "critical": true,
+     "detail": "got=None"
+    }
+   ],
+   "turns": [
+    {
+     "say": "Rank all hubs by overall weather exposure.",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 500,
+     "error": "internal_error",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 9,
+     "validation": null,
+     "notes": [],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "tool_called",
+       "ok": false,
+       "critical": false,
+       "detail": "calls=[]"
+      },
+      {
+       "type": "ranking_excludes",
+       "ok": false,
+       "critical": true,
+       "detail": "no overall ranking in analysis"
+      },
+      {
+       "type": "engine_overall_ranking",
+       "ok": false,
+       "critical": true,
+       "detail": "got=None"
+      },
+      {
+       "type": "answer_contains_any",
+       "ok": false,
+       "critical": false,
+       "detail": "none of ['partial', 'not ranked', 'incomplete', 'excluded']"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C1-three-hub-winter",
+   "category": "comparison",
+   "criticality": "normal",
+   "outcome": "fail",
+   "critical_failures": [
+    {
+     "type": "comparison_leader",
+     "ok": false,
+     "critical": true,
+     "detail": "no comparison/ranking for hazard"
+    }
+   ],
+   "turns": [
+    {
+     "say": "Compare Chicago, Detroit and Minneapolis for winter exposure.",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 500,
+     "error": "internal_error",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 10,
+     "validation": null,
+     "notes": [],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "resolved_hubs_include",
+       "ok": false,
+       "critical": false,
+       "detail": "resolved=[]"
+      },
+      {
+       "type": "comparison_leader",
+       "ok": false,
+       "critical": true,
+       "detail": "no comparison/ranking for hazard"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      },
+      {
+       "type": "fact_attribution",
+       "ok": true,
+       "critical": true,
+       "detail": "facts outside resolved hubs=[]"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "S1-session-isolation",
+   "category": "isolation",
+   "criticality": "high",
+   "outcome": "fail",
+   "critical_failures": [],
+   "turns": [
+    {
+     "say": "What percentage of days in Denver last year had snowfall?",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 500,
+     "error": "internal_error",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 12,
+     "validation": null,
+     "notes": [],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "status_in",
+       "ok": false,
+       "critical": false,
+       "detail": "status=None"
+      }
+     ]
+    },
+    {
+     "say": "What about 2024?",
+     "new_session": true,
+     "expected_http_error": false,
+     "http": 500,
+     "error": "internal_error",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 11,
+     "validation": null,
+     "notes": [],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "status_in",
+       "ok": false,
+       "critical": false,
+       "detail": "status=None"
+      },
+      {
+       "type": "no_analysis",
+       "ok": true,
+       "critical": true,
+       "detail": "analysis items=0"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "F1-denver-false-premise",
+   "category": "false_premise",
+   "criticality": "high",
+   "outcome": "fail",
+   "critical_failures": [
+    {
+     "type": "premise_corrected",
+     "ok": false,
+     "critical": true,
+     "detail": "premise=''"
+    }
+   ],
+   "turns": [
+    {
+     "say": "Why is Denver the most exposed hub overall?",
+     "new_session": false,
+     "expected_http_error": false,
+     "http": 500,
+     "error": "internal_error",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 11,
+     "validation": null,
+     "notes": [],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "premise_corrected",
+       "ok": false,
+       "critical": true,
+       "detail": "premise=''"
+      },
+      {
+       "type": "answer_or_premise_contains_all",
+       "ok": false,
+       "critical": false,
+       "detail": "missing=['Low']"
+      },
+      {
+       "type": "grounded_numbers",
+       "ok": true,
+       "critical": true,
+       "detail": "all numbers from verified facts"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

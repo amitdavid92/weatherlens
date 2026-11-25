@@ -1,6 +1,6 @@
 WEB_PORT ?= 5173
 
-.PHONY: dev web-install web-dev web-test web-lint web-build web-inspect web-real-gemini install test test-live lint format hubs snapshot verify-snapshot validate-data validate-data-offline scenarios scenarios-live api api-offline smoke-live smoke-live-no-weather-network
+.PHONY: eval eval-smoke benchmark dev web-install web-dev web-test web-lint web-build web-inspect web-real-gemini install test test-live lint format hubs snapshot verify-snapshot validate-data validate-data-offline scenarios scenarios-live api api-offline smoke-live smoke-live-no-weather-network
 
 install:            ## reproducible install from uv.lock
 	uv sync --frozen
@@ -78,3 +78,13 @@ web-inspect:        ## real-browser checks + screenshots at 1440/1024/390 (app m
 
 web-real-gemini:    ## REAL Gemini through the browser UI (app running, key + quota needed)
 	cd web && node e2e/real-gemini.mjs http://localhost:$(WEB_PORT) ../docs/screenshots
+
+# ---------------------------------------------------------------- evaluation (Phase 5)
+eval:               ## REAL Gemini evaluation of all cases in evals/cases.yaml -> evals/results/
+	uv run python evals/run.py --label full
+
+eval-smoke:         ## quick demo subset (assignment questions, isolation, injection)
+	uv run python evals/run.py --smoke --label smoke
+
+benchmark:          ## latency benchmark of the 4 assignment questions -> docs/benchmarks/
+	uv run python scripts/benchmark.py --label $(or $(LABEL),run)

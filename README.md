@@ -4,7 +4,7 @@
 
 An AI agent that helps logistics analysts see which US distribution hubs are most exposed to weather hazards. It uses public data and deterministic analytics; the LLM never computes numbers or rankings.
 
-> **Status: Phase 4 (WeatherLens web app) complete.** Next: evaluation and QA (Phase 5). See [docs/PHASE_4_REPORT.md](docs/PHASE_4_REPORT.md).
+> **Status: Phase 5 (evaluation and QA) partially complete.** The 90% target is not met and the latest fixes are not yet verified live (Gemini free-tier quota). See [docs/PHASE_5_REPORT.md](docs/PHASE_5_REPORT.md).
 
 **Scope and framing:** the product computes a **Weather Hazard Exposure Index**. It does not measure operational disruption risk, because we have no shipment, downtime or loss data. The 12 hubs in [config/hubs.yaml](config/hubs.yaml) are **illustrative examples**, not real company facilities.
 
@@ -59,7 +59,7 @@ uv sync --frozen && make web-install     # backend + frontend dependencies (lock
 cp .env.example .env                     # then set GEMINI_API_KEY=... (only needed for the AI Analyst)
 make dev                                 # API on :8000 + WeatherLens on http://localhost:5173
 ```
-- **Different frontend port:** use `make dev WEB_PORT=5181` if 5173 is taken.
+- **Different frontend port:** use `make dev WEB_PORT=5181` if 5173 is taken. `API_URL=http://127.0.0.1:8010` points the frontend proxy at a backend on another port.
 - **No network for weather data:** `WEATHER_RISK_OFFLINE=true make dev` serves weather data from the committed snapshot. The AI Analyst still needs internet.
 - **How the frontend reaches the API:** the browser only calls the Vite server, which proxies `/api` to FastAPI, so the Gemini key never reaches the browser.
 - **Without a key:** the Overview and Methodology views work fully, and the AI Analyst shows that it is unavailable.
@@ -73,6 +73,26 @@ make web-inspect      # real Chromium: overflow/console checks + screenshots at 
 make web-real-gemini  # the 4 assignment questions through the UI with REAL Gemini (app running, uses quota)
 ```
 Playwright's browser is needed for the last two commands: `cd web && npx playwright install chromium`.
+
+## Evaluation (real Gemini)
+```bash
+make eval            # 22 cases / 29 turns in evals/cases.yaml -> evals/results/latest.{md,json}
+make eval-smoke      # quick demo subset (assignment questions, isolation, injection)
+uv run python evals/run.py --case A3-denver-snow-2025 --category multi_turn   # filters
+make benchmark LABEL=mytest   # latency breakdown of the 4 assignment questions -> docs/benchmarks/
+```
+**How the evaluation runs:**
+- It starts its own server, with weather data from the committed snapshot (weather APIs blocked, empty cache), so results are comparable across runs.
+- It paces requests for free-tier quotas.
+- It records the model, fallbacks, thinking level, methodology and dataset version.
+
+**What it reports:**
+- per case: pass, pass with deterministic fallback, fail, or provider error;
+- the assertion pass rate;
+- critical (numerical grounding) failures;
+- retries, deterministic fallbacks and use of fallback models.
+
+**Quota:** it needs a Gemini key. On the free tier, `gemini-3.5-flash` and `3.6-flash` allow only 20 requests per day each, so most calls go to `gemini-3.5-flash-lite`.
 
 ## Running the API and agent (Phase 3)
 1. Put your Gemini key in `.env` (gitignored): `GEMINI_API_KEY=...`. See `.env.example` for the model and timeout settings.

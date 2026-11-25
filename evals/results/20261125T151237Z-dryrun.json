@@ -1,0 +1,87 @@
+{
+ "summary": {
+  "run_id": "20261125T151237Z-dryrun",
+  "model": "gemini-3.5-flash-lite",
+  "fallbacks": "gemini-3.6-flash,gemini-3.5-flash",
+  "thinking": "low",
+  "methodology": "1.1.0",
+  "dataset_version": "1.0",
+  "selected_cases": [
+   "D1-llm-unavailable"
+  ],
+  "cases": 1,
+  "n_pass": 1,
+  "n_pass_fallback": 0,
+  "n_fail": 0,
+  "n_provider_error": 0,
+  "ids": {
+   "pass": [
+    "D1-llm-unavailable"
+   ],
+   "pass_fallback": [],
+   "fail": [],
+   "provider_error": []
+  },
+  "case_pass_rate": 1.0,
+  "case_pass_rate_incl_fallback": 1.0,
+  "assertions": 2,
+  "assertions_passed": 2,
+  "assertion_pass_rate": 1.0,
+  "critical_failures": [],
+  "turns": 1,
+  "llm_retries": 0,
+  "deterministic_fallbacks": 0,
+  "provider_errors": 0,
+  "turns_using_fallback_model": 0,
+  "latency_ms": {
+   "median": null,
+   "p90": null,
+   "max": null
+  }
+ },
+ "results": [
+  {
+   "id": "D1-llm-unavailable",
+   "category": "provider_unavailable",
+   "criticality": "high",
+   "outcome": "pass",
+   "critical_failures": [],
+   "turns": [
+    {
+     "say": "Which hubs in the Midwest are most exposed to winter disruption?",
+     "new_session": false,
+     "expected_http_error": true,
+     "http": 503,
+     "error": "llm_unavailable",
+     "status": null,
+     "narrative_source": null,
+     "wall_ms": 11,
+     "validation": null,
+     "notes": [
+      "provider llm_unavailable -> waited 20s and retried once"
+     ],
+     "tools": [],
+     "models_used": [],
+     "llm_errors": [],
+     "timings_ms": null,
+     "answer": null,
+     "premise_correction": null,
+     "assertions": [
+      {
+       "type": "http_error",
+       "ok": true,
+       "critical": true,
+       "detail": "HTTP 503 llm_unavailable"
+      },
+      {
+       "type": "deterministic_endpoints_ok",
+       "ok": true,
+       "critical": true,
+       "detail": "codes=[200, 200]"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

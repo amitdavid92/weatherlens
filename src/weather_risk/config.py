@@ -24,11 +24,14 @@ class Settings(BaseSettings):
     # LLM — declared for later phases; unused in the data layer.
     gemini_api_key: SecretStr | None = Field(default=None, alias="GEMINI_API_KEY")
     gemini_model: str = Field(default="gemini-3.5-flash-lite", alias="WEATHER_RISK_GEMINI_MODEL")
+    # Comma-separated fallback chain, tried in order on 503 / timeout / 429 (D-037).
     gemini_fallback_model: str | None = Field(
-        default="gemini-3.5-flash", alias="WEATHER_RISK_GEMINI_FALLBACK_MODEL"
+        default="gemini-3.6-flash,gemini-3.5-flash", alias="WEATHER_RISK_GEMINI_FALLBACK_MODEL"
     )
+    # Gemini 3 thinking level ("minimal" | "low" | "medium" | "high"; empty = provider default).
+    llm_thinking_level: str | None = Field(default="low", alias="WEATHER_RISK_LLM_THINKING_LEVEL")
     llm_timeout_seconds: float = Field(default=45.0, alias="WEATHER_RISK_LLM_TIMEOUT_SECONDS")
-    llm_max_attempts: int = Field(default=3, alias="WEATHER_RISK_LLM_MAX_ATTEMPTS")
+    llm_max_attempts: int = Field(default=3, alias="WEATHER_RISK_LLM_MAX_ATTEMPTS")  # chain rounds
     sessions_path: Path = Field(
         default=PROJECT_ROOT / "data" / "cache" / "sessions.db", alias="WEATHER_RISK_SESSIONS_PATH"
     )

@@ -77,11 +77,16 @@ def test_bounded_retries_then_success():
     assert text == '{"ok": true}' and len(stub.models_called) == 3 and sleeps == [1, 2]
 
 
-def test_fallback_model_on_overload():
-    p, stub, _ = provider([api_error(503), api_error(503), Resp()], max_attempts=2,
-                          fallback_model="fallback")  # fmt: skip
+def test_overload_fails_fast_to_the_next_model_without_waiting():
+    p, stub, sleeps = provider([api_error(503), Resp()], max_attempts=2,
+                               fallback_model="fallback")  # fmt: skip
     p.structured(system="s", prompt="p", schema={})
-    assert stub.models_called == ["primary", "primary", "fallback"]
+    assert stub.models_called == ["primary", "fallback"] and sleeps == []
+
+
+def test_fallback_chain_is_deduplicated_and_ordered():
+    p, *_ = provider([], fallback_model=" fallback-a ,primary,fallback-b")
+    assert p.models == ["primary", "fallback-a", "fallback-b"]
 
 
 def test_auth_error_not_retried():
@@ -91,10 +96,55 @@ def test_auth_error_not_retried():
     assert stub.models_called == ["primary"]
 
 
-def test_quota_retries_with_capped_server_hint_then_raises():
+def test_quota_moves_down_the_chain_then_waits_once_with_capped_hint_then_raises():
     hint = ' "retryDelay": "45s"'
-    p, stub, sleeps = provider([api_error(429, "q", hint)] * 2, max_attempts=2,
+    p, stub, sleeps = provider([api_error(429, "q", hint)] * 4, max_attempts=2,
                                fallback_model="fallback")  # fmt: skip
     with pytest.raises(LLMQuotaError):
         p.structured(system="s", prompt="p", schema={})
-    assert sleeps == [20.0] and stub.models_called == ["primary", "primary"]  # no fallback on 429
+    assert stub.models_called == ["primary", "fallback", "primary", "fallback"]
+    assert sleeps == [20.0]  # one bounded wait between rounds
+    assert [c["phase"] for c in p.call_log] == ["synthesis"] * 5  # 4 attempts + 1 wait
+
+
+def test_thinking_level_is_applied_to_requests():
+    class Capture(StubModels):
+        def generate_content(self, *, model, contents, config):
+            self.config = config
+            return super().generate_content(model=model, contents=contents, config=config)
+
+    p = GeminiProvider(api_key="test-key-not-real", model="primary", thinking_level="low")
+    stub = Capture([Resp()])
+    p._client = type("C", (), {"models": stub})()
+    p.structured(system="s", prompt="p", schema={})
+    assert str(stub.config.thinking_config.thinking_level).endswith("LOW")
+
+
+def test_daily_quota_circuit_breaks_the_model_without_waiting():
+    daily = ' "retryDelay": "61095s"'
+    p, stub, sleeps = provider([api_error(429, "q", daily), Resp(), Resp()], max_attempts=2,
+                               fallback_model="fallback")  # fmt: skip
+    p.structured(system="s", prompt="p", schema={})
+    assert stub.models_called == ["primary", "fallback"] and sleeps == []
+    assert p.call_log[0]["error"] == "daily_quota_exhausted"
+    p.structured(system="s", prompt="p", schema={})  # next request skips the exhausted model
+    assert stub.models_called == ["primary", "fallback", "fallback"]
+
+
+def test_all_models_daily_exhausted_raises_immediately():
+    daily = ' "retryDelay": "50000s"'
+    p, stub, sleeps = provider([api_error(429, "q", daily)] * 2, max_attempts=3,
+                               fallback_model="fallback")  # fmt: skip
+    with pytest.raises(LLMQuotaError):
+        p.structured(system="s", prompt="p", schema={})
+    assert stub.models_called == ["primary", "fallback"] and sleeps == []
+
+
+def test_request_after_all_models_exhausted_raises_quota_not_assertion():
+    """Regression (eval rerun): the next request tried no model and hit `assert` -> HTTP 500."""
+    daily = ' "retryDelay": "50000s"'
+    p, stub, _ = provider([api_error(429, "q", daily)] * 2, fallback_model="fallback")
+    for _ in range(2):
+        with pytest.raises(LLMQuotaError):
+            p.structured(system="s", prompt="p", schema={})
+    assert stub.models_called == ["primary", "fallback"]

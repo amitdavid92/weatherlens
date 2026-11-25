@@ -312,3 +312,64 @@ def test_hub_from_previous_context_and_region_are_allowed(engine, sessions):
     }
     assert len(mentioned_hubs(engine, "rank the Midwest hubs")) == 6
     assert mentioned_hubs(engine, "What about 2024?") == set()
+
+
+def test_provider_failure_during_synthesis_degrades_to_labeled_fallback(engine, sessions):
+    from weather_risk.agent.llm import LLMUnavailableError
+
+    r, _ = run(engine, sessions, [("tools", [DENVER_CALL]), ("text", "ok"),
+                                  ("raise", LLMUnavailableError("503 overloaded"))])  # fmt: skip
+    s = engine.get_weather_stat("denver_co", "snow_days_measurable", "2025")
+    assert r.status == "fallback" and r.narrative_source == "deterministic_fallback"
+    assert r.validation.fallback_used and "synthesis unavailable" in r.validation.issues[0]
+    assert f"{s.value_percent_of_valid_days:.2f}%" in r.answer
+
+
+def test_provider_failure_without_tool_results_still_raises(engine, sessions):
+    from weather_risk.agent.llm import LLMUnavailableError
+
+    with pytest.raises(LLMUnavailableError):
+        run(engine, sessions, [("text", "hmm"), ("raise", LLMUnavailableError("503"))])
+
+
+def test_fallback_ranking_numbers_are_registered_facts(engine, sessions):
+    """Regression (eval R1/F1): the not-ranked line must not carry an unregistered number."""
+    from weather_risk.agent.llm import LLMUnavailableError
+
+    r, _ = run(engine, sessions, [("tools", [ToolCall("rank_hubs", {})]), ("text", "ok"),
+                                  ("raise", LLMUnavailableError("503"))], message="Rank all hubs")  # fmt: skip
+    assert r.status == "fallback" and "exposure index" in r.answer
+    miami_line = next(
+        line for line in r.answer.splitlines() if "Miami" in line and "not ranked" in line
+    )
+    fact = next(f for f in r.facts if f["fact_id"] == "miami_fl.winter.available_weight")
+    assert fact["display"] in miami_line and fact["display"] == "70%"
+    import re
+
+    displays = {f["display"] for f in r.facts}
+    for tok in re.findall(r"\d+(?:\.\d+)?%", r.answer):
+        assert tok in displays, tok
+
+
+def test_rankings_over_different_subsets_do_not_collide(engine):
+    """Regression: reused rank fact ids raised ValueError -> HTTP 500."""
+    box = ToolBox(engine, FactRegistry())
+    for hubs in (["chicago_il", "detroit_mi"], ["detroit_mi", "minneapolis_mn"]):
+        assert box.execute("rank_hubs", {"hubs": hubs, "hazard": "winter"}).ok
+
+
+def test_unexpected_tool_exception_is_contained(engine, monkeypatch):
+    box = ToolBox(engine, FactRegistry())
+    monkeypatch.setattr(box, "_list_hubs", lambda a: 1 / 0)
+    ex = box.execute("list_hubs", {})
+    assert not ex.ok and ex.error_type == "internal_error"
+
+
+def test_fallback_template_adds_no_unregistered_numbers(engine, sessions):
+    """Regression (eval A1-A4): the fallback header contained a literal '100'."""
+    from weather_risk.agent.llm import LLMUnavailableError
+
+    r, _ = run(engine, sessions, [("tools", [DENVER_CALL]), ("text", "ok"),
+                                  ("raise", LLMUnavailableError("503"))])  # fmt: skip
+    header = r.answer.split("\n\n")[0]
+    assert not any(ch.isdigit() for ch in header)

@@ -1,0 +1,846 @@
+INFO:     Started server process [79506]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:54637 (Press CTRL+C to quit)
+{"ts": "2026-11-25T15:42:23.596647+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county count", "file": "fema_nri/national_count.json.gz"}
+{"ts": "2026-11-25T15:42:23.671773+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI page offset=0", "file": "fema_nri/national_page_00000.json.gz"}
+{"ts": "2026-11-25T15:42:23.740880+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI page offset=2000", "file": "fema_nri/national_page_02000.json.gz"}
+{"ts": "2026-11-25T15:42:23.775382+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 17031", "file": "fema_nri/county_17031.json.gz"}
+{"ts": "2026-11-25T15:42:23.780715+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2016", "file": "noaa_ghcn/USW00094846_2016.json.gz"}
+{"ts": "2026-11-25T15:42:23.788307+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2017", "file": "noaa_ghcn/USW00094846_2017.json.gz"}
+{"ts": "2026-11-25T15:42:23.792910+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2018", "file": "noaa_ghcn/USW00094846_2018.json.gz"}
+{"ts": "2026-11-25T15:42:23.797467+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2019", "file": "noaa_ghcn/USW00094846_2019.json.gz"}
+{"ts": "2026-11-25T15:42:23.802147+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2020", "file": "noaa_ghcn/USW00094846_2020.json.gz"}
+{"ts": "2026-11-25T15:42:23.807013+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2021", "file": "noaa_ghcn/USW00094846_2021.json.gz"}
+{"ts": "2026-11-25T15:42:23.811523+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2022", "file": "noaa_ghcn/USW00094846_2022.json.gz"}
+{"ts": "2026-11-25T15:42:23.836187+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2023", "file": "noaa_ghcn/USW00094846_2023.json.gz"}
+{"ts": "2026-11-25T15:42:23.840792+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2024", "file": "noaa_ghcn/USW00094846_2024.json.gz"}
+{"ts": "2026-11-25T15:42:23.845348+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094846 2025", "file": "noaa_ghcn/USW00094846_2025.json.gz"}
+{"ts": "2026-11-25T15:42:23.851604+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 18097", "file": "fema_nri/county_18097.json.gz"}
+{"ts": "2026-11-25T15:42:23.856658+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2016", "file": "noaa_ghcn/USW00093819_2016.json.gz"}
+{"ts": "2026-11-25T15:42:23.861458+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2017", "file": "noaa_ghcn/USW00093819_2017.json.gz"}
+{"ts": "2026-11-25T15:42:23.865930+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2018", "file": "noaa_ghcn/USW00093819_2018.json.gz"}
+{"ts": "2026-11-25T15:42:23.870470+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2019", "file": "noaa_ghcn/USW00093819_2019.json.gz"}
+{"ts": "2026-11-25T15:42:23.875108+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2020", "file": "noaa_ghcn/USW00093819_2020.json.gz"}
+{"ts": "2026-11-25T15:42:23.879658+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2021", "file": "noaa_ghcn/USW00093819_2021.json.gz"}
+{"ts": "2026-11-25T15:42:23.884355+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2022", "file": "noaa_ghcn/USW00093819_2022.json.gz"}
+{"ts": "2026-11-25T15:42:23.888876+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2023", "file": "noaa_ghcn/USW00093819_2023.json.gz"}
+{"ts": "2026-11-25T15:42:23.933212+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2024", "file": "noaa_ghcn/USW00093819_2024.json.gz"}
+{"ts": "2026-11-25T15:42:23.938998+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00093819 2025", "file": "noaa_ghcn/USW00093819_2025.json.gz"}
+{"ts": "2026-11-25T15:42:23.946154+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 39049", "file": "fema_nri/county_39049.json.gz"}
+{"ts": "2026-11-25T15:42:23.951019+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2016", "file": "noaa_ghcn/USW00014821_2016.json.gz"}
+{"ts": "2026-11-25T15:42:23.955743+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2017", "file": "noaa_ghcn/USW00014821_2017.json.gz"}
+{"ts": "2026-11-25T15:42:23.960354+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2018", "file": "noaa_ghcn/USW00014821_2018.json.gz"}
+{"ts": "2026-11-25T15:42:23.964845+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2019", "file": "noaa_ghcn/USW00014821_2019.json.gz"}
+{"ts": "2026-11-25T15:42:23.969575+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2020", "file": "noaa_ghcn/USW00014821_2020.json.gz"}
+{"ts": "2026-11-25T15:42:23.974382+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2021", "file": "noaa_ghcn/USW00014821_2021.json.gz"}
+{"ts": "2026-11-25T15:42:23.978940+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2022", "file": "noaa_ghcn/USW00014821_2022.json.gz"}
+{"ts": "2026-11-25T15:42:23.983454+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2023", "file": "noaa_ghcn/USW00014821_2023.json.gz"}
+{"ts": "2026-11-25T15:42:23.988025+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2024", "file": "noaa_ghcn/USW00014821_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.087065+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014821 2025", "file": "noaa_ghcn/USW00014821_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.094087+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 26163", "file": "fema_nri/county_26163.json.gz"}
+{"ts": "2026-11-25T15:42:24.098978+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2016", "file": "noaa_ghcn/USW00094847_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.103732+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2017", "file": "noaa_ghcn/USW00094847_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.108552+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2018", "file": "noaa_ghcn/USW00094847_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.113110+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2019", "file": "noaa_ghcn/USW00094847_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.117886+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2020", "file": "noaa_ghcn/USW00094847_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.122429+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2021", "file": "noaa_ghcn/USW00094847_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.127019+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2022", "file": "noaa_ghcn/USW00094847_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.131547+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2023", "file": "noaa_ghcn/USW00094847_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.136221+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2024", "file": "noaa_ghcn/USW00094847_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.140828+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00094847 2025", "file": "noaa_ghcn/USW00094847_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.146771+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 27053", "file": "fema_nri/county_27053.json.gz"}
+{"ts": "2026-11-25T15:42:24.151385+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2016", "file": "noaa_ghcn/USW00014922_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.223976+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2017", "file": "noaa_ghcn/USW00014922_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.228747+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2018", "file": "noaa_ghcn/USW00014922_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.233368+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2019", "file": "noaa_ghcn/USW00014922_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.238157+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2020", "file": "noaa_ghcn/USW00014922_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.242802+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2021", "file": "noaa_ghcn/USW00014922_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.247384+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2022", "file": "noaa_ghcn/USW00014922_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.252091+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2023", "file": "noaa_ghcn/USW00014922_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.256526+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2024", "file": "noaa_ghcn/USW00014922_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.261152+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00014922 2025", "file": "noaa_ghcn/USW00014922_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.267941+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 29095", "file": "fema_nri/county_29095.json.gz"}
+{"ts": "2026-11-25T15:42:24.272560+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2016", "file": "noaa_ghcn/USW00003947_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.277242+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2017", "file": "noaa_ghcn/USW00003947_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.281564+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2018", "file": "noaa_ghcn/USW00003947_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.285866+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2019", "file": "noaa_ghcn/USW00003947_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.290516+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2020", "file": "noaa_ghcn/USW00003947_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.295179+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2021", "file": "noaa_ghcn/USW00003947_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.299766+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2022", "file": "noaa_ghcn/USW00003947_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.387549+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2023", "file": "noaa_ghcn/USW00003947_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.392375+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2024", "file": "noaa_ghcn/USW00003947_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.396578+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003947 2025", "file": "noaa_ghcn/USW00003947_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.402574+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 08031", "file": "fema_nri/county_08031.json.gz"}
+{"ts": "2026-11-25T15:42:24.407253+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2016", "file": "noaa_ghcn/USW00003017_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.411783+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2017", "file": "noaa_ghcn/USW00003017_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.416311+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2018", "file": "noaa_ghcn/USW00003017_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.420847+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2019", "file": "noaa_ghcn/USW00003017_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.425347+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2020", "file": "noaa_ghcn/USW00003017_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.429839+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2021", "file": "noaa_ghcn/USW00003017_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.434475+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2022", "file": "noaa_ghcn/USW00003017_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.438956+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2023", "file": "noaa_ghcn/USW00003017_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.443520+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2024", "file": "noaa_ghcn/USW00003017_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.448050+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003017 2025", "file": "noaa_ghcn/USW00003017_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.454625+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 48113", "file": "fema_nri/county_48113.json.gz"}
+{"ts": "2026-11-25T15:42:24.459271+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2016", "file": "noaa_ghcn/USW00003927_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.463743+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2017", "file": "noaa_ghcn/USW00003927_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.468359+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2018", "file": "noaa_ghcn/USW00003927_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.472874+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2019", "file": "noaa_ghcn/USW00003927_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.477352+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2020", "file": "noaa_ghcn/USW00003927_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.588708+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2021", "file": "noaa_ghcn/USW00003927_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.593480+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2022", "file": "noaa_ghcn/USW00003927_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.598054+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2023", "file": "noaa_ghcn/USW00003927_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.602756+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2024", "file": "noaa_ghcn/USW00003927_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.607287+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00003927 2025", "file": "noaa_ghcn/USW00003927_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.613559+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 48201", "file": "fema_nri/county_48201.json.gz"}
+{"ts": "2026-11-25T15:42:24.618739+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2016", "file": "noaa_ghcn/USW00012960_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.623366+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2017", "file": "noaa_ghcn/USW00012960_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.627751+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2018", "file": "noaa_ghcn/USW00012960_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.632160+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2019", "file": "noaa_ghcn/USW00012960_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.636691+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2020", "file": "noaa_ghcn/USW00012960_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.641119+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2021", "file": "noaa_ghcn/USW00012960_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.646020+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2022", "file": "noaa_ghcn/USW00012960_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.650453+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2023", "file": "noaa_ghcn/USW00012960_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.655038+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2024", "file": "noaa_ghcn/USW00012960_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.659490+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012960 2025", "file": "noaa_ghcn/USW00012960_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.665728+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 12086", "file": "fema_nri/county_12086.json.gz"}
+{"ts": "2026-11-25T15:42:24.670782+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2016", "file": "noaa_ghcn/USW00012839_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.675199+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2017", "file": "noaa_ghcn/USW00012839_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.679501+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2018", "file": "noaa_ghcn/USW00012839_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.683526+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2019", "file": "noaa_ghcn/USW00012839_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.688419+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2020", "file": "noaa_ghcn/USW00012839_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.693034+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2021", "file": "noaa_ghcn/USW00012839_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.697311+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2022", "file": "noaa_ghcn/USW00012839_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.701692+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2023", "file": "noaa_ghcn/USW00012839_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.706300+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2024", "file": "noaa_ghcn/USW00012839_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.848859+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00012839 2025", "file": "noaa_ghcn/USW00012839_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.854765+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 13121", "file": "fema_nri/county_13121.json.gz"}
+{"ts": "2026-11-25T15:42:24.859480+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2016", "file": "noaa_ghcn/USW00013874_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.863996+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2017", "file": "noaa_ghcn/USW00013874_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.870160+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2018", "file": "noaa_ghcn/USW00013874_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.874847+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2019", "file": "noaa_ghcn/USW00013874_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.879268+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2020", "file": "noaa_ghcn/USW00013874_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.883878+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2021", "file": "noaa_ghcn/USW00013874_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.888810+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2022", "file": "noaa_ghcn/USW00013874_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.893717+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2023", "file": "noaa_ghcn/USW00013874_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.898321+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2024", "file": "noaa_ghcn/USW00013874_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.903126+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013874 2025", "file": "noaa_ghcn/USW00013874_2025.json.gz"}
+{"ts": "2026-11-25T15:42:24.909292+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NRI county 47157", "file": "fema_nri/county_47157.json.gz"}
+{"ts": "2026-11-25T15:42:24.913936+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2016", "file": "noaa_ghcn/USW00013893_2016.json.gz"}
+{"ts": "2026-11-25T15:42:24.918574+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2017", "file": "noaa_ghcn/USW00013893_2017.json.gz"}
+{"ts": "2026-11-25T15:42:24.923128+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2018", "file": "noaa_ghcn/USW00013893_2018.json.gz"}
+{"ts": "2026-11-25T15:42:24.927637+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2019", "file": "noaa_ghcn/USW00013893_2019.json.gz"}
+{"ts": "2026-11-25T15:42:24.932926+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2020", "file": "noaa_ghcn/USW00013893_2020.json.gz"}
+{"ts": "2026-11-25T15:42:24.937842+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2021", "file": "noaa_ghcn/USW00013893_2021.json.gz"}
+{"ts": "2026-11-25T15:42:24.942455+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2022", "file": "noaa_ghcn/USW00013893_2022.json.gz"}
+{"ts": "2026-11-25T15:42:24.946963+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2023", "file": "noaa_ghcn/USW00013893_2023.json.gz"}
+{"ts": "2026-11-25T15:42:24.952831+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2024", "file": "noaa_ghcn/USW00013893_2024.json.gz"}
+{"ts": "2026-11-25T15:42:24.957544+00:00", "level": "WARNING", "logger": "weather_risk.repository", "event": "serving_snapshot", "what": "NOAA USW00013893 2025", "file": "noaa_ghcn/USW00013893_2025.json.gz"}
+{"ts": "2026-11-25T15:42:40.113580+00:00", "level": "WARNING", "logger": "weather_risk.llm", "event": "llm_error", "model": "gemini-3.5-flash-lite", "kind": "unavailable", "round": 1}
+{"ts": "2026-11-25T15:42:40.274819+00:00", "level": "WARNING", "logger": "weather_risk.llm", "event": "llm_error", "model": "gemini-3.6-flash", "kind": "quota_exceeded", "round": 1}
+{"ts": "2026-11-25T15:42:40.409657+00:00", "level": "WARNING", "logger": "weather_risk.llm", "event": "llm_error", "model": "gemini-3.5-flash", "kind": "quota_exceeded", "round": 1}
+{"ts": "2026-11-25T15:42:43.823778+00:00", "level": "WARNING", "logger": "weather_risk.llm", "event": "llm_error", "model": "gemini-3.5-flash-lite", "kind": "unavailable", "round": 2}
+{"ts": "2026-11-25T15:42:48.828290+00:00", "level": "WARNING", "logger": "weather_risk.llm", "event": "llm_error", "model": "gemini-3.5-flash-lite", "kind": "unavailable", "round": 3}
+{"ts": "2026-11-25T15:42:48.828573+00:00", "level": "WARNING", "logger": "weather_risk.agent", "event": "synthesis_provider_error", "kind": "unavailable"}
+{"ts": "2026-11-25T15:42:58.859955+00:00", "level": "WARNING", "logger": "weather_risk.llm", "event": "llm_error", "model": "gemini-3.5-flash-lite", "kind": "quota_exceeded", "round": 1}
+{"ts": "2026-11-25T15:44:03.870640+00:00", "level": "ERROR", "logger": "weather_risk.api", "event": "unhandled_error", "exc": "Traceback (most recent call last):\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py\", line 151, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py\", line 80, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 91, in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 149, in simple_response\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 683, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 2929, in app\n    await route.handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 1375, in handle\n    await super().handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 289, in handle\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 175, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 161, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 762, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 383, in run_endpoint_function\n    return await run_in_threadpool(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 2779, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 1124, in run\n    result = context.run(func, *args)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py\", line 244, in _run_sync_endpoint\n    return function(**arguments)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py\", line 302, in chat\n    return c.agent.chat(body.message, body.session_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 180, in chat\n    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 234, in _tool_phase\n    step = self.provider.tool_step(system=system, messages=messages, tools=tools)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 226, in tool_step\n    resp, latency = self._call(contents, config, phase=\"tool_selection\")\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 187, in _call\n    assert last is not None\n           ^^^^^^^^^^^^^^^^\nAssertionError"}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1224, in __call__
+    await super().__call__(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1375, in handle
+    await super().handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 289, in handle
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py", line 302, in chat
+    return c.agent.chat(body.message, body.session_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 180, in chat
+    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 234, in _tool_phase
+    step = self.provider.tool_step(system=system, messages=messages, tools=tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 226, in tool_step
+    resp, latency = self._call(contents, config, phase="tool_selection")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 187, in _call
+    assert last is not None
+           ^^^^^^^^^^^^^^^^
+AssertionError
+{"ts": "2026-11-25T15:44:11.894369+00:00", "level": "ERROR", "logger": "weather_risk.api", "event": "unhandled_error", "exc": "Traceback (most recent call last):\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py\", line 151, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py\", line 80, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 91, in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 149, in simple_response\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 683, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 2929, in app\n    await route.handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 1375, in handle\n    await super().handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 289, in handle\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 175, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 161, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 762, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 383, in run_endpoint_function\n    return await run_in_threadpool(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 2779, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 1124, in run\n    result = context.run(func, *args)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py\", line 244, in _run_sync_endpoint\n    return function(**arguments)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py\", line 302, in chat\n    return c.agent.chat(body.message, body.session_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 180, in chat\n    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 234, in _tool_phase\n    step = self.provider.tool_step(system=system, messages=messages, tools=tools)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 226, in tool_step\n    resp, latency = self._call(contents, config, phase=\"tool_selection\")\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 187, in _call\n    assert last is not None\n           ^^^^^^^^^^^^^^^^\nAssertionError"}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1224, in __call__
+    await super().__call__(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1375, in handle
+    await super().handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 289, in handle
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py", line 302, in chat
+    return c.agent.chat(body.message, body.session_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 180, in chat
+    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 234, in _tool_phase
+    step = self.provider.tool_step(system=system, messages=messages, tools=tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 226, in tool_step
+    resp, latency = self._call(contents, config, phase="tool_selection")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 187, in _call
+    assert last is not None
+           ^^^^^^^^^^^^^^^^
+AssertionError
+{"ts": "2026-11-25T15:44:19.911098+00:00", "level": "ERROR", "logger": "weather_risk.api", "event": "unhandled_error", "exc": "Traceback (most recent call last):\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py\", line 151, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py\", line 80, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 91, in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 149, in simple_response\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 683, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 2929, in app\n    await route.handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 1375, in handle\n    await super().handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 289, in handle\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 175, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 161, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 762, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 383, in run_endpoint_function\n    return await run_in_threadpool(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 2779, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 1124, in run\n    result = context.run(func, *args)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py\", line 244, in _run_sync_endpoint\n    return function(**arguments)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py\", line 302, in chat\n    return c.agent.chat(body.message, body.session_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 180, in chat\n    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 234, in _tool_phase\n    step = self.provider.tool_step(system=system, messages=messages, tools=tools)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 226, in tool_step\n    resp, latency = self._call(contents, config, phase=\"tool_selection\")\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 187, in _call\n    assert last is not None\n           ^^^^^^^^^^^^^^^^\nAssertionError"}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1224, in __call__
+    await super().__call__(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1375, in handle
+    await super().handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 289, in handle
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py", line 302, in chat
+    return c.agent.chat(body.message, body.session_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 180, in chat
+    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 234, in _tool_phase
+    step = self.provider.tool_step(system=system, messages=messages, tools=tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 226, in tool_step
+    resp, latency = self._call(contents, config, phase="tool_selection")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 187, in _call
+    assert last is not None
+           ^^^^^^^^^^^^^^^^
+AssertionError
+{"ts": "2026-11-25T15:44:27.927672+00:00", "level": "ERROR", "logger": "weather_risk.api", "event": "unhandled_error", "exc": "Traceback (most recent call last):\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py\", line 151, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py\", line 80, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 91, in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 149, in simple_response\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 683, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 2929, in app\n    await route.handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 1375, in handle\n    await super().handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 289, in handle\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 175, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 161, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 762, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 383, in run_endpoint_function\n    return await run_in_threadpool(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 2779, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 1124, in run\n    result = context.run(func, *args)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py\", line 244, in _run_sync_endpoint\n    return function(**arguments)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py\", line 302, in chat\n    return c.agent.chat(body.message, body.session_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 180, in chat\n    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 234, in _tool_phase\n    step = self.provider.tool_step(system=system, messages=messages, tools=tools)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 226, in tool_step\n    resp, latency = self._call(contents, config, phase=\"tool_selection\")\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 187, in _call\n    assert last is not None\n           ^^^^^^^^^^^^^^^^\nAssertionError"}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1224, in __call__
+    await super().__call__(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1375, in handle
+    await super().handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 289, in handle
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py", line 302, in chat
+    return c.agent.chat(body.message, body.session_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 180, in chat
+    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 234, in _tool_phase
+    step = self.provider.tool_step(system=system, messages=messages, tools=tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 226, in tool_step
+    resp, latency = self._call(contents, config, phase="tool_selection")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 187, in _call
+    assert last is not None
+           ^^^^^^^^^^^^^^^^
+AssertionError
+{"ts": "2026-11-25T15:44:37.302681+00:00", "level": "ERROR", "logger": "weather_risk.api", "event": "unhandled_error", "exc": "Traceback (most recent call last):\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py\", line 151, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py\", line 80, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 91, in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 149, in simple_response\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 683, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 2929, in app\n    await route.handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 1375, in handle\n    await super().handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 289, in handle\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 175, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 161, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 762, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 383, in run_endpoint_function\n    return await run_in_threadpool(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 2779, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 1124, in run\n    result = context.run(func, *args)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py\", line 244, in _run_sync_endpoint\n    return function(**arguments)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py\", line 302, in chat\n    return c.agent.chat(body.message, body.session_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 180, in chat\n    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 234, in _tool_phase\n    step = self.provider.tool_step(system=system, messages=messages, tools=tools)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 226, in tool_step\n    resp, latency = self._call(contents, config, phase=\"tool_selection\")\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 187, in _call\n    assert last is not None\n           ^^^^^^^^^^^^^^^^\nAssertionError"}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1224, in __call__
+    await super().__call__(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1375, in handle
+    await super().handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 289, in handle
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py", line 302, in chat
+    return c.agent.chat(body.message, body.session_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 180, in chat
+    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 234, in _tool_phase
+    step = self.provider.tool_step(system=system, messages=messages, tools=tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 226, in tool_step
+    resp, latency = self._call(contents, config, phase="tool_selection")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 187, in _call
+    assert last is not None
+           ^^^^^^^^^^^^^^^^
+AssertionError
+{"ts": "2026-11-25T15:44:45.322211+00:00", "level": "ERROR", "logger": "weather_risk.api", "event": "unhandled_error", "exc": "Traceback (most recent call last):\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py\", line 151, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py\", line 80, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 91, in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 149, in simple_response\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 683, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 2929, in app\n    await route.handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 1375, in handle\n    await super().handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 289, in handle\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 175, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 161, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 762, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 383, in run_endpoint_function\n    return await run_in_threadpool(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 2779, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 1124, in run\n    result = context.run(func, *args)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py\", line 244, in _run_sync_endpoint\n    return function(**arguments)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py\", line 302, in chat\n    return c.agent.chat(body.message, body.session_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 180, in chat\n    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 234, in _tool_phase\n    step = self.provider.tool_step(system=system, messages=messages, tools=tools)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 226, in tool_step\n    resp, latency = self._call(contents, config, phase=\"tool_selection\")\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 187, in _call\n    assert last is not None\n           ^^^^^^^^^^^^^^^^\nAssertionError"}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1224, in __call__
+    await super().__call__(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1375, in handle
+    await super().handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 289, in handle
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py", line 302, in chat
+    return c.agent.chat(body.message, body.session_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 180, in chat
+    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 234, in _tool_phase
+    step = self.provider.tool_step(system=system, messages=messages, tools=tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 226, in tool_step
+    resp, latency = self._call(contents, config, phase="tool_selection")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 187, in _call
+    assert last is not None
+           ^^^^^^^^^^^^^^^^
+AssertionError
+{"ts": "2026-11-25T15:44:53.338289+00:00", "level": "ERROR", "logger": "weather_risk.api", "event": "unhandled_error", "exc": "Traceback (most recent call last):\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py\", line 151, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py\", line 80, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 91, in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 149, in simple_response\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 683, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 2929, in app\n    await route.handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 1375, in handle\n    await super().handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 289, in handle\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 175, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 161, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 762, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 383, in run_endpoint_function\n    return await run_in_threadpool(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 2779, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 1124, in run\n    result = context.run(func, *args)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py\", line 244, in _run_sync_endpoint\n    return function(**arguments)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py\", line 302, in chat\n    return c.agent.chat(body.message, body.session_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 180, in chat\n    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 234, in _tool_phase\n    step = self.provider.tool_step(system=system, messages=messages, tools=tools)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 226, in tool_step\n    resp, latency = self._call(contents, config, phase=\"tool_selection\")\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 187, in _call\n    assert last is not None\n           ^^^^^^^^^^^^^^^^\nAssertionError"}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1224, in __call__
+    await super().__call__(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1375, in handle
+    await super().handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 289, in handle
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py", line 302, in chat
+    return c.agent.chat(body.message, body.session_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 180, in chat
+    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 234, in _tool_phase
+    step = self.provider.tool_step(system=system, messages=messages, tools=tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 226, in tool_step
+    resp, latency = self._call(contents, config, phase="tool_selection")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 187, in _call
+    assert last is not None
+           ^^^^^^^^^^^^^^^^
+AssertionError
+{"ts": "2026-11-25T15:45:01.356856+00:00", "level": "ERROR", "logger": "weather_risk.api", "event": "unhandled_error", "exc": "Traceback (most recent call last):\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py\", line 151, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py\", line 80, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 91, in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py\", line 149, in simple_response\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 683, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 2929, in app\n    await route.handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 1375, in handle\n    await super().handle(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py\", line 289, in handle\n    await self.app(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 175, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 161, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 762, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py\", line 383, in run_endpoint_function\n    return await run_in_threadpool(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 2779, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py\", line 1124, in run\n    result = context.run(func, *args)\n             ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py\", line 244, in _run_sync_endpoint\n    return function(**arguments)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py\", line 302, in chat\n    return c.agent.chat(body.message, body.session_id)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 180, in chat\n    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)\n                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py\", line 234, in _tool_phase\n    step = self.provider.tool_step(system=system, messages=messages, tools=tools)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 226, in tool_step\n    resp, latency = self._call(contents, config, phase=\"tool_selection\")\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py\", line 187, in _call\n    assert last is not None\n           ^^^^^^^^^^^^^^^^\nAssertionError"}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 422, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1224, in __call__
+    await super().__call__(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1375, in handle
+    await super().handle(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/routing.py", line 289, in handle
+    await self.app(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/api/app.py", line 302, in chat
+    return c.agent.chat(body.message, body.session_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 180, in chat
+    execs, iterations, model_version, notes = self._tool_phase(message, history, toolbox, usage)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/orchestrator.py", line 234, in _tool_phase
+    step = self.provider.tool_step(system=system, messages=messages, tools=tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 226, in tool_step
+    resp, latency = self._call(contents, config, phase="tool_selection")
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/IdeaProjects/Tasks/Moveo/moveo-weather-risk/src/weather_risk/agent/gemini.py", line 187, in _call
+    assert last is not None
+           ^^^^^^^^^^^^^^^^
+AssertionError
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [79506]
