@@ -1,6 +1,14 @@
 # Phase 2 Report: Deterministic Risk Engine
 
-**Date:** 2026-11-25 · **Branch:** `phase-2-risk-engine` (from `main` at merge `8ade76d`) · **Status:** complete, awaiting review. Phase 3 has not started.
+**Date:** 2026-11-25 · **Branch:** `phase-2-risk-engine` (from `main` at merge `8ade76d`) · **Status:** complete, including the review refinement (methodology **1.1.0**). Phase 3 has not started.
+
+> **Refinement after review (methodology 1.1.0):**
+> - FEMA frequencies now use a hybrid of national percentile and absolute log-frequency (D-022).
+> - Explanations now separate hazard-level from indicator-level contributions (D-023). This corrects an earlier statement in this report.
+> - Ranking eligibility is explicit per scope (D-024).
+> - The AI session export is placed in the repo (D-025).
+>
+> §2–§4 show v1.1.0 results; v1.0.0 → v1.1.0 comparisons are in §2a and [SCORING_METHODOLOGY.md §6](SCORING_METHODOLOGY.md).
 
 ## 1. Implementation summary
 A fully deterministic analytics and **Weather Hazard Exposure Index** engine (methodology `1.0.0`) on top of the Phase 1 data layer. It needs no LLM, API or frontend. It answers the analytical part of all four assignment scenarios, offline from the committed snapshot.
@@ -18,73 +26,87 @@ A fully deterministic analytics and **Weather Hazard Exposure Index** engine (me
 
 FEMA frequencies are always labeled *"NRI December 2025, hazard-specific period of record"*. They are never presented as specific to a user-selected year.
 
-## 2. Actual scenario results
-Generated offline from the snapshot, with methodology 1.0.0 and NRI December 2025. Full output is in [PHASE_2_VALIDATION.md](PHASE_2_VALIDATION.md).
+## 2. Actual scenario results (methodology 1.1.0)
+Generated offline from the snapshot, NRI December 2025. Full output is in [PHASE_2_VALIDATION.md](PHASE_2_VALIDATION.md).
 
-**1. Midwest winter ranking.** Annual averages are for 2016–2025. "NRI pctl" is the national percentile score of the FEMA frequency.
+**1. Midwest winter ranking.** The order is unchanged from v1.0.0.
 
-| Rank | Hub | Winter score | Snow days/yr | Freezing days/yr | NRI pctl: winter weather / ice storm / cold wave |
-|---|---|---|---|---|---|
-| 1 | Minneapolis | **67.5** | 34.4 | 143.1 | 79.7 / 42.8 / 93.0 |
-| 2 | Detroit | **64.7** | 36.1 | 113.7 | 52.0 / **98.4** / 66.4 |
-| 3 | Chicago | **55.1** | 26.2 | 107.1 | 72.2 / 49.0 / 79.4 |
-| 4 | Columbus | **50.2** | 20.5 | 97.8 | 58.7 / 60.6 / 74.7 |
-| 5 | Kansas City | **48.6** | 11.9 | 102.6 | 57.8 / 74.8 / 60.5 |
-| 6 | Indianapolis | **47.7** | 16.2 | 99.7 | 51.2 / 64.2 / 69.8 |
+| Rank | Hub | Winter score (v1.0.0 → v1.1.0) |
+|---|---|---|
+| 1 | Minneapolis | 67.5 → **74.0** |
+| 2 | Detroit | 64.7 → **71.4** |
+| 3 | Chicago | 55.1 → **62.9** |
+| 4 | Columbus | 50.2 → **58.8** |
+| 5 | Kansas City | 48.6 → **57.2** |
+| 6 | Indianapolis | 47.7 → **57.1** |
 
 **2. Miami vs Houston**
-- **Hurricane:** Miami **98.9** vs Houston 91.7. Frequency 0.305/yr vs 0.184/yr.
-- **Flood:** Houston **98.0** vs Miami 94.1.
-  - Coastal flooding: 3.76/yr vs 2.25/yr.
-  - Inland flooding: 5.14/yr vs 4.00/yr.
+- **Hurricane:** Miami **86.6** vs Houston 77.4. Frequency 0.305/yr vs 0.184/yr.
+- **Flood:** Houston **99.0** vs Miami 97.0.
+  - Coastal flooding: 98.8 vs 95.9.
+  - Inland flooding: 99.2 vs 98.2.
+- Same leaders as in v1.0.0.
 
-**3. Denver, calendar year 2025** (NOAA station USW00003017):
-- **Measurable snowfall: 7.14%** of days (26 of 364 valid days).
-- **Including trace: 12.36%** (45 of 364).
-- 365 expected days; 1 missing (2025‑05‑21); 0 quality-excluded; coverage 99.7%.
-- Open-Meteo ERA5 gives 9.32% (34 of 365). It is modeled data, reported separately and never mixed with NOAA.
+**3. Denver, calendar year 2025.** Unaffected by the change.
+- Measurable snow: **7.14%** of days (26 of 364 valid).
+- Including trace: **12.36%** (45 of 364).
+- 1 missing day (2025‑05‑21); coverage 99.7%.
 
-**Miami, insufficient coverage:** for 2016–2025 snowfall, 748 of 3,653 days are valid (20.5%), below the 90% threshold.
-- The statistic is withheld (not zero).
-- Miami's winter score is therefore `partial` (70% of its weight available), so its overall score is `partial`.
-- Miami is listed as **not ranked** in the overall ranking.
+**Miami, insufficient coverage:** 20.5% valid snow observations.
+- The statistic is withheld; the winter hazard is partial; the overall score (61.3) is partial and **not ranked overall**.
+- Miami **is ranked** #1 for hurricane and #2 for flood, with explicit reasons recorded (D-024).
 
-**4. Dallas.** Overall **59.7, Moderate**; rank 2 of 11 ranked hubs.
-- **Premise "Dallas's risk is High" is not supported** (High starts at 70). Weights and thresholds were not adjusted.
-- Drivers, by contribution to the overall score:
+**4. Dallas.** Overall **58.7, Moderate**; rank 2 of 11 ranked hubs.
+- **Premise "Dallas's risk is High" is not supported.**
+- **Primary driver: severe convective storms.** Hazard contributions to the overall score:
 
-| Hazard | Score | Contribution | Main indicators |
+| Hazard | Score | Contribution |
+|---|---|---|
+| Severe convective storms | 94.6 | 18.9 |
+| Extreme heat | 81.7 | 16.3 |
+| Flood | 49.4 | 9.9 |
+| Winter | 40.6 | 8.1 |
+| Hurricane | 27.0 | 5.4 |
+
+### 2a. v1.0.0 → v1.1.0: key indicators
+| Indicator | Frequency | v1.0.0 | v1.1.0 |
 |---|---|---|---|
-| Severe convective storms | 89.7 | 17.9 | Tornado 96.3, hail 96.9, strong wind 75.8 |
-| Extreme heat | 80.9 | 16.2 | 65 days ≥ 95 °F per year; heat-wave percentile 96.7 |
-| Hurricane | 50.8 | 10.2 | Frequency 0.0115/yr — see limitation 1 |
-| Flood | 48.9 | 9.8 | Inland 97.8; coastal not applicable (scored 0) |
-| Winter | 28.3 | 5.7 | Ice storm percentile 88.2 is the notable driver |
+| Dallas hurricane | 0.0115/yr (≈ 1 per 87 yr) | 50.8 | **27.0** |
+| Chicago hurricane | 0.0093/yr | 40.4 | 20.2 |
+| Miami hurricane | 0.305/yr | 98.9 | 86.6 |
+| Houston hurricane | 0.184/yr | 91.7 | 77.4 |
+| Chicago coastal flooding | 0.012/yr | 88.3 | **46.2** |
+| Miami coastal flooding | 2.25/yr | 91.7 | 95.9 |
+| Houston coastal flooding | 3.76/yr | 97.6 | 98.8 |
 
-## 3. Overall and per-hazard scores (12 hubs)
+## 3. Overall and per-hazard scores (12 hubs, v1.1.0)
 | Rank | Hub | Overall | Band | Winter | Hurricane | Flood | Severe convective | Extreme heat |
 |---|---|---|---|---|---|---|---|---|
-| 1 | Houston | 68.3 | Moderate | 19.0 | 91.7 | 98.0 | 54.8 | 77.8 |
-| 2 | Dallas | 59.7 | Moderate | 28.3 | 50.8 | 48.9 | 89.7 | 80.9 |
-| 3 | Chicago | 58.5 | Moderate | 55.1 | 40.4 | 93.7 | 85.1 | 18.1 |
-| 4 | Detroit | 57.2 | Moderate | 64.7 | 48.9 | 91.3 | 56.8 | 24.4 |
-| 5 | Memphis | 51.7 | Moderate | 33.0 | 64.2 | 49.2 | 49.7 | 62.1 |
-| 6 | Kansas City | 46.3 | Moderate | 48.6 | 0.0 | 48.7 | 83.5 | 50.4 |
-| 7 | Atlanta | 45.3 | Moderate | 26.5 | 71.5 | 44.9 | 64.3 | 19.2 |
-| 8 | Indianapolis | 44.2 | Moderate | 47.7 | 37.0 | 45.6 | 66.5 | 24.1 |
-| 9 | Minneapolis | 43.2 | Moderate | 67.5 | 0.0 | 34.5 | 79.2 | 35.0 |
-| 10 | Columbus | 39.2 | Low | 50.2 | 31.3 | 47.3 | 43.9 | 23.5 |
-| 11 | Denver | 28.1 | Low | 51.1 | 0.0 | 20.9 | 49.2 | 19.4 |
-| — | Miami | 55.5 (partial, not ranked) | Moderate | 6.5\* | 98.9 | 94.1 | 42.3 | 35.4 |
+| 1 | Houston | 73.6 | High | 34.0 | 77.4 | 99.0 | 77.4 | 80.1 |
+| 2 | Dallas | 58.7 | Moderate | 40.6 | 27.0 | 49.4 | 94.6 | 81.7 |
+| 3 | Chicago | 56.7 | Moderate | 62.9 | 20.2 | 72.9 | 92.6 | 34.8 |
+| 4 | Detroit | 56.2 | Moderate | 71.4 | 25.4 | 72.7 | 73.8 | 37.6 |
+| 5 | Memphis | 54.0 | Moderate | 44.4 | 41.4 | 49.6 | 72.4 | 62.4 |
+| 6 | Atlanta | 50.7 | Moderate | 39.7 | 50.3 | 47.5 | 78.2 | 37.8 |
+| 7 | Kansas City | 49.5 | Moderate | 57.2 | 0.0 | 49.4 | 88.3 | 52.6 |
+| 8 | Minneapolis | 49.3 | Moderate | 74.0 | 0.0 | 42.3 | 86.8 | 43.4 |
+| 9 | Indianapolis | 47.9 | Moderate | 57.1 | 18.5 | 47.8 | 79.0 | 37.2 |
+| 10 | Columbus | 45.6 | Moderate | 58.8 | 15.6 | 48.6 | 67.4 | 37.2 |
+| 11 | Denver | 40.0 | Low | 56.6 | 0.0 | 34.4 | 67.9 | 40.9 |
+| — | Miami | 61.3 (partial, not ranked) | Moderate | 10.4\* | 86.6 | 97.0 | 68.1 | 44.7 |
 
 \* Partial: the snow indicators are unavailable because coverage is too low.
+
+The v1.0.0 overall scores and ranks are in [SCORING_METHODOLOGY.md §6](SCORING_METHODOLOGY.md). Only two adjacent pairs swapped: Atlanta/Kansas City and Minneapolis/Indianapolis.
 
 ## 4. Formulas, weights and policies
 These are summarized here; the full method is in [SCORING_METHODOLOGY.md](SCORING_METHODOLOGY.md).
 
 **Formulas:**
 - Climate indicator: `s = 100·clip((x−low)/(high−low), 0, 1)`.
-- FEMA indicator, positive frequency: `s = 100·(Z + L + ½E)/N`.
+- FEMA indicator, positive frequency (v1.1.0): `s = ½·s_rel + ½·s_abs`.
+  - `s_rel = 100·(Z + L + ½E)/N`
+  - `s_abs = 100·clip(log10(x/0.01)/2, 0, 1)`, so 1-in-100 years scores 0 and once a year scores 100.
   - N = eligible counties (50 states + DC, minus territories and insufficient/unknown records).
   - Z = no-exposure counties (observed-zero or not-applicable).
   - L = eligible positive values below; E = equal values (ties share the mid-rank).
@@ -114,6 +136,8 @@ These are summarized here; the full method is in [SCORING_METHODOLOGY.md](SCORIN
 
 Bands: Low < 40 ≤ Moderate < 70 ≤ High.
 
+**Ranking eligibility:** each hub and scope gets an explicit eligible flag and reason. Hazard rankings include every hub whose hazard is complete.
+
 **Missing data and "not applicable":**
 - **Not applicable** scores 0 and keeps its weight, so dropping it can't inflate a score.
 - **Insufficient data or unknown** is never treated as 0; it makes the hazard partial or unavailable.
@@ -129,11 +153,12 @@ Bands: Low < 40 ≤ Moderate < 70 ≤ High.
 ## 6. Test commands and results (2026-11-25)
 | Command | Result |
 |---|---|
-| `uv run pytest` (offline, default) | **214 passed**, 6 deselected (136 from Phase 1 + 78 new) |
+| `uv run pytest` (offline, default) | **227 passed**, 6 deselected (136 from Phase 1 + 91 Phase 2, including 13 refinement tests) |
 | `uv run pytest -m live` | **6 passed** (Phase 1 live suite, unchanged) |
-| `uv run ruff check src tests scripts` / `ruff format --check` | All checks passed / 43 files formatted |
+| `uv run ruff check src tests scripts` / `ruff format --check` | All checks passed / 44 files formatted |
 | Fresh `git clone` → `uv sync --frozen` → `pytest` | 214 passed; scenarios reproduce identically |
-| `make scenarios` with HTTP(S) routed to a dead proxy and an empty cache | Output identical to the committed report; 0 HTTP attempts logged; served from the snapshot |
+| `make scenarios` with HTTP(S) routed to a dead proxy and an empty cache (re-run on v1.1.0) | Output identical to the committed report; 0 HTTP attempts logged; served from the snapshot |
+| `uv run python scripts/sensitivity.py --out docs/PHASE_2_SENSITIVITY.md` | Methods A, B and C compared for all 12 hubs (offline) |
 
 **What the new tests cover:**
 - **Statistics:** hand-computed denominators (missing, quality-excluded, valid); measurable vs trace; heavy snow; freezing including 0 °C and negatives; heat threshold included; coverage gate; all-missing never zero; leap-year and multi-year annual averages computed independently; Open-Meteo kept separate.
@@ -149,17 +174,17 @@ Bands: Low < 40 ≤ Moderate < 70 ≤ High.
   - Unsupported hubs, hazards, regions, periods and metrics rejected; version-mismatch fallback; report rendering.
 
 ## 7. Limitations and unresolved issues
-1. **Percentile compression near zero (D-021, needs your decision).**
-   - A tiny but positive FEMA frequency ranks above about 870 no-exposure counties and scores mid-range. Hurricane examples: Dallas (about one event per 87 years) scores 50.8; Chicago 40.4; Detroit 48.9.
-   - For coastal flooding, 2,644 not-applicable counties put every coastal county at about 85 or higher.
-   - For Dallas, the hurricane indicator is the single largest contributor to the overall score (10.2 points).
-   - The validation report includes a diagnostic table. Options: (a) keep and disclose (current); (b) blend with an absolute log-scale anchor; (c) set a minimum material frequency.
-2. **Partial hubs are excluded from overall rankings.** Miami, the strongest hurricane exposure in the catalog, is therefore absent from the overall ranking, though shown with its partial score. Setting `rank_partial_results: true` would include it, flagged.
+1. **FEMA scores are relative and absolute *frequency*, not event likelihood or severity** (D-022).
+   - The hybrid reduces near-zero compression (Dallas hurricane 27.0) but keeps a positive score for every real exposure.
+   - Its absolute half saturates for hazards that occur at least yearly, which lifted overall levels; Houston is now in the High band.
+   - Anchors are a single return-period rule, not hazard-specific severity anchors.
+   - **Correction:** an earlier version of this report called Dallas's hurricane indicator "the single largest contributor to the overall score". It was the largest *single indicator* (because hurricane has only one indicator), but third at hazard level. Fixed in D-023, with regression tests.
+2. **Partial hubs are excluded from the default overall ranking only** (shown with their score and reason). Miami is ranked in the hurricane and flood rankings.
 3. **Weights and anchors are judgment calls**, and equal hazard weights strongly shape the overall ranking. The engine does not yet accept custom weights per request; Phase 3 could add that as a deterministic parameter.
 4. **The climate window is 10 years**, short for rare heavy-snow events. FEMA periods of record differ by hazard.
 5. **Exposure is not operational risk.** The index has no vulnerability, redundancy or cost dimension.
 6. **Sources not yet used:** NOAA wind, precipitation and Storm Events data.
-7. **AI session file.** An `ai-session` export (94 KB, untracked) sits at the repo root. My scan found no API keys or email addresses. It's not committed yet; it should move to `docs/ai-session/` after your review, together with the Phase 2 export.
+7. **AI session.** The Phases 0–1 export is now `docs/ai-session/session-phase-0-1.txt`; it was reviewed, needed no redactions, and is unmodified. **Security:** a real-looking Gemini key was typed into the tracked `.env.example`. It was never staged or committed, but it now appears in this session's transcript. Rotate the key, move it to `.env`, restore the placeholder, and redact it from the next export (D-025).
 
 ## 8. Commits
 | Hash | Message |
@@ -181,6 +206,5 @@ Phase 2 is **ready.**
 - The premise check gives the agent a grounded way to push back on false premises such as "Dallas is high".
 
 Inputs Phase 3 needs from you:
-- a `GEMINI_API_KEY` in your local `.env`;
-- a decision on D-021 (percentile compression), or approval to keep v1.0.0 as is;
-- whether partial hubs should be rankable with a flag.
+- a **rotated** `GEMINI_API_KEY` in your local `.env` (not `.env.example`);
+- approval of methodology 1.1.0.

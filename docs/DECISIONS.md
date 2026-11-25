@@ -164,7 +164,7 @@ Every result (`WeatherStatResult`, `HubProfile`, `RankingResult`, `ComparisonRes
 ### D-020: Premise checks are deterministic
 `explain_hub_score(hub, claimed_band)` compares the claim with the configured bands and reports `supported: true/false/None` with reasoning. For Dallas, the claim "High" is **not supported** (59.7, Moderate; rank 2 of 11 ranked hubs). Thresholds were not adjusted.
 
-### D-021 (open, needs your decision): percentile compression near zero
+### D-021 (resolved by D-022): percentile compression near zero
 The approved mid-rank percentile gives tiny but positive modeled frequencies mid-range scores. Examples: hurricane, Dallas ≈ 1/87 yr → 50.8; coastal flood, any coastal county ≥ ~85.
 
 Options for a v1.1:
@@ -173,3 +173,33 @@ Options for a v1.1:
 - (c) apply a minimum material frequency, e.g. treat < 0.02/yr as the no-exposure tier.
 
 Not changed in Phase 2.
+
+## Phase 2 refinement (2026-11-25, methodology 1.1.0)
+
+### D-022: Hybrid FEMA normalization (methodology 1.1.0)
+`s = 0.5·national mid-rank percentile + 0.5·absolute log-frequency`. The absolute half uses one return-period rule for every hazard: 0.01/yr (the 1%-annual-chance "100-year" planning standard) → 0, and 1/yr → 100, on a log10 scale.
+
+- **Chosen over** percentile-only (v1.0.0) and conditional (positive-only) percentiles after a sensitivity analysis (`docs/PHASE_2_SENSITIVITY.md`). The conditional version fixes hurricane but drops Miami's coastal-flood score to 44.0, because coastal counties are then compared only with each other.
+- **The hybrid is monotone in frequency,** so every within-hazard ranking is unchanged; magnitudes for rare hazards fall (Dallas hurricane 50.8 → 27.0).
+- **No minimum-frequency cutoff:** every positive frequency still scores above 0.
+- **Known effect:** for hazards that occur at least yearly almost everywhere, the absolute half saturates at 100, so overall *levels* rose (e.g. Houston 68.3 → 73.6, now in the High band). Overall rank order changed only for two adjacent pairs (Atlanta/Kansas City, Minneapolis/Indianapolis).
+- **Not chosen per hub or per hazard.** Hazard-specific severity anchors were out of scope for the timebox.
+
+### D-023: Contribution levels are reported explicitly
+**Problem:** the Phase 2 report and summary said Dallas's hurricane indicator was "the single largest contributor to the overall score".
+- At **indicator level** that was true: hurricane is the only indicator of its hazard, so it gets the full hazard weight (10.2 points).
+- At **hazard level** it was third (severe convective 17.9, heat 16.2, hurricane 10.2).
+- The arithmetic was consistent; the wording conflated the two levels.
+
+**Fix:**
+- `Explanation` now has `primary_driver` (hazard level), `hazards_by_contribution` (`W_h·H_h`; sums to the overall score), `top_indicators` with both `contribution_to_hazard` and `contribution_to_overall`, and an explanatory note.
+- Regression tests check that the primary driver is the argmax of independently recomputed hazard contributions, and that both levels sum to the overall score.
+
+### D-024: Ranking eligibility is per scope, with explicit reasons
+- Every `HubProfile` exposes `ranking_eligibility[overall | <hazard>]` with `eligible`, `status` and `reason`.
+- `RankingEntry` carries `eligible` and `exclusion_reason`.
+- Partial overall scores stay visible but are excluded from the default overall ranking.
+- A hazard ranking includes every hub whose *hazard* is complete. Miami is ranked #1 for hurricane and #2 for flood; it is excluded only from the overall and winter rankings, because its snowfall coverage is 20.5% (missing is never treated as 0).
+
+### D-025: AI session export placement and review
+The user's `/export` (Phases 0–1) was moved unmodified to `docs/ai-session/session-phase-0-1.txt` after a pattern review: no credentials; personal data limited to the chosen GitHub noreply address and local paths. A real-looking Gemini key was later typed into the tracked `.env.example` and echoed into this session. That file was never staged. The key must be rotated and redacted from the next export.

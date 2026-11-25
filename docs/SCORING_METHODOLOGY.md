@@ -1,4 +1,4 @@
-# Scoring Methodology: Weather Hazard Exposure Index (v1.0.0)
+# Scoring Methodology: Weather Hazard Exposure Index (v1.1.0)
 
 **What it is:** a deterministic, heuristic 0–100 index of how exposed a distribution hub's location is to five weather hazards, built from public data.
 
@@ -9,7 +9,7 @@
 
 We have no internal downtime, shipment, asset-vulnerability or financial data, so the index cannot measure *operational* risk.
 
-All parameters live in [`config/scoring.yaml`](../config/scoring.yaml) and are validated at load time. They were fixed before any hub score was computed and have **not** been tuned to produce particular rankings. The same inputs always give identical outputs, and no LLM is involved.
+All parameters live in [`config/scoring.yaml`](../config/scoring.yaml) and are validated at load time. The v1.0.0 parameters were fixed before any hub score was computed. v1.1.0 changed only the FEMA normalization (§3.2), after a sensitivity analysis ([PHASE_2_SENSITIVITY.md](PHASE_2_SENSITIVITY.md)). Its absolute anchors follow one hub-independent return-period rule. Nothing has been tuned to produce particular rankings. The same inputs always give identical outputs, and no LLM is involved.
 
 ---
 
@@ -62,7 +62,7 @@ For one dataset (one source, one location), one element and one period:
 
 Fixed anchors, unlike min-max over the catalog, mean that adding or removing a hub never changes another hub's score. The anchors are judgment calls, stated openly.
 
-### 3.2 FEMA NRI indicators: national mid-rank percentiles
+### 3.2 FEMA NRI indicators: hybrid of relative and absolute frequency (v1.1.0)
 For each hazard h, the **eligible reference population** is defined as follows:
 - **Start:** NRI county records for the 50 states + DC (3,144).
 - **Excluded:** territories (88: PR, GU, AS, MP, VI), plus counties whose hazard status is `insufficient_data` or `unknown`. Example: 30 Alaska counties for heat wave.
@@ -75,7 +75,30 @@ county with positive AFREQ x     -> s = 100 · (Z + L + ½E) / N
                                     E = eligible positives == x (ties share the mid-rank)
 insufficient_data / unknown      -> unavailable (None), never 0
 ```
-**Properties:** 0 ≤ s < 100. The calculation is deterministic (exact comparison of published values). A mass of zero-frequency counties scores 0; it cannot pull zero counties up.
+The value above is the **relative** component `s_rel`. Version 1.1.0 blends it with an **absolute** component:
+
+```
+s_abs = 100 · clip( log10(x / 0.01) / log10(1 / 0.01), 0, 1 )   # 1-in-100-yr -> 0, 1/yr -> 100
+s     = 0.5 · s_rel + 0.5 · s_abs                              # no-exposure tier: 0; unavailable: None
+```
+**Why:**
+- A percentile alone says *how a county compares nationally*. It ranks a ~1-in-87-year hurricane frequency above the 873 no-exposure counties, which gives it a mid-range score.
+- The absolute component says *how often, in absolute terms*.
+  - The anchors use one rule for every hazard. 0.01/yr is the US **1%-annual-chance** planning standard (the "100-year" event); 1/yr is an annual occurrence.
+  - The scale is logarithmic because hazard frequencies span orders of magnitude.
+- The two halves are weighted equally, as a transparent default.
+
+**Effects:**
+- The hybrid is **monotone in frequency**, so every hub ranking *within* a hazard is identical to percentile-only.
+- What changes is magnitude for rare hazards. Hurricane: Dallas 50.8 → 27.0, Chicago 40.4 → 20.2, Miami 98.9 → 86.6. Coastal flooding: Chicago (0.012/yr on Lake Michigan) 88.3 → 46.2.
+
+**Limitations of the absolute half:**
+- It saturates at 100 for hazards that occur at least yearly in most counties (winter weather 93%, heat wave 87% and hail 85% of positive counties). For those, the relative half carries the comparison, and the absolute half adds a near-constant offset. As a result, overall *levels* rose in v1.1.0 (§6). Bands are heuristic labels.
+- The anchors are the same for all hazards; there are no hazard-specific severity anchors. NRI frequencies count *events* for some hazards and *event-days* for others (winter weather, cold wave, heat wave). So the absolute half measures occurrence frequency, not severity.
+
+**Alternative rejected:** a percentile among positive-frequency counties only, which drops the no-exposure tier. It fixes hurricane but distorts coastal flooding: Miami's coastal score falls to 44.0, because coastal counties are then compared only with each other. See [PHASE_2_SENSITIVITY.md](PHASE_2_SENSITIVITY.md).
+
+**Properties:** 0 ≤ s ≤ 100. The calculation is deterministic (exact comparison of published values). A mass of zero-frequency counties scores 0; it cannot pull zero counties up.
 
 **Version guard:** a county record and the reference population must share one `NRI_VER`. If they don't, the engine uses the reference table's own row; if that is still inconsistent, it raises.
 
@@ -128,31 +151,46 @@ They sum exactly to the scores (tested).
 | Any hazard `unavailable` | Overall = **None**, status `unavailable` | No silent renormalization across hazards |
 | Any hazard `partial` | Overall computed, status `partial` | **Not ranked** by default (`rank_partial_results: false`); listed separately with its score |
 | Rankings | Require one NRI version, one climate source and one climate period across hubs | Otherwise rejected as not comparable |
+| Ranking eligibility (per scope) | Every profile exposes `ranking_eligibility` for `overall` and each hazard, with an explicit reason. A hazard ranking includes every hub whose *hazard* is complete. | Miami is excluded from the overall and winter rankings (partial snow data) but ranked in hurricane (#1) and flood (#2) |
 | Ties | Score descending; exact ties share a rank; listed by `hub_id` | Deterministic |
 
 ---
 
-## 6. Worked example: Dallas (actual output, methodology 1.0.0)
+## 6. Worked example: Dallas (actual output, methodology 1.1.0)
 | Hazard | Indicator: raw → score (effective weight) | Hazard score | × 0.2 |
 |---|---|---|---|
-| Severe convective | tornado 0.928/yr → 96.3 (0.334); hail 8.92/yr → 96.9 (0.333); strong wind 4.36/yr → 75.8 (0.333) | **89.7** | 17.93 |
-| Extreme heat | 65.0 days ≥ 95 °F/yr → 65.0 (0.5); heat wave 19.1/yr → 96.7 (0.5) | **80.9** | 16.17 |
-| Hurricane | 0.0115/yr (≈ 1 per 87 yr) → 50.8 (1.0) | **50.8** | 10.17 |
-| Flood | coastal: not applicable → 0 (0.5); inland 4.61/yr → 97.8 (0.5) | **48.9** | 9.78 |
-| Winter | snow 1.1 d/yr → 1.8; heavy 0.1 → 1.7; freezing 23.2 → 12.9; NRI winter weather 4.05 → 21.5; ice storm 1.23 → 88.2; cold wave 0.95 → 32.1 | **28.3** | 5.65 |
-| **Overall** | | | **59.7 (Moderate)** |
+| Severe convective | tornado 0.928/yr → 97.3 (0.334); hail 8.92/yr → 98.4 (0.333); strong wind 4.36/yr → 87.9 (0.333) | **94.6** | 18.91 |
+| Extreme heat | 65.0 days ≥ 95 °F/yr → 65.0 (0.5); heat wave 19.1/yr → 98.4 (0.5) | **81.7** | 16.34 |
+| Flood | coastal: not applicable → 0 (0.5); inland 4.61/yr → 98.9 (0.5) | **49.4** | 9.89 |
+| Winter | snow 1.1 d/yr → 1.8; heavy 0.1 → 1.7; freezing 23.2 → 12.9; NRI winter weather 4.05 → 60.8; ice storm 1.23 → 94.1; cold wave 0.95 → 65.5 | **40.6** | 8.12 |
+| Hurricane | 0.0115/yr (≈ 1 per 87 yr): relative 50.8, absolute 3.1 → 27.0 (1.0) | **27.0** | 5.39 |
+| **Overall** | | | **58.7 (Moderate)** |
 
-Check: 0.2 × (89.675 + 80.854 + 50.843 + 48.895 + 28.253) = 59.70.
+**Two contribution levels:**
+- **Hazard level:** `W_h·H_h`. This is the primary explanation; Dallas's primary driver is severe convective storms.
+- **Indicator level:** `W_h·w_i·s_i`. These also sum to the overall score. But a single-indicator hazard (hurricane) concentrates its whole weight in one indicator, so indicator lists must not be read as hazard rankings. In v1.0.0 the hurricane indicator was Dallas's largest *single indicator* (10.2 points) while ranking only third as a hazard. `explain_hub_score` now reports `primary_driver`, both contribution levels, and a note.
 
----
+### v1.0.0 → v1.1.0 (overall)
+| Hub | v1.0.0 | v1.1.0 | Rank change |
+|---|---|---|---|
+| Houston | 68.3 (#1) | 73.6 (#1, High) | — |
+| Dallas | 59.7 (#2) | 58.7 (#2) | — |
+| Chicago | 58.5 (#3) | 56.7 (#3) | — |
+| Detroit | 57.2 (#4) | 56.2 (#4) | — |
+| Memphis | 51.7 (#5) | 54.0 (#5) | — |
+| Atlanta | 45.3 (#7) | 50.7 (#6) | ↑1 |
+| Kansas City | 46.3 (#6) | 49.5 (#7) | ↓1 |
+| Minneapolis | 43.2 (#9) | 49.3 (#8) | ↑1 |
+| Indianapolis | 44.2 (#8) | 47.9 (#9) | ↓1 |
+| Columbus | 39.2 (#10) | 45.6 (#10) | — |
+| Denver | 28.1 (#11) | 40.0 (#11) | — |
+| Miami | 55.5 (partial) | 61.3 (partial) | not ranked |
 
 ## 7. Limitations (stated with every result)
 1. **Exposure ≠ disruption risk.** The index has no vulnerability, redundancy or financial dimension and has not been validated against outcomes.
-2. **Percentiles exaggerate small differences near the no-exposure tier.** Hubs with tiny but positive modeled frequencies score mid-range:
-   - Hurricane: Dallas ≈ 1 event per 87 years scores 50.8; Chicago ≈ 1 per 108 years scores 40.4.
-   - Coastal flooding: with 2,644 counties not applicable, any coastal county scores ≥ ~85.
-
-   See `docs/PHASE_2_VALIDATION.md` → *Methodology diagnostics*. This is a known property of the approved method and is flagged for review; it was not tuned.
+2. **FEMA scores mean relative and absolute *frequency*, not likelihood of a damaging event or its severity.** The v1.1.0 hybrid reduces, but doesn't remove, the percentile's compression near the no-exposure tier.
+   - Hurricane: Dallas ≈ 1 event per 87 years now scores 27.0 (was 50.8).
+   - The absolute half saturates for hazards that occur at least yearly.
 3. **Geography.** County-level FEMA data and airport-station climate data are not site-specific. Three hubs (Chicago, Kansas City, Atlanta) use a station outside the hazard county.
 4. **Periods.** The climate window is 10 years, short for rare events. FEMA frequencies cover different, hazard-specific periods of record and are not year-specific.
 5. **Weights and anchors are judgment calls.** The overall ranking is sensitive to equal hazard weighting.
