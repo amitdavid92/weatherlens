@@ -81,6 +81,9 @@ class AgentInfo(BaseModel):
     output_tokens: int = 0
     thinking_tokens: int = 0
     latency_ms: float
+    # Phase 5 instrumentation: where the time went (ms) and every LLM HTTP attempt.
+    timings_ms: dict[str, float] = Field(default_factory=dict)
+    llm_calls: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class Resolved(BaseModel):
