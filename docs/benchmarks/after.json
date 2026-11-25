@@ -1,97 +1,297 @@
 {
  "label": "after",
- "at": "2026-11-25T15:06:08+00:00",
+ "at": "2026-11-25T16:25:44+00:00",
  "model": "gemini-3.5-flash-lite",
  "methodology": "1.1.0",
- "engine_warmup_ms": 1314,
+ "engine_warmup_ms": 1216,
  "n": 4,
- "median_ms": null,
- "mean_ms": null,
- "max_ms": null,
+ "median_ms": 5562,
+ "mean_ms": 5774,
+ "max_ms": 7430,
  "rows": [
   {
    "rep": 0,
    "question": "Which hubs in the Midwest are most exposed to winter disruption?",
-   "http": 503,
-   "wall_ms": 22077,
-   "status": "HTTP 503 llm_unavailable",
-   "valid": null,
-   "attempts": null,
-   "timings_ms": {},
-   "llm_http_calls": 0,
+   "http": 200,
+   "wall_ms": 4542,
+   "status": "answered",
+   "valid": true,
+   "attempts": 1,
+   "timings_ms": {
+    "tool_phase_ms": 1960.7,
+    "tool_selection_llm_ms": 1933.2,
+    "tool_execution_ms": 3.4,
+    "synthesis_phase_ms": 2567.8,
+    "synthesis_llm_ms": 2558.5,
+    "validation_ms": 7.7,
+    "provider_wait_ms": 0.0,
+    "synthesis_prompt_chars": 3627.0
+   },
+   "llm_http_calls": 3,
    "llm_errors": [],
-   "models": [],
-   "iterations": null,
-   "tools": [],
-   "tokens": [
-    null,
-    null,
-    null
+   "models": [
+    "gemini-3.5-flash-lite"
    ],
-   "llm_calls": []
+   "iterations": 2,
+   "tools": [
+    "rank_hubs"
+   ],
+   "tokens": [
+    6849,
+    1047,
+    59
+   ],
+   "llm_calls": [
+    {
+     "phase": "tool_selection",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 934.8,
+     "input_tokens": 1920,
+     "output_tokens": 24,
+     "thinking_tokens": 59,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "tool_selection",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 998.4,
+     "input_tokens": 3243,
+     "output_tokens": 180,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "synthesis",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 2558.5,
+     "input_tokens": 1686,
+     "output_tokens": 843,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    }
+   ]
   },
   {
    "rep": 0,
    "question": "Compare Miami and Houston in terms of hurricane and flood exposure.",
-   "http": 503,
-   "wall_ms": 36406,
-   "status": "HTTP 503 llm_unavailable",
-   "valid": null,
-   "attempts": null,
-   "timings_ms": {},
-   "llm_http_calls": 0,
+   "http": 200,
+   "wall_ms": 5293,
+   "status": "answered",
+   "valid": true,
+   "attempts": 1,
+   "timings_ms": {
+    "tool_phase_ms": 2117.0,
+    "tool_selection_llm_ms": 2109.8,
+    "tool_execution_ms": 2.4,
+    "synthesis_phase_ms": 3164.8,
+    "synthesis_llm_ms": 3161.7,
+    "validation_ms": 1.6,
+    "provider_wait_ms": 0.0,
+    "synthesis_prompt_chars": 2396.0
+   },
+   "llm_http_calls": 3,
    "llm_errors": [],
-   "models": [],
-   "iterations": null,
-   "tools": [],
-   "tokens": [
-    null,
-    null,
-    null
+   "models": [
+    "gemini-3.5-flash-lite"
    ],
-   "llm_calls": []
+   "iterations": 2,
+   "tools": [
+    "compare_hubs"
+   ],
+   "tokens": [
+    5907,
+    1112,
+    0
+   ],
+   "llm_calls": [
+    {
+     "phase": "tool_selection",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 682.8,
+     "input_tokens": 1920,
+     "output_tokens": 39,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "tool_selection",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 1427.0,
+     "input_tokens": 2699,
+     "output_tokens": 151,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "synthesis",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 3161.7,
+     "input_tokens": 1288,
+     "output_tokens": 922,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    }
+   ]
   },
   {
    "rep": 0,
    "question": "What percentage of days in Denver last year had snowfall?",
-   "http": 503,
-   "wall_ms": 48152,
-   "status": "HTTP 503 llm_unavailable",
-   "valid": null,
-   "attempts": null,
-   "timings_ms": {},
-   "llm_http_calls": 0,
+   "http": 200,
+   "wall_ms": 5830,
+   "status": "answered",
+   "valid": true,
+   "attempts": 1,
+   "timings_ms": {
+    "tool_phase_ms": 2337.9,
+    "tool_selection_llm_ms": 2313.0,
+    "tool_execution_ms": 20.5,
+    "synthesis_phase_ms": 3482.6,
+    "synthesis_llm_ms": 3479.1,
+    "validation_ms": 1.0,
+    "provider_wait_ms": 0.0,
+    "synthesis_prompt_chars": 4965.0
+   },
+   "llm_http_calls": 3,
    "llm_errors": [],
-   "models": [],
-   "iterations": null,
-   "tools": [],
-   "tokens": [
-    null,
-    null,
-    null
+   "models": [
+    "gemini-3.5-flash-lite"
    ],
-   "llm_calls": []
+   "iterations": 2,
+   "tools": [
+    "get_weather_stat",
+    "get_weather_stat"
+   ],
+   "tokens": [
+    8319,
+    1355,
+    155
+   ],
+   "llm_calls": [
+    {
+     "phase": "tool_selection",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 1208.5,
+     "input_tokens": 1919,
+     "output_tokens": 78,
+     "thinking_tokens": 155,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "tool_selection",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 1104.5,
+     "input_tokens": 4019,
+     "output_tokens": 82,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "synthesis",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 3479.1,
+     "input_tokens": 2381,
+     "output_tokens": 1195,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    }
+   ]
   },
   {
    "rep": 0,
    "question": "Why is the Dallas hub's weather disruption risk high?",
-   "http": 503,
-   "wall_ms": 48434,
-   "status": "HTTP 503 llm_unavailable",
-   "valid": null,
-   "attempts": null,
-   "timings_ms": {},
-   "llm_http_calls": 0,
+   "http": 200,
+   "wall_ms": 7430,
+   "status": "fallback",
+   "valid": false,
+   "attempts": 2,
+   "timings_ms": {
+    "tool_phase_ms": 2222.3,
+    "tool_selection_llm_ms": 2216.0,
+    "tool_execution_ms": 2.2,
+    "synthesis_phase_ms": 5195.7,
+    "synthesis_llm_ms": 5191.0,
+    "validation_ms": 2.4,
+    "provider_wait_ms": 0.0,
+    "synthesis_prompt_chars": 4735.0
+   },
+   "llm_http_calls": 4,
    "llm_errors": [],
-   "models": [],
-   "iterations": null,
-   "tools": [],
-   "tokens": [
-    null,
-    null,
-    null
+   "models": [
+    "gemini-3.5-flash-lite"
    ],
-   "llm_calls": []
+   "iterations": 2,
+   "tools": [
+    "explain_hub_score"
+   ],
+   "tokens": [
+    9509,
+    1528,
+    145
+   ],
+   "llm_calls": [
+    {
+     "phase": "tool_selection",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 856.2,
+     "input_tokens": 1920,
+     "output_tokens": 29,
+     "thinking_tokens": 91,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "tool_selection",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 1359.8,
+     "input_tokens": 3587,
+     "output_tokens": 207,
+     "thinking_tokens": 54,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "synthesis",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 2557.0,
+     "input_tokens": 1983,
+     "output_tokens": 657,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    },
+    {
+     "phase": "synthesis",
+     "model": "gemini-3.5-flash-lite",
+     "attempt": 1,
+     "ok": true,
+     "latency_ms": 2634.0,
+     "input_tokens": 2019,
+     "output_tokens": 635,
+     "thinking_tokens": 0,
+     "model_version": "gemini-3.5-flash-lite"
+    }
+   ]
   }
  ]
 }
