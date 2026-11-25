@@ -1,0 +1,132 @@
+{
+  "base": "http://localhost:5180",
+  "at": "2026-11-25T14:08:16.686Z",
+  "errors": [],
+  "results": [
+    {
+      "question": "Which hubs in the Midwest are most exposed to winter disruption?",
+      "ok": true,
+      "seconds": 64.776,
+      "loadingVisible": true,
+      "sendDisabled": true,
+      "answer": "Note that scores measure weather-hazard exposure heuristics, not operational disruption.\n\nIn the Midwest region for winter weather exposure:\n\nMinneapolis Hub is the most exposed hub, ranking #1 with an exposure score of 74.0 (High risk band).\nDetroit Hub ranks #2 with a score of 71.4 (High risk band).\nChicago Hub ranks #3 with a score of 62.9 (Moderate risk band).\nColumbus Hub ranks #4 with a score of 58.8 (Moderate risk band).\nKansas City Hub ranks #5 with a score of 57.2 (Moderate risk band).\nIndianapolis Hub ranks #6 with a score of 57.1 (Moderate risk band).\nWinter weather ranking · Midwest\n1\tMinneapolis\t\n74.0\n\tHigh\n2\tDetroit\t\n71.4\n\tHigh\n3\tChicago\t\n62.9\n\tModerate\n4\tColumbus\t\n58.8\n\tModerate\n5\tKansas City\t\n57.2\n\tModerate\n6\tIndianapolis\t\n57.1\n\tModerate\nFEMA National Risk Index: Cached\nNOAA GHCN-Daily: Cached\nIndex 1.1.0\nFacts verified\nSources, assumptions and limitations\nWhat specific indicators drive Detroit's winter risk score?\nHow does Minneapolis compare to Chicago across other hazards?\nWhich Midwest hub has the highest severe convective exposure?",
+      "displayed": [
+        [
+          "Minneapolis",
+          "74.0"
+        ],
+        [
+          "Detroit",
+          "71.4"
+        ],
+        [
+          "Chicago",
+          "62.9"
+        ],
+        [
+          "Columbus",
+          "58.8"
+        ],
+        [
+          "Kansas City",
+          "57.2"
+        ],
+        [
+          "Indianapolis",
+          "57.1"
+        ]
+      ],
+      "expected": [
+        [
+          "Minneapolis",
+          "74.0"
+        ],
+        [
+          "Detroit",
+          "71.4"
+        ],
+        [
+          "Chicago",
+          "62.9"
+        ],
+        [
+          "Columbus",
+          "58.8"
+        ],
+        [
+          "Kansas City",
+          "57.2"
+        ],
+        [
+          "Indianapolis",
+          "57.1"
+        ]
+      ],
+      "matches": true
+    },
+    {
+      "question": "Compare Miami and Houston in terms of hurricane and flood exposure.",
+      "ok": true,
+      "seconds": 60.211,
+      "loadingVisible": true,
+      "sendDisabled": true,
+      "answer": "Note: Scores measure weather-hazard exposure (a heuristic assessment), not operational disruption.\n\nHurricane Exposure\n\nMiami Hub leads in hurricane exposure with a score of 86.6, compared to Houston Hub's score of 77.4 (a difference of 9.2 points). Miami Hub has an annualized hurricane frequency of 0.305 per year (about 1 in 3 years), while Houston Hub registers 0.184 per year (about 1 in 5 years).\n\nFlood Exposure\n\nHouston Hub leads in flood exposure with a score of 99.0, outscoring Miami Hub's score of 97.0 by 2.0 points. For coastal flooding, Houston Hub records an annualized frequency of 3.76 per year versus Miami Hub's 2.25 per year. For inland flooding, Houston Hub registers 5.14 per year compared to 4 per year at Miami Hub.\n\nHub comparison\nHazard\tMiami\tHouston\nHurricane\t86.6 highest\t77.4\nFlooding\t97.0\t99.0 highest\nFEMA annualized frequencies (NRI December 2025)\nFEMA National Risk Index: Cached\nNOAA GHCN-Daily: Cached\nIndex 1.1.0\nFacts verified\nSources, assumptions and limitations\nHow does extreme heat exposure compare between Miami Hub and Houston Hub?\nWhat are the individual hazard scores for all hazards at Miami Hub?",
+      "displayed": [
+        [
+          "Hurricane",
+          "86.6 highest",
+          "77.4"
+        ],
+        [
+          "Flooding",
+          "97.0",
+          "99.0 highest"
+        ]
+      ],
+      "expected": [
+        [
+          "hurricane",
+          "86.6",
+          "77.4"
+        ],
+        [
+          "flood",
+          "97.0",
+          "99.0"
+        ]
+      ],
+      "matches": true
+    },
+    {
+      "question": "What percentage of days in Denver last year had snowfall?",
+      "ok": true,
+      "seconds": 17.403,
+      "loadingVisible": true,
+      "sendDisabled": true,
+      "answer": "In 2025, the Denver Hub recorded measurable snowfall on 7.14% of valid days (representing 26 of 364 valid days). When including trace snowfall, the percentage rises to 12.36%, covering 45 days. The difference reflects days with trace amounts that are excluded from measurable totals. There was 1 missing day on 2025-05-21 out of 365 expected days, with coverage at 99.73%.\n\nMeasurable snowfall days · Denver · calendar year 2025 (last completed year)\n7.14%\n26 of 364 valid days\nDays in period\n365\nMissing\n1\nQuality-excluded\n0\nCoverage\n99.7%\nSource\nNOAA GHCN-Daily · USW00003017\n\nDefinition: days with measurable new snowfall (reported > 0; trace excluded).\n\nSnowfall days incl. trace · Denver · calendar year 2025 (last completed year)\n12.36%\n45 of 364 valid days\nDays in period\n365\nMissing\n1\nQuality-excluded\n0\nCoverage\n99.7%\nSource\nNOAA GHCN-Daily · USW00003017\n\nDefinition: days with measurable OR trace snowfall.\n\nNOAA GHCN-Daily: Cached\nFEMA National Risk Index: Cached\nIndex 1.1.0\nFacts verified\nSources, assumptions and limitations\nWhat is the historical annual average for snowfall days in Denver?\nHow does Denver compare to other hubs for winter weather exposure?",
+      "displayed": [
+        "Measurable snowfall days · Denver · calendar year 2025 (last completed year) 7.14% 26 of 364 valid days Days in period 365 Missing 1 Quality-excluded 0 Coverage 99.7% Source NOAA GHCN-Daily · USW00003017 Definition: days with measurable new snowfall (reported > 0; trace excluded).",
+        "Snowfall days incl. trace · Denver · calendar year 2025 (last completed year) 12.36% 45 of 364 valid days Days in period 365 Missing 1 Quality-excluded 0 Coverage 99.7% Source NOAA GHCN-Daily · USW00003017 Definition: days with measurable OR trace snowfall."
+      ],
+      "matches": true,
+      "note": "expected values from the deterministic engine: measurable 7.14% (26/364), trace-inclusive 12.36% (45/364), 2025"
+    },
+    {
+      "question": "Why is the Dallas hub's weather disruption risk high?",
+      "ok": true,
+      "seconds": 79.834,
+      "loadingVisible": true,
+      "sendDisabled": true,
+      "answer": "Premise check\n\nThe Dallas Hub's overall weather-hazard exposure is classified as Moderate, not High, with an overall score of 58.7, ranking #2 out of 11 hubs.\n\nNote that scores measure weather-hazard EXPOSURE (heuristic), not operational disruption risk. The Dallas Hub's overall exposure band is Moderate with an overall score of 58.7, ranking #2 out of 11 hubs. However, its overall score is primarily driven by High exposure in two specific hazard categories: 1. Severe Convective: Score of 94.6 (High band), contributing 18.9 points to the overall score. Key indicators include hail frequency of 8.92 per year (score 98.4) and tornado frequency of 0.928 per year (score 97.3). 2. Extreme Heat: Score of 81.7 (High band), contributing 16.3 points, driven by heat waves at 19.1 per year (score 98.4) and 65.0 extreme heat days per year. Additionally, Dallas Hub registers Moderate exposure for flood (score 49.4) and winter weather (score 40.6), and Low exposure for hurricane (score 27.0).\n\nDallas: overall exposure drivers\n58.7\nModerate\nRank #2 of 11 ranked hubs\n\nClaim “overall exposure is High”: not supported by the index.\n\nHazard\tHazard score\tPoints of overall\nSevere convective stormsPrimary driver\t\n94.6\n\t18.9\nExtreme heat\t\n81.7\n\t16.3\nFlooding\t\n49.4\n\t9.9\nWinter weather\t\n40.6\n\t8.1\nHurricane\t\n27.0\n\t5.4\n\nNot applicable per FEMA (scored 0, weight kept): FEMA coastal flooding.\n\nFEMA National Risk Index: Cached\nNOAA GHCN-Daily: Cached\nIndex 1.1.0\nFacts verified\nSources, assumptions and limitations\nHow does the Dallas Hub compare to the Houston Hub across severe convective risk?\nWhat indicators drive the flood hazard score for the Dallas Hub?",
+      "premiseBanner": "Premise checkThe Dallas Hub's overall weather-hazard exposure is classified as Moderate, not High, with an overall score of 58.7, ranking #2 out of 11 hubs.",
+      "displayed": "58.7ModerateRank #2 of 11 ranked hubs",
+      "expected": "58.7 Moderate",
+      "matches": true
+    },
+    {
+      "question": "Ask the AI Analyst (from Dallas profile, docked panel)",
+      "ok": true,
+      "docked": true
+    }
+  ]
+}
