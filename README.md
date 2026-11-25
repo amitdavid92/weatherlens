@@ -2,7 +2,7 @@
 
 An AI agent that helps logistics analysts see which US distribution hubs are most exposed to weather hazards. It uses public data and deterministic analytics; the LLM never computes numbers or rankings.
 
-> **Status: Phase 2 (deterministic risk engine) complete.** Next: agent and API (Phase 3), then the chat UI (Phase 4). See [docs/PHASE_2_REPORT.md](docs/PHASE_2_REPORT.md) and [docs/SCORING_METHODOLOGY.md](docs/SCORING_METHODOLOGY.md).
+> **Status: Phase 3 (AI agent and API) complete.** Next: the React chat UI (Phase 4). See [docs/PHASE_3_REPORT.md](docs/PHASE_3_REPORT.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 **Scope and framing:** the product computes a **Weather Hazard Exposure Index**. It does not measure operational disruption risk, because we have no shipment, downtime or loss data. The 12 hubs in [config/hubs.yaml](config/hubs.yaml) are **illustrative examples**, not real company facilities.
 
@@ -50,6 +50,35 @@ make snapshot           # re-fetch everything into data/snapshot/ (~6-8 min, net
 
 Set `WEATHER_RISK_OFFLINE=true` to skip the network entirely.
 
+## Running the API and agent (Phase 3)
+1. Put your Gemini key in `.env` (gitignored): `GEMINI_API_KEY=...`. See `.env.example` for the model and timeout settings.
+2. Start the server:
+   ```bash
+   make api            # http://127.0.0.1:8000 ; interactive OpenAPI docs at /docs
+   make api-offline    # weather data from cache/snapshot only (Gemini still needs internet)
+   ```
+3. Example requests:
+   ```bash
+   curl -s localhost:8000/api/health
+   curl -s localhost:8000/api/hubs
+   curl -s localhost:8000/api/hubs/dallas_tx/scores          # deterministic, no LLM needed
+   curl -s -X POST localhost:8000/api/chat -H 'Content-Type: application/json' \
+        -d '{"message": "Which hubs in the Midwest are most exposed to winter disruption?"}'
+   # follow-up in the same conversation: pass the returned session_id
+   curl -s -X POST localhost:8000/api/chat -H 'Content-Type: application/json' \
+        -d '{"message": "What about Denver?", "session_id": "<session_id from the previous response>"}'
+   ```
+
+The `/api/chat` response separates the LLM's narrative (`answer`, rendered from verified fact ids) from the authoritative engine output (`analysis`, `facts`, `sources`, `data_freshness`). It also includes the `validation` report and `agent` metadata: model, tool calls, tokens and latency.
+
+**Without a Gemini key,** `/api/chat` returns `503 llm_unavailable`; the deterministic endpoints keep working.
+
+**Real-LLM smoke tests:** these use your key and quota and take a few minutes.
+```bash
+make smoke-live                       # 4 scenarios + 2 multi-turn conversations + isolation
+make smoke-live-no-weather-network    # scenarios with weather APIs blocked (snapshot only)
+```
+
 ## Running the risk engine (Phase 2, no LLM)
 ```bash
 make scenarios          # 4 assignment scenarios + 12-hub score table from the snapshot -> docs/PHASE_2_VALIDATION.md
@@ -64,6 +93,8 @@ src/weather_risk/
   catalog.py                     catalog loading, validation, strict name resolution
   config.py                      settings (.env), SecretStr for keys
   cli.py                         weather-risk CLI (hubs, build-snapshot, validate-data, ...)
+  agent/                         Gemini provider, typed tools, fact registry, grounding, sessions
+  api/app.py                     FastAPI endpoints
   data/
     models.py                    typed contracts (provenance, statuses, datasets, NRI records)
     adapters/{noaa_ghcn,open_meteo,fema_nri}.py   source-specific request/parse only

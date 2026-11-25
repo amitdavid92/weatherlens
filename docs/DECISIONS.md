@@ -177,7 +177,7 @@ Not changed in Phase 2.
 ## Phase 2 refinement (2026-11-25, methodology 1.1.0)
 
 ### D-022: Hybrid FEMA normalization (methodology 1.1.0)
-`s = 0.5·national mid-rank percentile + 0.5·absolute log-frequency`. The absolute half uses one return-period rule for every hazard: 0.01/yr (the 1%-annual-chance "100-year" planning standard) → 0, and 1/yr → 100, on a log10 scale.
+`s = 0.5·national mid-rank percentile + 0.5·absolute log-frequency`. The absolute half uses one rule for every hazard: 0.01/yr → 0 and 1/yr → 100, on a log10 scale. These anchors are a **heuristic modeling assumption** (loosely inspired by the "1%-annual-chance" planning convention), not a universal scientific standard; wording clarified in Phase 3.
 
 - **Chosen over** percentile-only (v1.0.0) and conditional (positive-only) percentiles after a sensitivity analysis (`docs/PHASE_2_SENSITIVITY.md`). The conditional version fixes hurricane but drops Miami's coastal-flood score to 44.0, because coastal counties are then compared only with each other.
 - **The hybrid is monotone in frequency,** so every within-hazard ranking is unchanged; magnitudes for rare hazards fall (Dallas hurricane 50.8 → 27.0).
@@ -203,3 +203,34 @@ Not changed in Phase 2.
 
 ### D-025: AI session export placement and review
 The user's `/export` (Phases 0–1) was moved unmodified to `docs/ai-session/session-phase-0-1.txt` after a pattern review: no credentials; personal data limited to the chosen GitHub noreply address and local paths. A real-looking Gemini key was later typed into the tracked `.env.example` and echoed into this session. That file was never staged. The key must be rotated and redacted from the next export.
+
+## Phase 3 (2026-11-25): agent and API
+
+### D-026: Band-safe score display rounding
+Bands are decided on the unrounded score. The display uses 1 decimal, or more decimals if 1-decimal rounding would cross a band boundary. If even 3 decimals cross it, the value is truncated downward. Example: Denver 39.975 is shown as **39.98 (Low)**, not "40.0 (Low)". Implemented in `analytics/formatting.py`, used by the reports and the agent.
+
+### D-027: Model `gemini-3.5-flash-lite` (configurable), fallback `gemini-3.5-flash`
+Probed live on 2026-11-25:
+- `gemini-2.5-flash` returns 404 for new users.
+- `gemini-3.8-flash` returned 503 (overloaded).
+- `gemini-3.5-flash` worked, with 18 s on the first tool call.
+- `gemini-3.5-flash-lite` supported both function calling and JSON-schema output with sub-second calls.
+
+The lite model is cost-effective and fast for tool routing plus constrained synthesis. The model and fallback are set in `.env` (`WEATHER_RISK_GEMINI_MODEL`, `WEATHER_RISK_GEMINI_FALLBACK_MODEL`).
+
+### D-028: Two-phase agent (tool loop, then structured synthesis)
+On the live API, `gemini-3.5-flash` given tools **and** a response schema in one call answered directly without calling tools. So tool selection and final structured synthesis are separate calls. The tool loop is bounded: at most 6 iterations and 12 tool calls.
+
+### D-029: Grounding by fact references, not regex on prose
+Tools expose every number as `{fact, value}`, and the LLM must write `{{fact:id}}`. The server:
+- renders values deterministically;
+- validates existence, hub attribution (per citation and per sentence), stray numbers, topic-aware superlatives and premise corrections;
+- applies the same checks to `premise_correction` and `clarification_question`. Follow-up suggestions are questions, so only their placeholders are checked.
+
+Failure leads to one corrective retry, then a labeled deterministic fallback. A real number from another hub or metric fails the attribution checks.
+
+### D-030: No silent hub guessing
+A tool call may only name hubs that the user mentioned in the current message (by name, city, alias or region) or that appear in the last 3 turns' resolved context. Other calls are refused with `unreferenced_hub`, and the model must ask. Added after a live run in which "What about 2024?" in a fresh session was answered about Chicago.
+
+### D-031: Honest LLM availability
+`FakeProvider` exists only for offline tests, and responses report `agent.provider`. Without a key, `/api/chat` returns 503 `llm_unavailable`; it never falls back to a fake model.
