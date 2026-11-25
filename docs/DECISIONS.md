@@ -301,3 +301,9 @@ If tools already produced verified results and synthesis cannot get any model, t
 
 ### D-042: Fact-backed deterministic templates
 The evaluation found the deterministic fallback pasting an engine reason string that contained an unregistered "70%". The available indicator weight is now a registered fact, rendered through a placeholder.
+
+### D-043: Premise corrections may restate a superlative (Phase 6)
+- **Problem:** eval case F1 ("Why is Denver the most exposed hub overall?") fell back because the superlative check treated the model's *correction* ("the premise that Denver is the most exposed hub is incorrect") as a claim.
+- **Decision:** correction vocabulary (*incorrect, false, premise, claim, …*) exempts a sentence from the winner check **only inside `premise_correction`**. Narrative sentences keep the strict `not`/`n't` rule, so "Contrary to the claim, Denver has the highest exposure" is still rejected (regression test).
+- **Also:** stray-number feedback names the fact placeholder that holds the typed value.
+- **Result:** the targeted F1 rerun no longer flags the superlative. The remaining fallback cause is the model typing scores literally despite the hint. That is rejected by design and documented as a limitation, not loosened.

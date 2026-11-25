@@ -10,7 +10,8 @@ The **Weather Risk Intelligence Agent** answers analysts' questions about weathe
    browser → Vite dev server ──/api proxy──┐  │
                                            ▼  ▼
  ┌──────────────────────── FastAPI (weather_risk.api.app) ─────────────────────────┐
- │ GET /api/health   GET /api/hubs   GET /api/hubs/{id}/scores   GET /api/sessions │
+ │ GET /api/health /api/hubs /api/hubs/{id}/scores /api/overview /api/rankings     │
+ │     /api/methodology /api/sessions/{id}          (deterministic, no LLM)         │
  │ POST /api/chat ──► Agent (agent/orchestrator.py)                                 │
  └────────────────────────────────┬─────────────────────────────────────────────────┘
                                   │
@@ -131,7 +132,152 @@ There is no ORM, vector database or external database server, because the data v
 - **CORS:** restricted to the local Vite origins. Only GET/POST and `Content-Type` are allowed.
 - **Not production-ready:**
   - no authentication or rate limiting on the API;
-  - single process, with a lock serializing engine access;
+  - single process; `/api/chat` requests are serialized by one lock, and there is no deadline on a whole request (each LLM call has a 45 s timeout and retries are bounded);
   - no TLS;
   - session data is not encrypted at rest;
   - the session id is the only access control.
+
+## 5. Flows
+
+### 5.1 Agent sequence (`POST /api/chat`)
+```mermaid
+sequenceDiagram
+    participant UI as WeatherLens
+    participant API as FastAPI
+    participant S as SessionStore
+    participant A as Orchestrator
+    participant G as Gemini
+    participant T as ToolBox + Engine
+    participant V as Grounding validator
+    UI->>API: {message, session_id?}
+    API->>S: last 6 turns + resolved context
+    API->>A: chat()
+    loop tool phase (≤6 iterations, ≤12 calls)
+        A->>G: rules + history + 6 tool declarations
+        G-->>A: function calls
+        A->>A: unreferenced-hub guard, Pydantic args
+        A->>T: run tool (pure engine)
+        T-->>A: payload with fact refs → FactRegistry
+    end
+    A->>G: synthesis (no tools, LLMAnswer JSON schema)
+    G-->>A: LLMAnswer
+    A->>V: validate(answer, registry, tool results)
+    alt valid
+        V-->>A: ok → render {{fact:id}} deterministically
+    else invalid
+        A->>G: one retry with targeted issues
+        G-->>A: LLMAnswer
+        A->>V: validate again
+        V-->>A: still invalid → labeled deterministic summary
+    end
+    A->>S: append turn
+    A-->>UI: answer + analysis + facts + sources + freshness + validation + agent metadata
+```
+If synthesis hits a provider error after the tools have succeeded, the response is the labeled deterministic summary. If no tool could run, the API returns a structured `503`, `429` or `504` error with a `retryable` flag.
+
+### 5.2 Grounding flow
+```
+tool result ──► FactRegistry: fact_id → {value, display, hub_id, topic, period, sources}
+                     │
+LLM narrative "Denver had snow on {{fact:denver_co.snow_days_measurable.2025}} of days"
+                     │
+validate:  1 every fact id exists; cited hub = the fact's hub
+           2 no fact sits in a sentence about a different hub
+           3 no digits outside placeholders, except years and small counts that occur in tool
+             output or the question; the feedback names the matching fact
+           4 "highest/most exposed/leads" must match the rank-#1 hub or the comparison leader
+             for that hazard (explicit negation exempts a sentence; correction wording exempts
+             only premise_correction sentences)
+           5 a premise the engine rejects (e.g. "Dallas is high") must be corrected
+                     │
+render:    placeholders → server-formatted displays (band-safe rounding, units)
+```
+Regex checks are a second line of defence. The primary control is that the model never receives raw numbers it could copy: tool payloads carry fact references.
+
+### 5.3 Data ingestion, cache and snapshot
+```
+engine asks repository for (source, params)
+   │
+   ├─ fresh SQLite cache entry (sha256 key, body hash OK) ──────────────► freshness=cache
+   ├─ live HTTP (timeout, ≤3 attempts, Retry-After capped) → validate → cache ──► live
+   ├─ on failure: stale cache entry ─────────────────────────────────────► stale_cache
+   ├─ committed snapshot entry (manifest sha256 verified) ───────────────► snapshot
+   └─ DataUnavailableError → tool returns "data unavailable; do not estimate"
+```
+- **Canonical requests:** they are split into calendar-year chunks, so the cache and snapshot keys are stable.
+- **TTLs:** 30 days for completed periods, 1 day for periods touching the last 30 days, 7 days for NRI.
+- **Integrity:** a corrupt cache entry is evicted and refetched.
+- **Freshness:** every response states each source's freshness label, and the UI shows it.
+
+## 6. Why SQLite
+- **Fits the workload:**
+  - a few hundred cached responses, key lookups, one writer;
+  - a session table with bounded history.
+  - SQLite gives transactions and integrity with zero operations.
+- **Portable:** a single file, in the Python standard library. A fresh clone runs with no database server. The demo also works with an empty cache, from the committed snapshot.
+- **Rejected alternatives:**
+  - Postgres or Redis would add infrastructure that buys nothing at this scale.
+  - A vector database is unnecessary, because there is no retrieval over free text.
+  - Plain JSON files would give up atomic writes and concurrent-read safety.
+- **Where it stops fitting:**
+  - several server instances, which would need a shared session store;
+  - multi-user write volume;
+  - retention or encryption requirements.
+
+  At that point, sessions move to Postgres or Redis. The read-mostly cache can stay per-instance or move to object storage.
+
+## 7. Deployment considerations
+This is a recommendation only; nothing has been deployed.
+- **Shape.** One container:
+  - FastAPI serves the built React assets (`web/dist`) on the same origin, so CORS isn't needed;
+  - `uvicorn` sits behind the platform's TLS (Render, Fly.io, Railway or Cloud Run).
+- **Secrets.** `GEMINI_API_KEY` is a platform secret, server-side only; the browser never sees it.
+- **Data:**
+  - ship the committed snapshot in the image;
+  - set `WEATHER_RISK_OFFLINE=true` for a deterministic, outage-proof demo, or keep live fetching with the snapshot as fallback;
+  - SQLite on ephemeral disk is acceptable (the cache rebuilds, and sessions are disposable for a demo).
+- **Health.** `/api/health` reports the methodology version, snapshot entries and LLM availability, and serves as the liveness/readiness probe.
+- **Timeouts.** Set the platform request timeout to at least 120 s, and add a per-request deadline in the orchestrator before scaling up.
+- **Abuse and spend protection** (needed before a public URL):
+  - per-IP rate limiting on `/api/chat`;
+  - a daily request cap;
+  - a Gemini budget alert or quota limit on the Google Cloud project;
+  - optional shared-password or basic auth for the demo.
+- **Concurrency.** The single chat lock is fine for one interviewer. For more users, replace it with per-session locking and run more workers, with sessions in a shared store.
+- **Cost.**
+  - Hosting fits a free or low tier: one small instance.
+  - Gemini Flash-Lite pricing at about 2–3 calls per question is small for demo traffic, but it is unbounded without the caps above.
+
+## 8. Trade-offs
+| Choice | Benefit | Cost |
+|---|---|---|
+| Two LLM phases (tools, then a schema-constrained answer) | Reliable tool use plus native JSON-schema enforcement | About 2 LLM round-trips per question |
+| Fact placeholders + validator | No invented numbers can reach the user | Occasional valid-but-noncompliant answers fall back to the deterministic summary (A4/F1 in the final run) |
+| Deterministic summary fallback | Always a correct, labeled answer when tools succeeded | Less fluent; the user sees it as a lower-quality answer |
+| Committed snapshot | Reproducible evals; demo survives outages | ~2.9 MB of gzip data in the repository; data is as of the snapshot date |
+| Fixed climate anchors + national FEMA percentiles | Scores don't shift when hubs are added | Anchors are judgment calls (documented, with sensitivity analysis) |
+| Strict hub resolution (no fuzzy guessing) | No silent wrong-hub answers | More clarification questions |
+| One process, one chat lock | Simple and race-free | Doesn't scale beyond a demo |
+| Domain-specific validator rules | Catch real failure modes seen in evaluation | Regex-based checks need maintenance as phrasing evolves; some rules are heuristic |
+
+**Where the design is heavier than the brief requires:**
+- the grounding validator;
+- the model fallback chain with a circuit breaker;
+- per-turn instrumentation.
+
+Each was added in response to a failure observed in live runs (Phases 3 and 5). For a one-day prototype they are worth keeping, but they add code surface: the agent is about 2,000 lines.
+
+## 9. Future work
+- **Outcome validation:** calibrate the exposure index against real hub outage or delay records. This is the step that would turn exposure into disruption risk.
+- **Hub-level inputs:** asset vulnerability, criticality, throughput and site coordinates instead of county proxies.
+- **Operations:**
+  - a per-request deadline;
+  - rate limiting and spend caps;
+  - authentication;
+  - per-session locking;
+  - structured log shipping.
+- **Assignment bonus items:** a scheduled score-change alert (cron or webhook) and voice input.
+- **Evaluation:**
+  - more paraphrases per intent;
+  - repeated runs to measure variance (LLM outcomes are not deterministic);
+  - track the fallback rate as a KPI.
