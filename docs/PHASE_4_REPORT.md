@@ -164,7 +164,7 @@ Each question was clicked in a fresh conversation on the real UI. The displayed 
 | `48bffc6` | feat(web): WeatherLens React app — overview dashboard, AI Analyst, methodology |
 | `bd0f1dc` | test(web): Vitest integration tests on recorded real API responses; Playwright browser scripts |
 | `8dba198` | chore: make dev (full stack), web-* targets, frontend ignore rules |
-| (next) | docs: Phase 4 report, screenshots, README, architecture, decisions |
+| `3fd0e19` | docs: Phase 4 report, screenshots, README, architecture, decisions |
 
 Nothing has been pushed. `ASSIGNMENT.pdf` remains untracked.
 
