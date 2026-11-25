@@ -266,3 +266,38 @@ The `session_id` is kept in `localStorage`, and the conversation is restored fro
 
 ### D-036: Same-origin `/api` through the Vite proxy
 The browser only talks to the Vite origin, which proxies `/api` to FastAPI. The Gemini key stays on the server and CORS is not needed in development. The default port is 5173, overridable with `WEB_PORT`.
+
+## Phase 5 (2026-11-25): evaluation, performance and QA
+
+### D-037: Fail-fast model fallback chain with a low thinking level
+**Measured first.** Instrumentation (`agent.timings_ms`, `agent.llm_calls`) showed:
+- tool selection is about 1 s per call, and the deterministic tools take milliseconds;
+- **synthesis dominates**: `flash-lite` structured calls returned 503 "high demand" repeatedly;
+- the old policy retried the overloaded model 3× with waits (about 8–10 s), then fell back to `gemini-3.5-flash` at default thinking (19–24 s, 2–4k thinking tokens);
+- with `thinking_level=LOW`, the same synthesis took 4–5 s and passed grounding.
+
+**The new provider policy:**
+- **Chain:** primary → comma-separated fallbacks (`WEATHER_RISK_GEMINI_FALLBACK_MODEL`).
+- **Errors:** a 503, timeout or 429 moves to the next model at once.
+- **Rounds:** whole-chain rounds are bounded (`WEATHER_RISK_LLM_MAX_ATTEMPTS`, default 3), with a short backoff between rounds that honors a capped server retry hint.
+- **Thinking:** `WEATHER_RISK_LLM_THINKING_LEVEL=low`.
+
+Schema enforcement, grounding, provenance and deterministic calculation are unchanged.
+
+### D-038: Daily-quota circuit breaker
+On the free tier, `gemini-3.5-flash` and `gemini-3.6-flash` are limited to **20 requests per day per model** (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`, retryDelay ≈ 17 h). A 429 whose retry hint exceeds 2 minutes marks that model as exhausted for the hinted period, without waiting; if every model is exhausted, the error is raised immediately.
+
+### D-039: Synthesis provider failure degrades to the labeled deterministic summary
+If tools already produced verified results and synthesis cannot get any model, the response is the clearly labeled deterministic summary (`status: fallback`, `narrative_source: deterministic_fallback`) instead of HTTP 503. With no tool results, the provider error is still returned (503/429/504). No answer is fabricated. In the evaluation this counts as *pass with fallback*, not a full LLM pass.
+
+### D-040: Band thresholds have a single source
+`format_score` no longer hard-codes 0/40/70. `load_scoring_config` registers the configured bands, and display rounding and classification use the same bands. Regression tests cover Denver 39.975 and the 40/70 boundaries.
+
+### D-041: Evaluation design
+- **Dataset:** `evals/cases.yaml` (version 1.0) has 22 cases and 29 turns across 15 categories. Assertions are objective, run on the **structured** response, and use literal expectations (the Denver counts were verified from raw NOAA rows) plus engine cross-checks. There is no LLM judge.
+- **Outcomes:** `pass` (an LLM-written answer with every assertion green), `pass_fallback` (qualified), `fail`, `provider_error`.
+- **Critical assertions** guard numerical grounding: every number in the answer must match a verified fact display.
+- **Fake-provider tests** (pytest) cover code paths only and are never counted as LLM quality.
+
+### D-042: Fact-backed deterministic templates
+The evaluation found the deterministic fallback pasting an engine reason string that contained an unregistered "70%". The available indicator weight is now a registered fact, rendered through a placeholder.

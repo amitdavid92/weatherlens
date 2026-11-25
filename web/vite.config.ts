@@ -4,16 +4,18 @@ import { defineConfig } from 'vite'
 
 // The browser only talks to the Vite origin; /api is proxied to FastAPI, so the Gemini key
 // never leaves the backend.
+const API_URL = process.env.API_URL ?? 'http://127.0.0.1:8000'
+
 export default defineConfig({
   plugins: [react()],
   server: {
     port: Number(process.env.WEB_PORT ?? 5173),
     strictPort: true,
-    proxy: { '/api': { target: 'http://127.0.0.1:8000', changeOrigin: false } },
+    proxy: { '/api': { target: API_URL, changeOrigin: false } },
   },
   preview: {
     port: 4173,
-    proxy: { '/api': { target: 'http://127.0.0.1:8000', changeOrigin: false } },
+    proxy: { '/api': { target: API_URL, changeOrigin: false } },
   },
   test: {
     environment: 'jsdom',

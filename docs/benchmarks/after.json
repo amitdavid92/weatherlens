@@ -1,0 +1,97 @@
+{
+ "label": "after",
+ "at": "2026-11-25T15:06:08+00:00",
+ "model": "gemini-3.5-flash-lite",
+ "methodology": "1.1.0",
+ "engine_warmup_ms": 1314,
+ "n": 4,
+ "median_ms": null,
+ "mean_ms": null,
+ "max_ms": null,
+ "rows": [
+  {
+   "rep": 0,
+   "question": "Which hubs in the Midwest are most exposed to winter disruption?",
+   "http": 503,
+   "wall_ms": 22077,
+   "status": "HTTP 503 llm_unavailable",
+   "valid": null,
+   "attempts": null,
+   "timings_ms": {},
+   "llm_http_calls": 0,
+   "llm_errors": [],
+   "models": [],
+   "iterations": null,
+   "tools": [],
+   "tokens": [
+    null,
+    null,
+    null
+   ],
+   "llm_calls": []
+  },
+  {
+   "rep": 0,
+   "question": "Compare Miami and Houston in terms of hurricane and flood exposure.",
+   "http": 503,
+   "wall_ms": 36406,
+   "status": "HTTP 503 llm_unavailable",
+   "valid": null,
+   "attempts": null,
+   "timings_ms": {},
+   "llm_http_calls": 0,
+   "llm_errors": [],
+   "models": [],
+   "iterations": null,
+   "tools": [],
+   "tokens": [
+    null,
+    null,
+    null
+   ],
+   "llm_calls": []
+  },
+  {
+   "rep": 0,
+   "question": "What percentage of days in Denver last year had snowfall?",
+   "http": 503,
+   "wall_ms": 48152,
+   "status": "HTTP 503 llm_unavailable",
+   "valid": null,
+   "attempts": null,
+   "timings_ms": {},
+   "llm_http_calls": 0,
+   "llm_errors": [],
+   "models": [],
+   "iterations": null,
+   "tools": [],
+   "tokens": [
+    null,
+    null,
+    null
+   ],
+   "llm_calls": []
+  },
+  {
+   "rep": 0,
+   "question": "Why is the Dallas hub's weather disruption risk high?",
+   "http": 503,
+   "wall_ms": 48434,
+   "status": "HTTP 503 llm_unavailable",
+   "valid": null,
+   "attempts": null,
+   "timings_ms": {},
+   "llm_http_calls": 0,
+   "llm_errors": [],
+   "models": [],
+   "iterations": null,
+   "tools": [],
+   "tokens": [
+    null,
+    null,
+    null
+   ],
+   "llm_calls": []
+  }
+ ]
+}
