@@ -1,0 +1,125 @@
+# Decision Log
+
+Short ADR-style records. Status: **Accepted** unless noted. Dates are 2026-11-25 (Phase 0 and Phase 1).
+
+---
+
+### D-001: Product framing is a "Weather Hazard Exposure Index", not disruption risk
+We have no shipment, downtime, asset vulnerability or financial-loss data. The system measures
+**weather hazard exposure** at hub locations. It does not measure operational disruption risk.
+When a user asks about "disruption risk", the agent reframes the question and says so. If the
+premise is not supported by the data, it says so rather than agreeing.
+
+### D-002: Stack
+- Python 3.12 managed with uv; `uv.lock` is committed.
+- FastAPI and Pydantic (FastAPI arrives in Phase 3).
+- pytest for tests.
+- Stdlib `sqlite3` for the cache.
+- Gemini as the LLM (Phase 3).
+- React, TypeScript and Vite for the UI (Phase 4).
+
+Deployment, voice and alerts are deferred until all mandatory requirements are met.
+
+Phase 1 runtime dependencies are only `httpx`, `pydantic`, `pydantic-settings` and `pyyaml`.
+
+### D-003: Data sources
+| Role | Source | Why |
+|---|---|---|
+| Primary climate (observed) | NOAA NCEI Access Data Service, GHCN-Daily `daily-summaries` | Station observations. No token needed (the CDO v2 API does need one). Public domain. |
+| Alternative climate (modeled) | Open-Meteo archive, **`models=era5`** pinned | Gap-free reanalysis grid. Labeled `modeled_reanalysis`. Pinned because the `best_match` default blends models and changes daily values; Denver 2025 has 43 vs 34 snowfall > 0 days depending on model. |
+| Hazard frequency | FEMA NRI county table via the FEMA-hosted ArcGIS FeatureServer | `hazards.fema.gov` resets connections from our network; the FeatureServer is stable and serves the same release (`NRI_VER` = "December 2025", tech doc v1.20). |
+| Not used (yet) | NOAA Storm Events, HURDAT2, NWS alerts | Storm Events logs 43% of rows by forecast zone, so it needs a zone↔county crosswalk. HURDAT2 duplicates what NRI already models. NWS alerts are live-only. |
+
+### D-004: Illustrative 12-hub catalog
+The hubs are assumed examples, not company facilities.
+- The catalog has 6 Midwest hubs (US Census Bureau region) plus Denver, Dallas, Houston, Miami, Atlanta and Memphis.
+- Each hub is represented by:
+  - a city reference point (Open-Meteo geocoding);
+  - the county containing that point, used for hazard data (verified with the FCC Census Area API);
+  - the nearest major-airport GHCN station, used for climate data (verified in `ghcnd-stations.txt`).
+- At Chicago (DuPage vs Cook), Kansas City (Platte vs Jackson) and Atlanta (Clayton vs Fulton), the station's county differs from the hazard county. This is recorded as an assumption on each hub.
+- Name resolution is exact-match on id, name, city or alias only. Typos are suggested, never auto-resolved. A state or region name raises `AmbiguousHubError`.
+
+### D-005: Observation states. Missing is never zero.
+NOAA, assigned **per element**:
+- SNOW and PRCP (accumulations):
+  - `measured` when the value is > 0;
+  - `trace` when the value is 0 and the measurement flag is "T";
+  - `zero` when the value is 0 with no trace flag;
+  - `missing` when the key is absent or empty.
+- TMIN, TMAX, AWND and WSF5: `measured` (any value, **including negatives and 0 °C**) or `missing`. Trace and zero semantics never apply to them.
+- Dates absent from a response become `missing` for every element.
+- Quality flags are preserved and marked `quality_flagged`; the value is kept. The exclusion policy is set in Phase 2.
+- Example: Miami SNOW is reported on only about 20% of 2016–2025 days. The other days stay `missing`.
+
+Open-Meteo: null → `missing`; 0 → `zero`; > 0 → `measured`. There is no trace concept.
+
+### D-006: NRI hazard states
+**Official definitions** (NRI Technical Documentation, December 2025 v1.20, §3.2 Table 2, pp. 3‑5 to 3‑6; extracted from the PDF on 2026-11-25):
+- "Not Applicable": *community is not considered at risk for hazard type*. These are a-priori applicability definitions.
+- "Insufficient Data": *hazard source data are not available*.
+- "No EAL": *hazard type exposure or annualized frequency is zero*.
+- "No Rating" (Risk Index only): *Expected Annual Loss is zero*.
+
+**Empirical check:** we cross-tabulated `*_AFREQ` against `*_EALR` over all 3,232 records and 10 hazards. Every record fits this table:
+
+| AFREQ | EALR | Our status |
+|---|---|---|
+| null | Not Applicable | `not_applicable` |
+| null | Insufficient Data | `insufficient_data` |
+| 0 | No Expected Annual Losses | `observed_zero` |
+| > 0 | any rating (incl. "No Expected Annual Losses", meaning zero exposure) | `observed` |
+| anything else | — | `unknown` (conservative) |
+
+- Status is taken from the **EAL rating** (`*_EALR`), not the Risk Index rating (`*_RISKR`). The Risk Index rating also reflects whether social-vulnerability and resilience data exist, so it is not a pure hazard-data state.
+- Raw AFREQ, EVNTS, EALR, RISKR and RISKS are all kept. `RISKS` and `RISKR` are context only: they are community-risk percentiles in which nearly every large metro scores 95–100.
+- **Remaining limitation:** the documentation defines the rating labels, but it does not explicitly say that a null AFREQ *means* the same as the label. That link is our empirical inference, and it held for 100% of records. Any combination outside the table becomes `unknown`.
+
+### D-007: National reference population (used in Phase 2)
+- Of 3,232 NRI county records, 88 are territories (PR 78, AS 3, MP 3, VI 3, GU 1). These are excluded from the reference population, leaving the **3,144** county-equivalents of the 50 states plus DC.
+- Per hazard, `not_applicable`, `insufficient_data` and `unknown` counties are excluded from that hazard's denominator. Example: 30 Alaska counties are `insufficient_data` for heat wave.
+- `observed_zero` counties will get an indicator score of 0. They are not percentile-ranked, so a mass of zeros cannot inflate anyone's score.
+- Positive values will use mid-rank percentiles, with zeros counted below them and ties sharing the mid-rank.
+- When a county record and the reference table are used together they **must share one `NRI_VER`**. `DataRepository.get_county_with_reference` enforces this: on a mismatch it takes the county row from the reference table and raises if it is still inconsistent.
+
+### D-008: Source comparability
+- A metric, period or ranking never mixes NOAA and Open-Meteo values.
+- Each `ClimateDataset` has exactly one source.
+- Cross-hub rankings use NOAA. A hub with insufficient NOAA coverage is shown as such, not backfilled.
+- Open-Meteo rankings, if offered, are a separate labeled view across all hubs.
+
+### D-009: Cache and snapshot
+- **Cache:** stdlib SQLite (`data/cache/cache.db`, gitignored). It stores **raw response bodies**, keyed by sha256 of the source, URL and sorted params, with an integrity hash per entry.
+- **Validation before caching:** a response is parsed and validated before it is cached, so an invalid response is never stored.
+- **Corrupt entries** are evicted and refetched.
+- **TTLs:** 30 days for completed historical periods; 1 day for periods touching the last 30 days; 7 days for NRI.
+- **Resolution order:**
+  1. Fresh cache.
+  2. Live fetch.
+  3. On failure: stale cache, labeled `stale_cache`.
+  4. Then the snapshot, labeled `snapshot`.
+  5. Otherwise a typed `DataUnavailableError`.
+- **Climate requests** are canonicalized to calendar-year chunks, so cached and snapshot entries serve any sub-range.
+- **Snapshot:** gzip files with deterministic mtime under `data/snapshot/`. They hold raw bodies, so fallback data goes through the same parsers as live data. `manifest.json` records params, retrieval time, period, version, sha256 and licenses for each file. NOAA and FEMA data are public domain; Open-Meteo is CC BY 4.0 (redistributable with attribution).
+- **Offline mode** (`WEATHER_RISK_OFFLINE=true`) never calls the network.
+
+### D-010: Completeness vs. confidence
+- Data completeness is reported as numbers (reported/expected days, status counts).
+- Scientific confidence is **not** claimed. Every answer carries a fixed caveat: "heuristic exposure index; not validated against operational disruption". The product does not use "High confidence" labels.
+
+### D-011: Offline demo scope
+The snapshot makes the **data layer** work offline. A real LLM conversation still needs internet and a Gemini key. Deterministic endpoints will work offline; the chat will not.
+
+### D-012: Grounding strategy (implemented in Phase 3)
+- The LLM output schema references facts by `fact_id` (produced by tools). Critical numbers (percentages, scores, ranks, counts, dates, periods) are rendered deterministically by server templates with explicit units and rounding.
+- Validation:
+  1. `fact_id`s must exist.
+  2. Hub IDs and periods must match tool arguments.
+  3. A secondary scan flags stray numerals in the narrative.
+- Regex checking of free prose is not the primary control.
+
+### D-013: Secrets
+- `GEMINI_API_KEY` lives only in a local `.env` (gitignored) or the shell environment.
+- It is typed as `SecretStr`, so it is redacted in repr and logs.
+- `.env.example` has empty values only.
+- Claude Code never reads `.env`.

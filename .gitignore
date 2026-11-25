@@ -1,0 +1,28 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Runtime cache (regenerable); committed snapshot lives in data/snapshot/
+data/cache/
+
+# Raw AI session transcripts stay outside the repo until reviewed/redacted
+*.jsonl
+
+# Frontend (later phases)
+node_modules/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
