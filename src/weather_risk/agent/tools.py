@@ -259,6 +259,19 @@ class ToolBox:
                                             tool="rank_hubs")  # fmt: skip
             else:
                 item["excluded_reason"] = e.exclusion_reason
+                # the incomplete hazard and its available indicator weight, as verified facts
+                partial = [h for h in p.hazards.values() if h.status != "complete"]
+                if r.hazard is not None:
+                    partial = [p.hazards[r.hazard]]
+                if partial:
+                    h = partial[0]
+                    item["incomplete_hazard"] = h.hazard.value
+                    item["available_weight"] = self.reg.add(
+                        f"{e.hub_id}.{h.hazard.value}.available_weight",
+                        label=f"{e.hub_id} share of {h.hazard.value} indicator weight with data",
+                        value=round(100 * h.available_weight_fraction), unit="%", kind="statistic",
+                        hub_id=e.hub_id, topic=h.hazard.value, tool="rank_hubs",
+                        display=f"{round(100 * h.available_weight_fraction)}%")  # fmt: skip
             if r.hazard is None:
                 drivers = sorted(p.hazards.values(),
                                  key=lambda h: -(h.contribution_to_overall or 0))[:2]  # fmt: skip

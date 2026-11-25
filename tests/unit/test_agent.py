@@ -330,3 +330,22 @@ def test_provider_failure_without_tool_results_still_raises(engine, sessions):
 
     with pytest.raises(LLMUnavailableError):
         run(engine, sessions, [("text", "hmm"), ("raise", LLMUnavailableError("503"))])
+
+
+def test_fallback_ranking_numbers_are_registered_facts(engine, sessions):
+    """Regression (eval R1/F1): the not-ranked line must not carry an unregistered number."""
+    from weather_risk.agent.llm import LLMUnavailableError
+
+    r, _ = run(engine, sessions, [("tools", [ToolCall("rank_hubs", {})]), ("text", "ok"),
+                                  ("raise", LLMUnavailableError("503"))], message="Rank all hubs")  # fmt: skip
+    assert r.status == "fallback" and "exposure index" in r.answer
+    miami_line = next(
+        line for line in r.answer.splitlines() if "Miami" in line and "not ranked" in line
+    )
+    fact = next(f for f in r.facts if f["fact_id"] == "miami_fl.winter.available_weight")
+    assert fact["display"] in miami_line and fact["display"] == "70%"
+    import re
+
+    displays = {f["display"] for f in r.facts}
+    for tok in re.findall(r"\d+(?:\.\d+)?%", r.answer):
+        assert tok in displays, tok

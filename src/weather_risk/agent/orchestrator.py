@@ -287,8 +287,10 @@ class Agent:
             f"Tool results (authoritative; values must be cited via their fact ids):\n"
             f"{json.dumps(results, default=str, separators=(',', ':'), ensure_ascii=False)}\n\n"
             + (f"Agent notes: {'; '.join(notes)}\n" if notes else "")
-            + ("No tools were called. If the question needs data, ask for clarification or "
-               "mark it unsupported; do not answer from memory." if not execs else "")
+            + ("No tools were called, so there are NO facts: do not write any {{fact:...}} "
+               "placeholders and no numbers. If the question needs data, set status "
+               "needs_clarification (asking which hub/period/metric) or unsupported; do not answer "
+               "from memory." if not execs else "")
         )  # fmt: skip
 
     def _synthesize(self, message, history, execs, registry, usage, notes) -> dict[str, Any]:
@@ -362,9 +364,10 @@ class Agent:
         elif any(e.ok for e in execs):
             summary = deterministic_summary(execs)
             text, used = render(summary, registry)
-            text = ("**Deterministic summary** — the AI-written answer failed validation, so "
-                    "these verified results are shown directly from the analytics engine:\n\n"
-                    + text)  # fmt: skip
+            text = ("**Deterministic summary** — the AI-written answer was unavailable or failed "
+                    "validation, so these verified results are shown directly from the analytics "
+                    "engine. Scores are a heuristic weather-hazard exposure index (0–100), not a "
+                    "probability of operational disruption.\n\n" + text)  # fmt: skip
             status, intent, source = "fallback", _intent_from(execs), "deterministic_fallback"
             resolved = _resolved_from(execs)
             follow_ups, premise, clarify = [], None, None

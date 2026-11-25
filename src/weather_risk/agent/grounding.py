@@ -248,7 +248,15 @@ def deterministic_summary(executions: list[ToolExecution]) -> str:
                 lines.append(f"- {{{{fact:{item['rank']['fact']}}}}} {item['hub']['name']}: "
                              f"{{{{fact:{item['score']['fact']}}}}} ({item['band']})")  # fmt: skip
             for item in p["not_ranked"]:
-                lines.append(f"- not ranked: {item['hub']['name']} — {item.get('excluded_reason')}")
+                if "available_weight" in item:
+                    lines.append(
+                        f"- not ranked: {item['hub']['name']} — its "
+                        f"{item['incomplete_hazard'].replace('_', ' ')} data is incomplete "
+                        f"({{{{fact:{item['available_weight']['fact']}}}}} of the indicator weight "
+                        "available), so its score is shown but not ranked."
+                    )  # fmt: skip
+                else:
+                    lines.append(f"- not ranked: {item['hub']['name']} (incomplete data)")
         elif e.name == "compare_hubs":
             for row in p["rows"]:
                 parts = [f"{hid}: {{{{fact:{ref['fact']}}}}}" for hid, ref in row["scores"].items()]
