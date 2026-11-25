@@ -123,3 +123,53 @@ The snapshot makes the **data layer** work offline. A real LLM conversation stil
 - It is typed as `SecretStr`, so it is redacted in repr and logs.
 - `.env.example` has empty values only.
 - Claude Code never reads `.env`.
+
+---
+
+## Phase 2 (2026-11-25)
+
+### D-014: Scoring parameters live in versioned, validated config
+`config/scoring.yaml` holds the following, all with `methodology_version: 1.0.0`:
+- climate source and period (NOAA, 2016–2025);
+- minimum coverage (0.90);
+- quality-flag exclusion;
+- thresholds (4 in heavy snow, TMIN ≤ 0 °C, TMAX ≥ 35 °C);
+- climate anchors;
+- indicator and hazard weights (equal 0.2);
+- partial-hazard threshold (0.60);
+- bands.
+
+Load-time validation rejects weights that don't sum to 1, non-positive hazard weights, missing hazards, inverted anchors, inconsistent indicator kinds and non-increasing bands. The parameters were fixed before any scores were computed.
+
+### D-015: Not-applicable FEMA counties belong to the reference population as a no-exposure tier
+**Refines Phase 0 Addendum A2**, which excluded them.
+- FEMA defines "Not Applicable" as *community not considered at risk*, which is known absence of exposure, not missing data.
+- `not_applicable` and `observed_zero` counties stay in the per-hazard denominator, ranked below all positives, and score 0 themselves.
+- Only territories, `insufficient_data` and `unknown` are excluded.
+
+Excluding not-applicable counties would rank, say, Dallas's hurricane frequency only against coastal-adjacent counties. Its percentile would fall from 50.8 to 35.5, but for the wrong reason: absent-exposure counties would be dropped instead of counted below it.
+
+### D-016: Not-applicable hazards in hub scores: score 0, keep the weight
+A not-applicable indicator contributes 0 and stays in the hazard and overall denominators, so removing it cannot inflate a score (Dallas flood = 48.9, not 97.8). Unknown or insufficient data is never 0. It makes the hazard `partial` (renormalized, if ≥ 60% of weight is available) or `unavailable`, and an unavailable hazard makes the overall index unavailable.
+
+### D-017: Partial results are reported but not ranked
+`rank_partial_results: false`. A hub with any partial hazard appears in rankings under `not_ranked` with its score and status. Example: Miami's winter score lacks the snow indicators (20.5% coverage).
+
+### D-018: Annual averages use observed-rate scaling
+`annual = (event_days / valid_days) · (expected_days / n_years)`. This assumes missing days resemble observed ones and never treats them as zero. It applies only when coverage is ≥ 90%.
+
+### D-019: Engine contracts carry stable fact ids
+Every result (`WeatherStatResult`, `HubProfile`, `RankingResult`, `ComparisonResult`, `Explanation`) carries `Fact`s with ids such as `denver_co.stat.snow_days_measurable.2025-01-01_2025-12-31.noaa_ghcn_daily.percent`, `dallas_tx.overall.score` and `dallas_tx.extreme_heat.nri_heat_wave.score`. Each fact also carries units, sources, period and status. Phase 3 renders critical numbers from these ids (D-012).
+
+### D-020: Premise checks are deterministic
+`explain_hub_score(hub, claimed_band)` compares the claim with the configured bands and reports `supported: true/false/None` with reasoning. For Dallas, the claim "High" is **not supported** (59.7, Moderate; rank 2 of 11 ranked hubs). Thresholds were not adjusted.
+
+### D-021 (open, needs your decision): percentile compression near zero
+The approved mid-rank percentile gives tiny but positive modeled frequencies mid-range scores. Examples: hurricane, Dallas ≈ 1/87 yr → 50.8; coastal flood, any coastal county ≥ ~85.
+
+Options for a v1.1:
+- (a) keep it, and disclose it (current behavior);
+- (b) blend the percentile with an absolute log-scale anchor on AFREQ;
+- (c) apply a minimum material frequency, e.g. treat < 0.02/yr as the no-exposure tier.
+
+Not changed in Phase 2.
