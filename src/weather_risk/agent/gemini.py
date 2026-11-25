@@ -32,6 +32,8 @@ from weather_risk.agent.llm import (
 
 log = logging.getLogger("weather_risk.llm")
 MAX_RATE_LIMIT_WAIT_SECONDS = 20.0
+# A 429 whose retry hint exceeds this is a daily (not per-minute) quota: skip that model.
+DAILY_QUOTA_HINT_SECONDS = 120.0
 
 
 def _usage(resp: Any) -> Usage:
@@ -83,14 +85,21 @@ class GeminiProvider:
         model: str,
         fallback_model: str | None = None,
         timeout_seconds: float = 45.0,
-        max_attempts: int = 3,
+        max_attempts: int = 2,
         temperature: float = 0.0,
+        thinking_level: str | None = "low",
         sleep=time.sleep,
     ) -> None:
         if not api_key:
             raise LLMNotConfiguredError("GEMINI_API_KEY is not configured")
         self.model = model
         self.fallback_model = fallback_model
+        # Fallback chain: primary first, then comma-separated fallbacks (deduplicated).
+        chain = [model] + [m.strip() for m in (fallback_model or "").split(",") if m.strip()]
+        self.models = list(dict.fromkeys(chain))
+        self._thinking = (
+            types.ThinkingConfig(thinking_level=thinking_level.upper()) if thinking_level else None
+        )
         self._client = genai.Client(
             api_key=api_key, http_options=types.HttpOptions(timeout=int(timeout_seconds * 1000))
         )
@@ -98,45 +107,83 @@ class GeminiProvider:
         self._temperature = temperature
         self._sleep = sleep
         self.last_model_used: str | None = None
+        # model -> monotonic time until which it is skipped (daily quota exhausted)
+        self._exhausted_until: dict[str, float] = {}
+        # Per-turn call log (reset by the orchestrator): one entry per HTTP attempt.
+        self.call_log: list[dict[str, Any]] = []
 
     # ----------------------------------------------------------------- call with retries
-    def _call(self, contents: Any, config: types.GenerateContentConfig) -> tuple[Any, float]:
-        models = [self.model] + ([self.fallback_model] if self.fallback_model else [])
+    def _call(
+        self, contents: Any, config: types.GenerateContentConfig, phase: str = "llm"
+    ) -> tuple[Any, float]:
+        """Bounded fail-fast chain (Phase 5, D-037).
+
+        Each round tries every model in the chain ONCE. Overload (503), timeouts and per-minute
+        quota (429) move straight to the next model instead of retrying an overloaded one.
+        After a failed round the whole chain is retried, up to `max_attempts` rounds, after a
+        short backoff (honoring a capped server retry hint). Auth and non-retryable errors raise
+        immediately. Worst case: len(chain) × max_attempts calls.
+        """
+        if self._thinking is not None and config.thinking_config is None:
+            config = config.model_copy(update={"thinking_config": self._thinking})
         last: LLMError | None = None
-        for model in models:
-            for attempt in range(1, self._max_attempts + 1):
+        for round_no in range(1, self._max_attempts + 1):
+            now = time.monotonic()
+            available = [m for m in self.models if self._exhausted_until.get(m, 0) <= now]
+            if not available:
+                break
+            last_hint: float | None = None
+            for model in available:
                 t0 = time.perf_counter()
                 try:
                     resp = self._client.models.generate_content(
                         model=model, contents=contents, config=config
                     )
-                    latency = (time.perf_counter() - t0) * 1000
-                    self.last_model_used = model
-                    u = _usage(resp)
-                    log.info("llm_call", extra={"model": model, "latency_ms": round(latency),
-                                                "input_tokens": u.input_tokens,
-                                                "output_tokens": u.output_tokens,
-                                                "thinking_tokens": u.thinking_tokens,
-                                                "attempt": attempt})  # fmt: skip
-                    return resp, latency
                 except Exception as exc:  # noqa: BLE001 - classified below
                     err = _classify(exc)
                     last = err
+                    self.call_log.append({"phase": phase, "model": model, "attempt": round_no,
+                                          "ok": False, "error": err.kind,
+                                          "latency_ms": round((time.perf_counter() - t0) * 1000, 1)})  # fmt: skip
                     log.warning("llm_error", extra={"model": model, "kind": err.kind,
-                                                    "attempt": attempt})  # fmt: skip
+                                                    "round": round_no})  # fmt: skip
                     if isinstance(err, LLMAuthError | LLMNotConfiguredError):
                         raise err from None
                     if not (err.retryable or isinstance(err, LLMQuotaError)):
                         raise err from None
-                    if attempt < self._max_attempts:
-                        delay = min(2 ** (attempt - 1), 8)
-                        hint = getattr(err, "retry_after", None)
-                        if hint is not None:  # per-minute quota: honor the server hint (capped)
-                            delay = min(max(delay, hint), MAX_RATE_LIMIT_WAIT_SECONDS)
-                        self._sleep(delay)
-            # retries exhausted on this model -> try fallback only for overload/timeouts
-            if not isinstance(last, LLMUnavailableError | LLMTimeoutError):
-                break
+                    hint = getattr(err, "retry_after", None)
+                    if isinstance(err, LLMQuotaError) and hint and hint > DAILY_QUOTA_HINT_SECONDS:
+                        # daily quota: circuit-break this model, never wait for it
+                        self._exhausted_until[model] = time.monotonic() + hint
+                        self.call_log[-1]["error"] = "daily_quota_exhausted"
+                    elif hint is not None:
+                        last_hint = hint if last_hint is None else min(last_hint, hint)
+                    continue
+                latency = (time.perf_counter() - t0) * 1000
+                self.last_model_used = model
+                u = _usage(resp)
+                self.call_log.append({"phase": phase, "model": model, "attempt": round_no,
+                                      "ok": True, "latency_ms": round(latency, 1),
+                                      "input_tokens": u.input_tokens,
+                                      "output_tokens": u.output_tokens,
+                                      "thinking_tokens": u.thinking_tokens,
+                                      "model_version": getattr(resp, "model_version", None)})  # fmt: skip
+                log.info("llm_call", extra={"model": model, "latency_ms": round(latency),
+                                            "input_tokens": u.input_tokens,
+                                            "output_tokens": u.output_tokens,
+                                            "thinking_tokens": u.thinking_tokens,
+                                            "round": round_no, "phase": phase})  # fmt: skip
+                return resp, latency
+            still_available = [
+                m for m in self.models if self._exhausted_until.get(m, 0) <= time.monotonic()
+            ]
+            if round_no < self._max_attempts and still_available:
+                delay = min(2 ** (round_no - 1), 8)
+                if last_hint is not None:  # per-minute quota: honor the server hint (capped)
+                    delay = min(max(delay, last_hint), MAX_RATE_LIMIT_WAIT_SECONDS)
+                self.call_log.append({"phase": phase, "wait_ms": round(delay * 1000),
+                                      "reason": last.kind if last else "retry"})  # fmt: skip
+                self._sleep(delay)
         assert last is not None
         raise last
 
@@ -176,7 +223,7 @@ class GeminiProvider:
                 function_calling_config=types.FunctionCallingConfig(mode="AUTO")
             ),
         )
-        resp, latency = self._call(contents, config)
+        resp, latency = self._call(contents, config, phase="tool_selection")
         calls = [ToolCall(name=fc.name, args=dict(fc.args or {}), id=getattr(fc, "id", None))
                  for fc in (resp.function_calls or [])]  # fmt: skip
         raw = resp.candidates[0].content if resp.candidates else None
@@ -198,7 +245,7 @@ class GeminiProvider:
             response_mime_type="application/json",
             response_json_schema=schema,
         )
-        resp, latency = self._call(prompt, config)
+        resp, latency = self._call(prompt, config, phase="synthesis")
         try:
             text = resp.text or ""
         except (ValueError, AttributeError):

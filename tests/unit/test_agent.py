@@ -312,3 +312,21 @@ def test_hub_from_previous_context_and_region_are_allowed(engine, sessions):
     }
     assert len(mentioned_hubs(engine, "rank the Midwest hubs")) == 6
     assert mentioned_hubs(engine, "What about 2024?") == set()
+
+
+def test_provider_failure_during_synthesis_degrades_to_labeled_fallback(engine, sessions):
+    from weather_risk.agent.llm import LLMUnavailableError
+
+    r, _ = run(engine, sessions, [("tools", [DENVER_CALL]), ("text", "ok"),
+                                  ("raise", LLMUnavailableError("503 overloaded"))])  # fmt: skip
+    s = engine.get_weather_stat("denver_co", "snow_days_measurable", "2025")
+    assert r.status == "fallback" and r.narrative_source == "deterministic_fallback"
+    assert r.validation.fallback_used and "synthesis unavailable" in r.validation.issues[0]
+    assert f"{s.value_percent_of_valid_days:.2f}%" in r.answer
+
+
+def test_provider_failure_without_tool_results_still_raises(engine, sessions):
+    from weather_risk.agent.llm import LLMUnavailableError
+
+    with pytest.raises(LLMUnavailableError):
+        run(engine, sessions, [("text", "hmm"), ("raise", LLMUnavailableError("503"))])

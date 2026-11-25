@@ -74,7 +74,8 @@ def build_state(settings: Settings, *, provider: LLMProvider | None = None,
             provider = GeminiProvider(api_key=key, model=settings.gemini_model,
                                       fallback_model=settings.gemini_fallback_model,
                                       timeout_seconds=settings.llm_timeout_seconds,
-                                      max_attempts=settings.llm_max_attempts)  # fmt: skip
+                                      max_attempts=settings.llm_max_attempts,
+                                      thinking_level=settings.llm_thinking_level or None)  # fmt: skip
         except LLMNotConfiguredError as exc:
             provider, error = None, str(exc)
     return AppState(settings, engine, provider, error, SessionStore(settings.sessions_path))
