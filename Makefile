@@ -1,4 +1,4 @@
-.PHONY: install test test-live lint format hubs snapshot verify-snapshot validate-data validate-data-offline
+.PHONY: install test test-live lint format hubs snapshot verify-snapshot validate-data validate-data-offline scenarios scenarios-live
 
 install:            ## reproducible install from uv.lock
 	uv sync --frozen
@@ -31,3 +31,9 @@ validate-data:      ## live validation report -> docs/PHASE_1_VALIDATION.md
 
 validate-data-offline:  ## same report from cache/snapshot only (no network)
 	uv run weather-risk validate-data --offline
+
+scenarios:          ## Phase 2: 4 assignment scenarios + 12-hub table from the snapshot (no network, no LLM)
+	uv run weather-risk scenarios --offline --out docs/PHASE_2_VALIDATION.md
+
+scenarios-live:     ## same, resolving data live (cache -> network -> snapshot)
+	uv run weather-risk scenarios
