@@ -72,9 +72,14 @@ def main() -> None:
         req = SourceRequest(
             source_id=fema_nri.SOURCE,
             url=fema_nri.BASE_URL,
-            params={"where": where, "outFields": ",".join(fema_nri.OUT_FIELDS),
-                    "returnGeometry": "false", "orderByFields": "STCOFIPS ASC",
-                    "resultRecordCount": "1", "f": "json"},  # fmt: skip
+            params={
+                "where": where,
+                "outFields": ",".join(fema_nri.OUT_FIELDS),
+                "returnGeometry": "false",
+                "orderByFields": "STCOFIPS ASC",
+                "resultRecordCount": "1",
+                "f": "json",
+            },  # fmt: skip
         )
         save(name, req, fetch(req))
 
