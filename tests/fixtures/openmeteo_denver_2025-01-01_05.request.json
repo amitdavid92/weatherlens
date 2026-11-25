@@ -1,0 +1,17 @@
+{
+  "source_id": "open_meteo_archive",
+  "url": "https://archive-api.open-meteo.com/v1/archive",
+  "params": {
+    "latitude": "39.73915",
+    "longitude": "-104.98470",
+    "start_date": "2025-01-01",
+    "end_date": "2025-01-05",
+    "daily": "snowfall_sum,precipitation_sum,temperature_2m_min,temperature_2m_max,wind_speed_10m_max,wind_gusts_10m_max",
+    "temperature_unit": "celsius",
+    "precipitation_unit": "mm",
+    "wind_speed_unit": "ms",
+    "timezone": "America/Denver",
+    "models": "era5"
+  },
+  "location_id": "39.73915,-104.98470"
+}
