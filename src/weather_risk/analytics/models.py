@@ -8,9 +8,10 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 from weather_risk.analytics.config import ClimateMetric, Hazard
+from weather_risk.analytics.formatting import format_score
 from weather_risk.analytics.periods import Period
 from weather_risk.data.models import HazardCode, SourceId
 
@@ -79,6 +80,11 @@ class IndicatorResult(BaseModel):
     fact_ids: list[str]
     coverage: CoverageInfo | None = None
 
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def score_display(self) -> str | None:
+        return None if self.score is None else format_score(self.score)
+
 
 class HazardResult(BaseModel):
     model_config = ConfigDict(frozen=True)
@@ -93,6 +99,12 @@ class HazardResult(BaseModel):
     contribution_to_overall: float | None
     indicators: list[IndicatorResult]
     notes: list[str] = Field(default_factory=list)
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def score_display(self) -> str | None:
+        """Band-safe display string (D-026); clients must not re-round."""
+        return None if self.score is None else format_score(self.score)
 
 
 class RankingEligibility(BaseModel):
@@ -144,6 +156,11 @@ class HubProfile(BaseModel):
     assumptions: list[str]
     limitations: list[str]
 
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def overall_score_display(self) -> str | None:
+        return None if self.overall_score is None else format_score(self.overall_score)
+
 
 class WeatherStatResult(BaseModel):
     model_config = ConfigDict(frozen=True)
@@ -166,6 +183,12 @@ class WeatherStatResult(BaseModel):
     assumptions: list[str]
     limitations: list[str]
 
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def value_display(self) -> str | None:
+        v = self.value_percent_of_valid_days
+        return None if v is None else f"{v:.2f}%"
+
 
 class RankingEntry(BaseModel):
     model_config = ConfigDict(frozen=True)
@@ -180,6 +203,11 @@ class RankingEntry(BaseModel):
     fact_id: str
     eligible: bool = True
     exclusion_reason: str | None = None
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def score_display(self) -> str | None:
+        return None if self.score is None else format_score(self.score)
 
 
 class RankingResult(BaseModel):
@@ -209,6 +237,11 @@ class ComparisonRow(BaseModel):
     leader: str | None  # hub with the higher score, None if tie/unavailable
     difference: float | None  # absolute score difference between the top two
     indicators: dict[str, list[IndicatorResult]]
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def hub_score_display(self) -> dict[str, str | None]:
+        return {k: (None if v is None else format_score(v)) for k, v in self.hub_scores.items()}
 
 
 class ComparisonResult(BaseModel):
@@ -253,3 +286,8 @@ class Explanation(BaseModel):
     facts: list[Fact]
     assumptions: list[str]
     limitations: list[str]
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def overall_score_display(self) -> str | None:
+        return None if self.overall_score is None else format_score(self.overall_score)
