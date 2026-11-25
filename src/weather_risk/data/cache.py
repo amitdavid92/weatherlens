@@ -54,7 +54,8 @@ class ResponseCache:
         self.path = Path(path) if str(path) != ":memory:" else path
         if isinstance(self.path, Path):
             self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._conn = sqlite3.connect(str(path))
+        # API worker threads share this connection; writes are serialized by SQLite + app lock
+        self._conn = sqlite3.connect(str(path), check_same_thread=False)
         self._conn.execute(_SCHEMA)
         self._conn.commit()
 
