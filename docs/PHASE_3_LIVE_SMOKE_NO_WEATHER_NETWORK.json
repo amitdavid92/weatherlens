@@ -1,0 +1,2324 @@
+[
+ {
+  "label": "S1",
+  "question": "Which hubs in the Midwest are most exposed to winter disruption?",
+  "response": {
+   "session_id": "69nasyFI-JsbHUZjuho6Zw",
+   "turn": 1,
+   "status": "answered",
+   "intent": "rank",
+   "answer": "Based on heuristic weather-hazard EXPOSURE scores (not operational disruption), the leading hub in the Midwest for winter hazard exposure is the Minneapolis Hub, ranking #1 with score 74.0, driven by indicators such as winter weather (score 89.8) and freezing days (score 79.5). Following closely in the High band, the Detroit Hub ranks #2 with score 71.4, where top indicators include ice storms (score 99.2) and winter weather (score 76.0). In the Moderate band, the Chicago Hub ranks #3 with score 62.9; the Columbus Hub ranks #4 with score 58.8; the Kansas City Hub ranks #5 with score 57.2; and the Indianapolis Hub ranks #6 with score 57.1.",
+   "narrative_source": "llm",
+   "premise_correction": null,
+   "clarification_question": null,
+   "resolved": {
+    "hubs": [
+     "minneapolis_mn",
+     "detroit_mi",
+     "chicago_il",
+     "columbus_oh",
+     "kansas_city_mo",
+     "indianapolis_in"
+    ],
+    "hazards": [
+     "winter"
+    ],
+    "metric": "score",
+    "period": "2016\u20132025 climatology"
+   },
+   "facts": [
+    {
+     "fact_id": "rank.winter.Midwest.minneapolis_mn",
+     "label": "minneapolis_mn rank (winter.Midwest)",
+     "value": 1,
+     "display": "#1",
+     "unit": null,
+     "kind": "rank",
+     "hub_id": "minneapolis_mn",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "minneapolis_mn.winter.score",
+     "label": "minneapolis_mn winter exposure score (0-100)",
+     "value": 74.02226040037611,
+     "display": "74.0",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "minneapolis_mn",
+     "topic": "winter",
+     "period": "2016\u20132025 climatology",
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "minneapolis_mn.winter.nri_winter_weather.score",
+     "label": "minneapolis_mn nri_winter_weather score",
+     "value": 89.82983460559797,
+     "display": "89.8",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "minneapolis_mn",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "observed",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "minneapolis_mn.winter.freezing_days.score",
+     "label": "minneapolis_mn freezing_days score",
+     "value": 79.5,
+     "display": "79.5",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "minneapolis_mn",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "rank.winter.Midwest.detroit_mi",
+     "label": "detroit_mi rank (winter.Midwest)",
+     "value": 2,
+     "display": "#2",
+     "unit": null,
+     "kind": "rank",
+     "hub_id": "detroit_mi",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "detroit_mi.winter.score",
+     "label": "detroit_mi winter exposure score (0-100)",
+     "value": 71.36116412213741,
+     "display": "71.4",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "detroit_mi",
+     "topic": "winter",
+     "period": "2016\u20132025 climatology",
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "detroit_mi.winter.nri_ice_storm.score",
+     "label": "detroit_mi nri_ice_storm score",
+     "value": 99.19688295165395,
+     "display": "99.2",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "detroit_mi",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "observed",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "detroit_mi.winter.nri_winter_weather.score",
+     "label": "detroit_mi nri_winter_weather score",
+     "value": 76.00986005089058,
+     "display": "76.0",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "detroit_mi",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "observed",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "rank.winter.Midwest.chicago_il",
+     "label": "chicago_il rank (winter.Midwest)",
+     "value": 3,
+     "display": "#3",
+     "unit": null,
+     "kind": "rank",
+     "hub_id": "chicago_il",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "chicago_il.winter.score",
+     "label": "chicago_il winter exposure score (0-100)",
+     "value": 62.850902310421056,
+     "display": "62.9",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "chicago_il",
+     "topic": "winter",
+     "period": "2016\u20132025 climatology",
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "rank.winter.Midwest.columbus_oh",
+     "label": "columbus_oh rank (winter.Midwest)",
+     "value": 4,
+     "display": "#4",
+     "unit": null,
+     "kind": "rank",
+     "hub_id": "columbus_oh",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "columbus_oh.winter.score",
+     "label": "columbus_oh winter exposure score (0-100)",
+     "value": 58.836165545055,
+     "display": "58.8",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "columbus_oh",
+     "topic": "winter",
+     "period": "2016\u20132025 climatology",
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "rank.winter.Midwest.kansas_city_mo",
+     "label": "kansas_city_mo rank (winter.Midwest)",
+     "value": 5,
+     "display": "#5",
+     "unit": null,
+     "kind": "rank",
+     "hub_id": "kansas_city_mo",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "kansas_city_mo.winter.score",
+     "label": "kansas_city_mo winter exposure score (0-100)",
+     "value": 57.15006696002114,
+     "display": "57.2",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "kansas_city_mo",
+     "topic": "winter",
+     "period": "2016\u20132025 climatology",
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "rank.winter.Midwest.indianapolis_in",
+     "label": "indianapolis_in rank (winter.Midwest)",
+     "value": 6,
+     "display": "#6",
+     "unit": null,
+     "kind": "rank",
+     "hub_id": "indianapolis_in",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "rank_hubs"
+    },
+    {
+     "fact_id": "indianapolis_in.winter.score",
+     "label": "indianapolis_in winter exposure score (0-100)",
+     "value": 57.12465483811357,
+     "display": "57.1",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "indianapolis_in",
+     "topic": "winter",
+     "period": "2016\u20132025 climatology",
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "rank_hubs"
+    }
+   ],
+   "analysis": {
+    "rankings": [
+     {
+      "scope": "hazard",
+      "hazard": "winter",
+      "region": "Midwest",
+      "hub_ids": [
+       "chicago_il",
+       "indianapolis_in",
+       "columbus_oh",
+       "detroit_mi",
+       "minneapolis_mn",
+       "kansas_city_mo"
+      ],
+      "ranked": [
+       {
+        "rank": 1,
+        "hub_id": "minneapolis_mn",
+        "display_name": "Minneapolis Hub",
+        "score": 74.02226040037611,
+        "band": "High",
+        "status": "complete",
+        "top_contributors": [
+         "nri_winter_weather (89.8)",
+         "freezing_days (79.5)"
+        ],
+        "fact_id": "minneapolis_mn.winter.score",
+        "eligible": true,
+        "exclusion_reason": null
+       },
+       {
+        "rank": 2,
+        "hub_id": "detroit_mi",
+        "display_name": "Detroit Hub",
+        "score": 71.36116412213741,
+        "band": "High",
+        "status": "complete",
+        "top_contributors": [
+         "nri_ice_storm (99.2)",
+         "nri_winter_weather (76.0)"
+        ],
+        "fact_id": "detroit_mi.winter.score",
+        "eligible": true,
+        "exclusion_reason": null
+       },
+       {
+        "rank": 3,
+        "hub_id": "chicago_il",
+        "display_name": "Chicago Hub",
+        "score": 62.850902310421056,
+        "band": "Moderate",
+        "status": "complete",
+        "top_contributors": [
+         "nri_winter_weather (86.1)",
+         "nri_ice_storm (68.5)"
+        ],
+        "fact_id": "chicago_il.winter.score",
+        "eligible": true,
+        "exclusion_reason": null
+       },
+       {
+        "rank": 4,
+        "hub_id": "columbus_oh",
+        "display_name": "Columbus Hub",
+        "score": 58.836165545055,
+        "band": "Moderate",
+        "status": "complete",
+        "top_contributors": [
+         "nri_winter_weather (79.3)",
+         "nri_ice_storm (76.8)"
+        ],
+        "fact_id": "columbus_oh.winter.score",
+        "eligible": true,
+        "exclusion_reason": null
+       },
+       {
+        "rank": 5,
+        "hub_id": "kansas_city_mo",
+        "display_name": "Kansas City Hub",
+        "score": 57.15006696002114,
+        "band": "Moderate",
+        "status": "complete",
+        "top_contributors": [
+         "nri_ice_storm (86.5)",
+         "nri_winter_weather (78.9)"
+        ],
+        "fact_id": "kansas_city_mo.winter.score",
+        "eligible": true,
+        "exclusion_reason": null
+       },
+       {
+        "rank": 6,
+        "hub_id": "indianapolis_in",
+        "display_name": "Indianapolis Hub",
+        "score": 57.12465483811357,
+        "band": "Moderate",
+        "status": "complete",
+        "top_contributors": [
+         "nri_ice_storm (79.3)",
+         "nri_winter_weather (75.6)"
+        ],
+        "fact_id": "indianapolis_in.winter.score",
+        "eligible": true,
+        "exclusion_reason": null
+       }
+      ],
+      "not_ranked": [],
+      "tie_break": "score descending; exact ties share a rank; listed by hub_id ascending",
+      "methodology_version": "1.1.0",
+      "nri_version": "December 2025",
+      "climate_period": "2016\u20132025 climatology",
+      "assumptions": [
+       "Ranking by the winter hazard score only."
+      ],
+      "limitations": [
+       "Weather Hazard Exposure Index: a heuristic 0\u2013100 measure of weather-hazard exposure at the hub's county/station. It is not a probability of disruption, not a loss prediction, and has not been validated against operational outcomes.",
+       "Hubs are illustrative examples, not actual company facilities.",
+       "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific.",
+       "FEMA NRI annualized frequencies summarize each hazard's own multi-decade period of record (differs by hazard); they are NOT specific to any user-selected calendar year."
+      ]
+     }
+    ],
+    "comparisons": [],
+    "weather_stats": [],
+    "explanations": [],
+    "profiles": [],
+    "hubs": []
+   },
+   "sources": [
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "17031",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:06.419032+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00094846",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:00.034337+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    },
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "39049",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:07.474240+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00014821",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:09.261726+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    },
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "26163",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:07.773739+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00094847",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:12.967057+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    },
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "18097",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:07.174602+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00093819",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:05.538740+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    },
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "29095",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:08.596231+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00003947",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:20.487451+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    },
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "27053",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:08.288507+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00014922",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:16.516208+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    }
+   ],
+   "data_freshness": {
+    "fema_nri": [
+     "snapshot"
+    ],
+    "noaa_ghcn_daily": [
+     "snapshot"
+    ]
+   },
+   "methodology_version": "1.1.0",
+   "assumptions": [
+    "Ranking by the winter hazard score only."
+   ],
+   "limitations": [
+    "Weather Hazard Exposure Index: a heuristic 0\u2013100 measure of weather-hazard exposure at the hub's county/station. It is not a probability of disruption, not a loss prediction, and has not been validated against operational outcomes.",
+    "Hubs are illustrative examples, not actual company facilities.",
+    "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific.",
+    "FEMA NRI annualized frequencies summarize each hazard's own multi-decade period of record (differs by hazard); they are NOT specific to any user-selected calendar year."
+   ],
+   "follow_up_suggestions": [
+    "What specific winter indicators drive Detroit's high ice storm score?",
+    "How does Chicago compare to Minneapolis in freezing days exposure?",
+    "What other hazards affect the Minneapolis Hub?"
+   ],
+   "validation": {
+    "valid": true,
+    "attempts": 1,
+    "issues": [],
+    "retry_reasons": [],
+    "fallback_used": false
+   },
+   "agent": {
+    "provider": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "model_version": "gemini-3.5-flash-lite",
+    "iterations": 2,
+    "tool_calls": [
+     {
+      "name": "rank_hubs",
+      "args": {
+       "region": "Midwest",
+       "hazard": "winter"
+      },
+      "ok": true,
+      "error": null,
+      "error_type": null,
+      "latency_ms": 723.1
+     }
+    ],
+    "input_tokens": 7011,
+    "output_tokens": 1394,
+    "thinking_tokens": 0,
+    "latency_ms": 44184.9
+   },
+   "_http_status": 200,
+   "_rate_limited_retry": false
+  },
+  "checks": [
+   "PASS schema+grounding valid (or labeled fallback)",
+   "PASS called rank_hubs",
+   "PASS ranking order equals engine ['minneapolis_mn', 'detroit_mi', 'chicago_il', 'columbus_oh', 'kansas_city_mo', 'indianapolis_in']",
+   "PASS answer names #1 minneapolis_mn"
+  ]
+ },
+ {
+  "label": "S2",
+  "question": "Compare Miami and Houston in terms of hurricane and flood exposure.",
+  "response": {
+   "session_id": "-W9X0DAPDV6JbkIzsYdGfQ",
+   "turn": 1,
+   "status": "answered",
+   "intent": "compare",
+   "answer": "Comparing Miami and Houston for hurricane and flood weather-hazard EXPOSURE (heuristic), not operational disruption: for hurricanes, Miami Hub is the leading exposure location with a score 86.6, while Houston Hub has a score 77.4 (a difference of 9.2 points). FEMA annualized frequencies show hurricanes occur at 0.305 per year (about 1 in 3 years) for Miami Hub and 0.184 per year (about 1 in 5 years) for Houston Hub. For floods, Houston Hub is the most exposed with a score 99.0, compared to Miami Hub with a score 97.0 (a difference of 2.0 points). FEMA annualized frequencies for coastal flooding are 2.25 per year for Miami Hub and 3.76 per year for Houston Hub, while inland flooding frequencies are 4 per year for Miami Hub and 5.14 per year for Houston Hub.",
+   "narrative_source": "llm",
+   "premise_correction": null,
+   "clarification_question": null,
+   "resolved": {
+    "hubs": [
+     "miami_fl",
+     "houston_tx"
+    ],
+    "hazards": [
+     "hurricane",
+     "flood"
+    ],
+    "metric": "score",
+    "period": "December 2025"
+   },
+   "facts": [
+    {
+     "fact_id": "miami_fl.hurricane.score",
+     "label": "miami_fl hurricane exposure score (0-100)",
+     "value": 86.57382917633177,
+     "display": "86.6",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "miami_fl",
+     "topic": "hurricane",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "houston_tx.hurricane.score",
+     "label": "houston_tx hurricane exposure score (0-100)",
+     "value": 77.42283484464761,
+     "display": "77.4",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "houston_tx",
+     "topic": "hurricane",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "compare.hurricane.miami_fl_vs_houston_tx.difference",
+     "label": "hurricane score difference (miami_fl_vs_houston_tx)",
+     "value": 9.15099433168416,
+     "display": "9.2",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": null,
+     "topic": "hurricane",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "miami_fl.nri.HRCN.afreq",
+     "label": "miami_fl FEMA NRI hurricane annualized frequency",
+     "value": 0.30497455032244414,
+     "display": "0.305 per year (about 1 in 3 years)",
+     "unit": "per year",
+     "kind": "frequency",
+     "hub_id": "miami_fl",
+     "topic": "hurricane",
+     "period": "NRI December 2025 period of record",
+     "source_ids": [
+      "fema_nri"
+     ],
+     "status": "observed",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "houston_tx.nri.HRCN.afreq",
+     "label": "houston_tx FEMA NRI hurricane annualized frequency",
+     "value": 0.18361075931264648,
+     "display": "0.184 per year (about 1 in 5 years)",
+     "unit": "per year",
+     "kind": "frequency",
+     "hub_id": "houston_tx",
+     "topic": "hurricane",
+     "period": "NRI December 2025 period of record",
+     "source_ids": [
+      "fema_nri"
+     ],
+     "status": "observed",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "houston_tx.flood.score",
+     "label": "houston_tx flood exposure score (0-100)",
+     "value": 99.01399491094148,
+     "display": "99.0",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "houston_tx",
+     "topic": "flood",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "miami_fl.flood.score",
+     "label": "miami_fl flood exposure score (0-100)",
+     "value": 97.04198473282443,
+     "display": "97.0",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "miami_fl",
+     "topic": "flood",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "compare.flood.houston_tx_vs_miami_fl.difference",
+     "label": "flood score difference (houston_tx_vs_miami_fl)",
+     "value": 1.9720101781170456,
+     "display": "2.0",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": null,
+     "topic": "flood",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "miami_fl.nri.CFLD.afreq",
+     "label": "miami_fl FEMA NRI coastal_flooding annualized frequency",
+     "value": 2.250236987657198,
+     "display": "2.25 per year",
+     "unit": "per year",
+     "kind": "frequency",
+     "hub_id": "miami_fl",
+     "topic": "coastal_flooding",
+     "period": "NRI December 2025 period of record",
+     "source_ids": [
+      "fema_nri"
+     ],
+     "status": "observed",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "houston_tx.nri.CFLD.afreq",
+     "label": "houston_tx FEMA NRI coastal_flooding annualized frequency",
+     "value": 3.760667716463098,
+     "display": "3.76 per year",
+     "unit": "per year",
+     "kind": "frequency",
+     "hub_id": "houston_tx",
+     "topic": "coastal_flooding",
+     "period": "NRI December 2025 period of record",
+     "source_ids": [
+      "fema_nri"
+     ],
+     "status": "observed",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "miami_fl.nri.IFLD.afreq",
+     "label": "miami_fl FEMA NRI inland_flooding annualized frequency",
+     "value": 4.0,
+     "display": "4 per year",
+     "unit": "per year",
+     "kind": "frequency",
+     "hub_id": "miami_fl",
+     "topic": "inland_flooding",
+     "period": "NRI December 2025 period of record",
+     "source_ids": [
+      "fema_nri"
+     ],
+     "status": "observed",
+     "tool": "compare_hubs"
+    },
+    {
+     "fact_id": "houston_tx.nri.IFLD.afreq",
+     "label": "houston_tx FEMA NRI inland_flooding annualized frequency",
+     "value": 5.142857142857143,
+     "display": "5.14 per year",
+     "unit": "per year",
+     "kind": "frequency",
+     "hub_id": "houston_tx",
+     "topic": "inland_flooding",
+     "period": "NRI December 2025 period of record",
+     "source_ids": [
+      "fema_nri"
+     ],
+     "status": "observed",
+     "tool": "compare_hubs"
+    }
+   ],
+   "analysis": {
+    "rankings": [],
+    "comparisons": [
+     {
+      "hub_ids": [
+       "miami_fl",
+       "houston_tx"
+      ],
+      "hazards": [
+       "hurricane",
+       "flood"
+      ],
+      "rows": [
+       {
+        "hazard": "hurricane",
+        "hub_scores": {
+         "miami_fl": 86.57382917633177,
+         "houston_tx": 77.42283484464761
+        },
+        "hub_status": {
+         "miami_fl": "complete",
+         "houston_tx": "complete"
+        },
+        "leader": "miami_fl",
+        "difference": 9.15099433168416,
+        "indicators": {
+         "miami_fl": [
+          {
+           "indicator_id": "nri_hurricane",
+           "hazard": "hurricane",
+           "kind": "nri_percentile",
+           "label": "FEMA NRI hurricane annualized frequency",
+           "raw_value": 0.30497455032244414,
+           "raw_unit": "events or event-days per year (NRI AFREQ)",
+           "raw_status": "observed",
+           "score": 86.57382917633177,
+           "weight": 1.0,
+           "effective_weight": 1.0,
+           "contribution": 86.57382917633177,
+           "normalization": "hybrid: 0.5\u00b7national percentile (98.9) + 0.5\u00b7absolute log frequency (74.2; 0.01/yr -> 0, 1/yr -> 100)",
+           "period": "NRI December 2025, hazard-specific period of record",
+           "source_ids": [
+            "fema_nri"
+           ],
+           "fact_ids": [
+            "miami_fl.hurricane.nri_hurricane.raw",
+            "miami_fl.hurricane.nri_hurricane.score"
+           ],
+           "coverage": null
+          }
+         ],
+         "houston_tx": [
+          {
+           "indicator_id": "nri_hurricane",
+           "hazard": "hurricane",
+           "kind": "nri_percentile",
+           "label": "FEMA NRI hurricane annualized frequency",
+           "raw_value": 0.18361075931264648,
+           "raw_unit": "events or event-days per year (NRI AFREQ)",
+           "raw_status": "observed",
+           "score": 77.42283484464761,
+           "weight": 1.0,
+           "effective_weight": 1.0,
+           "contribution": 77.42283484464761,
+           "normalization": "hybrid: 0.5\u00b7national percentile (91.7) + 0.5\u00b7absolute log frequency (63.2; 0.01/yr -> 0, 1/yr -> 100)",
+           "period": "NRI December 2025, hazard-specific period of record",
+           "source_ids": [
+            "fema_nri"
+           ],
+           "fact_ids": [
+            "houston_tx.hurricane.nri_hurricane.raw",
+            "houston_tx.hurricane.nri_hurricane.score"
+           ],
+           "coverage": null
+          }
+         ]
+        }
+       },
+       {
+        "hazard": "flood",
+        "hub_scores": {
+         "miami_fl": 97.04198473282443,
+         "houston_tx": 99.01399491094148
+        },
+        "hub_status": {
+         "miami_fl": "complete",
+         "houston_tx": "complete"
+        },
+        "leader": "houston_tx",
+        "difference": 1.9720101781170456,
+        "indicators": {
+         "miami_fl": [
+          {
+           "indicator_id": "nri_coastal_flooding",
+           "hazard": "flood",
+           "kind": "nri_percentile",
+           "label": "FEMA NRI coastal flooding annualized frequency",
+           "raw_value": 2.250236987657198,
+           "raw_unit": "events or event-days per year (NRI AFREQ)",
+           "raw_status": "observed",
+           "score": 95.8571882951654,
+           "weight": 0.5,
+           "effective_weight": 0.5,
+           "contribution": 47.9285941475827,
+           "normalization": "hybrid: 0.5\u00b7national percentile (91.7) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+           "period": "NRI December 2025, hazard-specific period of record",
+           "source_ids": [
+            "fema_nri"
+           ],
+           "fact_ids": [
+            "miami_fl.flood.nri_coastal_flooding.raw",
+            "miami_fl.flood.nri_coastal_flooding.score"
+           ],
+           "coverage": null
+          },
+          {
+           "indicator_id": "nri_inland_flooding",
+           "hazard": "flood",
+           "kind": "nri_percentile",
+           "label": "FEMA NRI inland flooding annualized frequency",
+           "raw_value": 4.0,
+           "raw_unit": "events or event-days per year (NRI AFREQ)",
+           "raw_status": "observed",
+           "score": 98.22678117048346,
+           "weight": 0.5,
+           "effective_weight": 0.5,
+           "contribution": 49.11339058524173,
+           "normalization": "hybrid: 0.5\u00b7national percentile (96.5) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+           "period": "NRI December 2025, hazard-specific period of record",
+           "source_ids": [
+            "fema_nri"
+           ],
+           "fact_ids": [
+            "miami_fl.flood.nri_inland_flooding.raw",
+            "miami_fl.flood.nri_inland_flooding.score"
+           ],
+           "coverage": null
+          }
+         ],
+         "houston_tx": [
+          {
+           "indicator_id": "nri_coastal_flooding",
+           "hazard": "flood",
+           "kind": "nri_percentile",
+           "label": "FEMA NRI coastal flooding annualized frequency",
+           "raw_value": 3.760667716463098,
+           "raw_unit": "events or event-days per year (NRI AFREQ)",
+           "raw_status": "observed",
+           "score": 98.81520356234097,
+           "weight": 0.5,
+           "effective_weight": 0.5,
+           "contribution": 49.407601781170484,
+           "normalization": "hybrid: 0.5\u00b7national percentile (97.6) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+           "period": "NRI December 2025, hazard-specific period of record",
+           "source_ids": [
+            "fema_nri"
+           ],
+           "fact_ids": [
+            "houston_tx.flood.nri_coastal_flooding.raw",
+            "houston_tx.flood.nri_coastal_flooding.score"
+           ],
+           "coverage": null
+          },
+          {
+           "indicator_id": "nri_inland_flooding",
+           "hazard": "flood",
+           "kind": "nri_percentile",
+           "label": "FEMA NRI inland flooding annualized frequency",
+           "raw_value": 5.142857142857143,
+           "raw_unit": "events or event-days per year (NRI AFREQ)",
+           "raw_status": "observed",
+           "score": 99.21278625954199,
+           "weight": 0.5,
+           "effective_weight": 0.5,
+           "contribution": 49.60639312977099,
+           "normalization": "hybrid: 0.5\u00b7national percentile (98.4) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+           "period": "NRI December 2025, hazard-specific period of record",
+           "source_ids": [
+            "fema_nri"
+           ],
+           "fact_ids": [
+            "houston_tx.flood.nri_inland_flooding.raw",
+            "houston_tx.flood.nri_inland_flooding.score"
+           ],
+           "coverage": null
+          }
+         ]
+        }
+       }
+      ],
+      "nri_raw": {
+       "miami_fl": {
+        "CFLD": {
+         "afreq": 2.250236987657198,
+         "events": null,
+         "status": "observed"
+        },
+        "HRCN": {
+         "afreq": 0.30497455032244414,
+         "events": 124.0,
+         "status": "observed"
+        },
+        "IFLD": {
+         "afreq": 4.0,
+         "events": 112.0,
+         "status": "observed"
+        }
+       },
+       "houston_tx": {
+        "CFLD": {
+         "afreq": 3.760667716463098,
+         "events": null,
+         "status": "observed"
+        },
+        "HRCN": {
+         "afreq": 0.18361075931264648,
+         "events": 75.0,
+         "status": "observed"
+        },
+        "IFLD": {
+         "afreq": 5.142857142857143,
+         "events": 144.0,
+         "status": "observed"
+        }
+       }
+      },
+      "methodology_version": "1.1.0",
+      "nri_version": "December 2025",
+      "assumptions": [
+       "Hazard frequencies use Miami-Dade County (FIPS 12086); climate statistics use NOAA station USW00012839 (MIAMI INTL AP).",
+       "Hazard frequencies use Harris County (FIPS 48201); climate statistics use NOAA station USW00012960 (HOUSTON INTERCONTINENTAL AP)."
+      ],
+      "limitations": [
+       "Weather Hazard Exposure Index: a heuristic 0\u2013100 measure of weather-hazard exposure at the hub's county/station. It is not a probability of disruption, not a loss prediction, and has not been validated against operational outcomes.",
+       "Hubs are illustrative examples, not actual company facilities.",
+       "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific.",
+       "FEMA NRI annualized frequencies summarize each hazard's own multi-decade period of record (differs by hazard); they are NOT specific to any user-selected calendar year.",
+       "Flood exposure uses FEMA coastal and inland flooding frequencies, not rainfall.",
+       "Hurricane exposure uses FEMA hurricane frequency, not observed wind speeds."
+      ]
+     }
+    ],
+    "weather_stats": [],
+    "explanations": [],
+    "profiles": [],
+    "hubs": []
+   },
+   "sources": [
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "48201",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:09.545418+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00012960",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:30.565043+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    },
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "12086",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:09.846759+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00012839",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:34.097723+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    }
+   ],
+   "data_freshness": {
+    "fema_nri": [
+     "snapshot"
+    ],
+    "noaa_ghcn_daily": [
+     "snapshot"
+    ]
+   },
+   "methodology_version": "1.1.0",
+   "assumptions": [
+    "Hazard frequencies use Miami-Dade County (FIPS 12086); climate statistics use NOAA station USW00012839 (MIAMI INTL AP).",
+    "Hazard frequencies use Harris County (FIPS 48201); climate statistics use NOAA station USW00012960 (HOUSTON INTERCONTINENTAL AP)."
+   ],
+   "limitations": [
+    "Weather Hazard Exposure Index: a heuristic 0\u2013100 measure of weather-hazard exposure at the hub's county/station. It is not a probability of disruption, not a loss prediction, and has not been validated against operational outcomes.",
+    "Hubs are illustrative examples, not actual company facilities.",
+    "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific.",
+    "FEMA NRI annualized frequencies summarize each hazard's own multi-decade period of record (differs by hazard); they are NOT specific to any user-selected calendar year.",
+    "Flood exposure uses FEMA coastal and inland flooding frequencies, not rainfall.",
+    "Hurricane exposure uses FEMA hurricane frequency, not observed wind speeds."
+   ],
+   "follow_up_suggestions": [
+    "How do Miami and Houston compare on severe convective storm exposure?",
+    "What are the historical hurricane frequencies for other southern hubs?",
+    "What limitations apply to FEMA flood frequency data?"
+   ],
+   "validation": {
+    "valid": true,
+    "attempts": 1,
+    "issues": [],
+    "retry_reasons": [],
+    "fallback_used": false
+   },
+   "agent": {
+    "provider": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "model_version": "gemini-3.5-flash-lite",
+    "iterations": 2,
+    "tool_calls": [
+     {
+      "name": "compare_hubs",
+      "args": {
+       "hubs": [
+        "miami_fl",
+        "houston_tx"
+       ],
+       "hazards": [
+        "hurricane",
+        "flood"
+       ]
+      },
+      "ok": true,
+      "error": null,
+      "error_type": null,
+      "latency_ms": 297.7
+     }
+    ],
+    "input_tokens": 6038,
+    "output_tokens": 1218,
+    "thinking_tokens": 0,
+    "latency_ms": 19192.1
+   },
+   "_http_status": 200,
+   "_rate_limited_retry": false
+  },
+  "checks": [
+   "PASS schema+grounding valid (or labeled fallback)",
+   "PASS called compare_hubs",
+   "PASS hurricane leader = miami_fl",
+   "PASS flood leader = houston_tx",
+   "PASS compared ['houston_tx', 'miami_fl']"
+  ]
+ },
+ {
+  "label": "S3",
+  "question": "What percentage of days in Denver last year had snowfall?",
+  "response": {
+   "session_id": "YFD9AO0ye3odc29pwDVxhA",
+   "turn": 1,
+   "status": "answered",
+   "intent": "weather_stat",
+   "answer": "In 2025, Denver Hub experienced measurable snowfall on 7.14% of valid days (26 of 364 valid days).\n\nWhen including trace snowfall, 12.36% of valid days recorded snowfall (45 of 364 valid days). Measurable snowfall reflects days with accumulating snow (>0), whereas trace-inclusive adds days with light flurries that did not accumulate.\n\nThere was 1 missing day on 2025-05-21.",
+   "narrative_source": "llm",
+   "premise_correction": null,
+   "clarification_question": null,
+   "resolved": {
+    "hubs": [
+     "denver_co"
+    ],
+    "hazards": [],
+    "metric": "snow_days_measurable",
+    "period": "2025"
+   },
+   "facts": [
+    {
+     "fact_id": "denver_co.stat.snow_days_measurable.2025-01-01_2025-12-31.noaa_ghcn_daily.period",
+     "label": "observation period: calendar year 2025 (last completed year)",
+     "value": "calendar year 2025 (last completed year)",
+     "display": "2025",
+     "unit": null,
+     "kind": "label",
+     "hub_id": "denver_co",
+     "topic": "snow_days_measurable",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    },
+    {
+     "fact_id": "denver_co.stat.snow_days_measurable.2025-01-01_2025-12-31.noaa_ghcn_daily.percent",
+     "label": "% of valid days: days with measurable new snowfall (reported > 0; trace excluded)",
+     "value": 7.142857142857143,
+     "display": "7.14%",
+     "unit": "%",
+     "kind": "statistic",
+     "hub_id": "denver_co",
+     "topic": "snow_days_measurable",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    },
+    {
+     "fact_id": "denver_co.stat.snow_days_measurable.2025-01-01_2025-12-31.noaa_ghcn_daily.event_days",
+     "label": "days with measurable new snowfall (reported > 0; trace excluded)",
+     "value": 26,
+     "display": "26",
+     "unit": "days",
+     "kind": "count",
+     "hub_id": "denver_co",
+     "topic": "snow_days_measurable",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    },
+    {
+     "fact_id": "denver_co.stat.snow_days_measurable.2025-01-01_2025-12-31.noaa_ghcn_daily.valid_days",
+     "label": "days with a valid observation",
+     "value": 364,
+     "display": "364",
+     "unit": "days",
+     "kind": "count",
+     "hub_id": "denver_co",
+     "topic": "snow_days_measurable",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    },
+    {
+     "fact_id": "denver_co.stat.snow_days_trace_inclusive.2025-01-01_2025-12-31.noaa_ghcn_daily.percent",
+     "label": "% of valid days: days with measurable OR trace snowfall",
+     "value": 12.362637362637363,
+     "display": "12.36%",
+     "unit": "%",
+     "kind": "statistic",
+     "hub_id": "denver_co",
+     "topic": "snow_days_trace_inclusive",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    },
+    {
+     "fact_id": "denver_co.stat.snow_days_trace_inclusive.2025-01-01_2025-12-31.noaa_ghcn_daily.event_days",
+     "label": "days with measurable OR trace snowfall",
+     "value": 45,
+     "display": "45",
+     "unit": "days",
+     "kind": "count",
+     "hub_id": "denver_co",
+     "topic": "snow_days_trace_inclusive",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    },
+    {
+     "fact_id": "denver_co.stat.snow_days_trace_inclusive.2025-01-01_2025-12-31.noaa_ghcn_daily.valid_days",
+     "label": "days with a valid observation",
+     "value": 364,
+     "display": "364",
+     "unit": "days",
+     "kind": "count",
+     "hub_id": "denver_co",
+     "topic": "snow_days_trace_inclusive",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    },
+    {
+     "fact_id": "denver_co.stat.snow_days_measurable.2025-01-01_2025-12-31.noaa_ghcn_daily.missing_days",
+     "label": "days without a reported value",
+     "value": 1,
+     "display": "1",
+     "unit": "days",
+     "kind": "count",
+     "hub_id": "denver_co",
+     "topic": "snow_days_measurable",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    },
+    {
+     "fact_id": "denver_co.stat.snow_days_measurable.2025-01-01_2025-12-31.noaa_ghcn_daily.missing_dates",
+     "label": "dates without a value",
+     "value": "2025-05-21",
+     "display": "2025-05-21",
+     "unit": null,
+     "kind": "label",
+     "hub_id": "denver_co",
+     "topic": "snow_days_measurable",
+     "period": "calendar year 2025 (last completed year)",
+     "source_ids": [
+      "noaa_ghcn_daily"
+     ],
+     "status": "ok",
+     "tool": "get_weather_stat"
+    }
+   ],
+   "analysis": {
+    "rankings": [],
+    "comparisons": [],
+    "weather_stats": [
+     {
+      "hub_id": "denver_co",
+      "metric": "snow_days_measurable",
+      "definition": "days with measurable new snowfall (reported > 0; trace excluded)",
+      "period": {
+       "start": "2025-01-01",
+       "end": "2025-12-31",
+       "label": "calendar year 2025 (last completed year)",
+       "kind": "calendar_year"
+      },
+      "source_id": "noaa_ghcn_daily",
+      "data_kind": "observed",
+      "location_id": "USW00003017",
+      "status": "ok",
+      "value_percent_of_valid_days": 7.142857142857143,
+      "event_days": 26,
+      "annual_average_days": 26.07142857142857,
+      "coverage": {
+       "expected_days": 365,
+       "valid_days": 364,
+       "missing_days": 1,
+       "excluded_days": 0,
+       "excluded_reasons": {},
+       "coverage": 0.9972602739726028,
+       "min_coverage": 0.9,
+       "status": "ok"
+      },
+      "sources": [
+       {
+        "source_id": "noaa_ghcn_daily",
+        "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+        "version": null,
+        "location_id": "USW00003017",
+        "freshness": "snapshot",
+        "retrieved_at": "2026-11-25T10:42:26.441908+00:00",
+        "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+       }
+      ],
+      "methodology_version": "1.1.0",
+      "assumptions": [
+       "Observations from NOAA station USW00003017 represent the Denver Hub.",
+       "Percentages use days with a valid observation as the denominator; missing and quality-flagged days are excluded, never counted as zero.",
+       "Denver International Airport is ~30 km northeast of downtown on the plains; airport snowfall typically differs from city-centre snowfall.",
+       "Measurable snowfall = reported amount > 0; trace (NOAA flag 'T') is counted only in the trace-inclusive definition."
+      ],
+      "limitations": [
+       "Hubs are illustrative examples, not actual company facilities.",
+       "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific."
+      ]
+     },
+     {
+      "hub_id": "denver_co",
+      "metric": "snow_days_trace_inclusive",
+      "definition": "days with measurable OR trace snowfall",
+      "period": {
+       "start": "2025-01-01",
+       "end": "2025-12-31",
+       "label": "calendar year 2025 (last completed year)",
+       "kind": "calendar_year"
+      },
+      "source_id": "noaa_ghcn_daily",
+      "data_kind": "observed",
+      "location_id": "USW00003017",
+      "status": "ok",
+      "value_percent_of_valid_days": 12.362637362637363,
+      "event_days": 45,
+      "annual_average_days": 45.12362637362637,
+      "coverage": {
+       "expected_days": 365,
+       "valid_days": 364,
+       "missing_days": 1,
+       "excluded_days": 0,
+       "excluded_reasons": {},
+       "coverage": 0.9972602739726028,
+       "min_coverage": 0.9,
+       "status": "ok"
+      },
+      "sources": [
+       {
+        "source_id": "noaa_ghcn_daily",
+        "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+        "version": null,
+        "location_id": "USW00003017",
+        "freshness": "snapshot",
+        "retrieved_at": "2026-11-25T10:42:26.441908+00:00",
+        "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+       }
+      ],
+      "methodology_version": "1.1.0",
+      "assumptions": [
+       "Observations from NOAA station USW00003017 represent the Denver Hub.",
+       "Percentages use days with a valid observation as the denominator; missing and quality-flagged days are excluded, never counted as zero.",
+       "Denver International Airport is ~30 km northeast of downtown on the plains; airport snowfall typically differs from city-centre snowfall.",
+       "Measurable snowfall = reported amount > 0; trace (NOAA flag 'T') is counted only in the trace-inclusive definition."
+      ],
+      "limitations": [
+       "Hubs are illustrative examples, not actual company facilities.",
+       "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific."
+      ]
+     }
+    ],
+    "explanations": [],
+    "profiles": [],
+    "hubs": []
+   },
+   "sources": [
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00003017",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:23.746409+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    },
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "08031",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:08.907226+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    }
+   ],
+   "data_freshness": {
+    "noaa_ghcn_daily": [
+     "snapshot"
+    ],
+    "fema_nri": [
+     "snapshot"
+    ]
+   },
+   "methodology_version": "1.1.0",
+   "assumptions": [
+    "Observations from NOAA station USW00003017 represent the Denver Hub.",
+    "Percentages use days with a valid observation as the denominator; missing and quality-flagged days are excluded, never counted as zero.",
+    "Denver International Airport is ~30 km northeast of downtown on the plains; airport snowfall typically differs from city-centre snowfall.",
+    "Measurable snowfall = reported amount > 0; trace (NOAA flag 'T') is counted only in the trace-inclusive definition."
+   ],
+   "limitations": [
+    "Hubs are illustrative examples, not actual company facilities.",
+    "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific."
+   ],
+   "follow_up_suggestions": [
+    "How does Denver compare to Minneapolis for measurable snowfall days?",
+    "What is Denver's overall winter hazard exposure score?",
+    "How many extreme cold days did Denver experience last year?"
+   ],
+   "validation": {
+    "valid": true,
+    "attempts": 1,
+    "issues": [],
+    "retry_reasons": [],
+    "fallback_used": false
+   },
+   "agent": {
+    "provider": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "model_version": "gemini-3.6-flash",
+    "iterations": 2,
+    "tool_calls": [
+     {
+      "name": "get_weather_stat",
+      "args": {
+       "hub": "Denver",
+       "period": "last year",
+       "metric": "snow_days_measurable"
+      },
+      "ok": true,
+      "error": null,
+      "error_type": null,
+      "latency_ms": 22.4
+     },
+     {
+      "name": "get_weather_stat",
+      "args": {
+       "period": "last year",
+       "metric": "snow_days_trace_inclusive",
+       "hub": "Denver"
+      },
+      "ok": true,
+      "error": null,
+      "error_type": null,
+      "latency_ms": 1.3
+     }
+    ],
+    "input_tokens": 8324,
+    "output_tokens": 1500,
+    "thinking_tokens": 2729,
+    "latency_ms": 45204.4
+   },
+   "_http_status": 200,
+   "_rate_limited_retry": false
+  },
+  "checks": [
+   "PASS schema+grounding valid (or labeled fallback)",
+   "PASS weather stat snow_days_measurable 2025 retrieved",
+   "PASS event_days = 26",
+   "PASS answer states the engine's value",
+   "PASS answer states the year 2025",
+   "PASS answer also gives trace-inclusive %",
+   "PASS answer discloses missing observation(s)"
+  ]
+ },
+ {
+  "label": "S4",
+  "question": "Why is the Dallas hub's weather disruption risk high?",
+  "response": {
+   "session_id": "F8QZGTdwcQO3WGZTnte_Eg",
+   "turn": 1,
+   "status": "answered",
+   "intent": "explain",
+   "answer": "The premise that the Dallas Hub has a high overall weather-hazard exposure score is incorrect; its overall weather-hazard EXPOSURE score is 58.7, which places it in the Moderate band at rank #2 out of 11 hubs. Note that these scores measure weather-hazard EXPOSURE (heuristic), not operational disruption. The primary driver hazard is severe convective with a score of 94.6, contributing 18.9 points to the overall index. Extreme heat is another high hazard with a score of 81.7, contributing 16.3 points. Flood and winter hazards are in the moderate band, with scores of 49.4 and 40.6, while hurricane is low with a score of 27.0.",
+   "narrative_source": "llm",
+   "premise_correction": "The Dallas Hub's overall weather-hazard exposure is Moderate (score 58.7, rank #2 of 11), not High.",
+   "clarification_question": null,
+   "resolved": {
+    "hubs": [
+     "dallas_tx"
+    ],
+    "hazards": [
+     "severe_convective",
+     "extreme_heat",
+     "flood",
+     "winter",
+     "hurricane"
+    ],
+    "metric": "explain_hub_score",
+    "period": null
+   },
+   "facts": [
+    {
+     "fact_id": "dallas_tx.overall.score",
+     "label": "dallas_tx overall exposure index (0-100)",
+     "value": 58.65548420837109,
+     "display": "58.7",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "dallas_tx",
+     "topic": "overall",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "rank.overall.all.dallas_tx",
+     "label": "dallas_tx overall rank",
+     "value": 2,
+     "display": "#2",
+     "unit": null,
+     "kind": "rank",
+     "hub_id": "dallas_tx",
+     "topic": "overall",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "rank.overall.all.count",
+     "label": "number of hubs in the overall ranking",
+     "value": 11,
+     "display": "11",
+     "unit": null,
+     "kind": "count",
+     "hub_id": null,
+     "topic": null,
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "dallas_tx.severe_convective.score",
+     "label": "dallas_tx severe_convective exposure score (0-100)",
+     "value": 94.56551579792043,
+     "display": "94.6",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "dallas_tx",
+     "topic": "severe_convective",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "dallas_tx.severe_convective.contribution_to_overall",
+     "label": "dallas_tx severe_convective points of the overall index",
+     "value": 18.913103159584086,
+     "display": "18.9",
+     "unit": "points",
+     "kind": "statistic",
+     "hub_id": "dallas_tx",
+     "topic": "severe_convective",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "dallas_tx.extreme_heat.score",
+     "label": "dallas_tx extreme_heat exposure score (0-100)",
+     "value": 81.67710340398202,
+     "display": "81.7",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "dallas_tx",
+     "topic": "extreme_heat",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "dallas_tx.extreme_heat.contribution_to_overall",
+     "label": "dallas_tx extreme_heat points of the overall index",
+     "value": 16.335420680796403,
+     "display": "16.3",
+     "unit": "points",
+     "kind": "statistic",
+     "hub_id": "dallas_tx",
+     "topic": "extreme_heat",
+     "period": null,
+     "source_ids": [],
+     "status": "ok",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "dallas_tx.flood.score",
+     "label": "dallas_tx flood exposure score (0-100)",
+     "value": 49.44736005089058,
+     "display": "49.4",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "dallas_tx",
+     "topic": "flood",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "dallas_tx.winter.score",
+     "label": "dallas_tx winter exposure score (0-100)",
+     "value": 40.62317809158908,
+     "display": "40.6",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "dallas_tx",
+     "topic": "winter",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "explain_hub_score"
+    },
+    {
+     "fact_id": "dallas_tx.hurricane.score",
+     "label": "dallas_tx hurricane exposure score (0-100)",
+     "value": 26.96426369747335,
+     "display": "27.0",
+     "unit": "index 0\u2013100",
+     "kind": "score",
+     "hub_id": "dallas_tx",
+     "topic": "hurricane",
+     "period": null,
+     "source_ids": [
+      "noaa_ghcn_daily",
+      "fema_nri"
+     ],
+     "status": "complete",
+     "tool": "explain_hub_score"
+    }
+   ],
+   "analysis": {
+    "rankings": [],
+    "comparisons": [],
+    "weather_stats": [],
+    "explanations": [
+     {
+      "hub_id": "dallas_tx",
+      "overall_score": 58.65548420837109,
+      "overall_band": "Moderate",
+      "overall_status": "complete",
+      "rank_among_catalog": 2,
+      "catalog_size_ranked": 11,
+      "primary_driver": "severe_convective",
+      "hazards_by_contribution": [
+       {
+        "hazard": "severe_convective",
+        "label": "Severe convective storms",
+        "score": 94.56551579792043,
+        "band": "High",
+        "status": "complete",
+        "available_weight_fraction": 1.0,
+        "weight_in_overall": 0.2,
+        "contribution_to_overall": 18.913103159584086,
+        "indicators": [
+         {
+          "indicator_id": "nri_tornado",
+          "hazard": "severe_convective",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI tornado annualized frequency",
+          "raw_value": 0.9277701037042669,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 97.33327397558112,
+          "weight": 0.334,
+          "effective_weight": 0.334,
+          "contribution": 32.5093135078441,
+          "normalization": "hybrid: 0.5\u00b7national percentile (96.3) + 0.5\u00b7absolute log frequency (98.4; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.severe_convective.nri_tornado.raw",
+           "dallas_tx.severe_convective.nri_tornado.score"
+          ],
+          "coverage": null
+         },
+         {
+          "indicator_id": "nri_hail",
+          "hazard": "severe_convective",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI hail annualized frequency",
+          "raw_value": 8.92241579145822,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 98.43352417302799,
+          "weight": 0.333,
+          "effective_weight": 0.333,
+          "contribution": 32.77836354961832,
+          "normalization": "hybrid: 0.5\u00b7national percentile (96.9) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.severe_convective.nri_hail.raw",
+           "dallas_tx.severe_convective.nri_hail.score"
+          ],
+          "coverage": null
+         },
+         {
+          "indicator_id": "nri_strong_wind",
+          "hazard": "severe_convective",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI strong wind annualized frequency",
+          "raw_value": 4.360826818991375,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 87.92143765903307,
+          "weight": 0.333,
+          "effective_weight": 0.333,
+          "contribution": 29.277838740458016,
+          "normalization": "hybrid: 0.5\u00b7national percentile (75.8) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.severe_convective.nri_strong_wind.raw",
+           "dallas_tx.severe_convective.nri_strong_wind.score"
+          ],
+          "coverage": null
+         }
+        ],
+        "notes": []
+       },
+       {
+        "hazard": "extreme_heat",
+        "label": "Extreme heat",
+        "score": 81.67710340398202,
+        "band": "High",
+        "status": "complete",
+        "available_weight_fraction": 1.0,
+        "weight_in_overall": 0.2,
+        "contribution_to_overall": 16.335420680796403,
+        "indicators": [
+         {
+          "indicator_id": "extreme_heat_days",
+          "hazard": "extreme_heat",
+          "kind": "climate_anchor",
+          "label": "days with maximum temperature \u2265 35 \u00b0C (95 \u00b0F)",
+          "raw_value": 65.0,
+          "raw_unit": "days/yr",
+          "raw_status": "ok",
+          "score": 65.0,
+          "weight": 0.5,
+          "effective_weight": 0.5,
+          "contribution": 32.5,
+          "normalization": "fixed anchors: 0 -> 0, 100 -> 100 (linear, clipped)",
+          "period": "2016\u20132025 climatology",
+          "source_ids": [
+           "noaa_ghcn_daily"
+          ],
+          "fact_ids": [
+           "dallas_tx.extreme_heat.extreme_heat_days.raw",
+           "dallas_tx.extreme_heat.extreme_heat_days.score"
+          ],
+          "coverage": {
+           "expected_days": 3653,
+           "valid_days": 3653,
+           "missing_days": 0,
+           "excluded_days": 0,
+           "excluded_reasons": {},
+           "coverage": 1.0,
+           "min_coverage": 0.9,
+           "status": "ok"
+          }
+         },
+         {
+          "indicator_id": "nri_heat_wave",
+          "hazard": "extreme_heat",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI heat wave annualized frequency",
+          "raw_value": 19.10526315789487,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 98.35420680796403,
+          "weight": 0.5,
+          "effective_weight": 0.5,
+          "contribution": 49.17710340398202,
+          "normalization": "hybrid: 0.5\u00b7national percentile (96.7) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.extreme_heat.nri_heat_wave.raw",
+           "dallas_tx.extreme_heat.nri_heat_wave.score"
+          ],
+          "coverage": null
+         }
+        ],
+        "notes": []
+       },
+       {
+        "hazard": "flood",
+        "label": "Flooding (coastal + inland)",
+        "score": 49.44736005089058,
+        "band": "Moderate",
+        "status": "complete",
+        "available_weight_fraction": 1.0,
+        "weight_in_overall": 0.2,
+        "contribution_to_overall": 9.889472010178118,
+        "indicators": [
+         {
+          "indicator_id": "nri_coastal_flooding",
+          "hazard": "flood",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI coastal flooding annualized frequency",
+          "raw_value": null,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "not_applicable",
+          "score": 0.0,
+          "weight": 0.5,
+          "effective_weight": 0.5,
+          "contribution": 0.0,
+          "normalization": "not_applicable: no-exposure tier -> 0",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.flood.nri_coastal_flooding.raw",
+           "dallas_tx.flood.nri_coastal_flooding.score"
+          ],
+          "coverage": null
+         },
+         {
+          "indicator_id": "nri_inland_flooding",
+          "hazard": "flood",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI inland flooding annualized frequency",
+          "raw_value": 4.607142857142857,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 98.89472010178116,
+          "weight": 0.5,
+          "effective_weight": 0.5,
+          "contribution": 49.44736005089058,
+          "normalization": "hybrid: 0.5\u00b7national percentile (97.8) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.flood.nri_inland_flooding.raw",
+           "dallas_tx.flood.nri_inland_flooding.score"
+          ],
+          "coverage": null
+         }
+        ],
+        "notes": [
+         "nri_coastal_flooding: FEMA 'Not Applicable' (not considered at risk) -> scored 0 and kept in the denominator"
+        ]
+       },
+       {
+        "hazard": "winter",
+        "label": "Winter weather",
+        "score": 40.62317809158908,
+        "band": "Moderate",
+        "status": "complete",
+        "available_weight_fraction": 1.0,
+        "weight_in_overall": 0.2,
+        "contribution_to_overall": 8.124635618317816,
+        "indicators": [
+         {
+          "indicator_id": "snow_days_measurable",
+          "hazard": "winter",
+          "kind": "climate_anchor",
+          "label": "days with measurable new snowfall (reported > 0; trace excluded)",
+          "raw_value": 1.1,
+          "raw_unit": "days/yr",
+          "raw_status": "ok",
+          "score": 1.8333333333333333,
+          "weight": 0.2,
+          "effective_weight": 0.2,
+          "contribution": 0.3666666666666667,
+          "normalization": "fixed anchors: 0 -> 0, 60 -> 100 (linear, clipped)",
+          "period": "2016\u20132025 climatology",
+          "source_ids": [
+           "noaa_ghcn_daily"
+          ],
+          "fact_ids": [
+           "dallas_tx.winter.snow_days_measurable.raw",
+           "dallas_tx.winter.snow_days_measurable.score"
+          ],
+          "coverage": {
+           "expected_days": 3653,
+           "valid_days": 3653,
+           "missing_days": 0,
+           "excluded_days": 0,
+           "excluded_reasons": {},
+           "coverage": 1.0,
+           "min_coverage": 0.9,
+           "status": "ok"
+          }
+         },
+         {
+          "indicator_id": "heavy_snow_days",
+          "hazard": "winter",
+          "kind": "climate_anchor",
+          "label": "days with new snowfall \u2265 101.6 mm (4.0 in)",
+          "raw_value": 0.09999999999999999,
+          "raw_unit": "days/yr",
+          "raw_status": "ok",
+          "score": 1.6666666666666667,
+          "weight": 0.1,
+          "effective_weight": 0.1,
+          "contribution": 0.16666666666666669,
+          "normalization": "fixed anchors: 0 -> 0, 6 -> 100 (linear, clipped)",
+          "period": "2016\u20132025 climatology",
+          "source_ids": [
+           "noaa_ghcn_daily"
+          ],
+          "fact_ids": [
+           "dallas_tx.winter.heavy_snow_days.raw",
+           "dallas_tx.winter.heavy_snow_days.score"
+          ],
+          "coverage": {
+           "expected_days": 3653,
+           "valid_days": 3653,
+           "missing_days": 0,
+           "excluded_days": 0,
+           "excluded_reasons": {},
+           "coverage": 1.0,
+           "min_coverage": 0.9,
+           "status": "ok"
+          }
+         },
+         {
+          "indicator_id": "freezing_days",
+          "hazard": "winter",
+          "kind": "climate_anchor",
+          "label": "days with minimum temperature \u2264 0 \u00b0C",
+          "raw_value": 23.2,
+          "raw_unit": "days/yr",
+          "raw_status": "ok",
+          "score": 12.88888888888889,
+          "weight": 0.2,
+          "effective_weight": 0.2,
+          "contribution": 2.577777777777778,
+          "normalization": "fixed anchors: 0 -> 0, 180 -> 100 (linear, clipped)",
+          "period": "2016\u20132025 climatology",
+          "source_ids": [
+           "noaa_ghcn_daily"
+          ],
+          "fact_ids": [
+           "dallas_tx.winter.freezing_days.raw",
+           "dallas_tx.winter.freezing_days.score"
+          ],
+          "coverage": {
+           "expected_days": 3653,
+           "valid_days": 3653,
+           "missing_days": 0,
+           "excluded_days": 0,
+           "excluded_reasons": {},
+           "coverage": 1.0,
+           "min_coverage": 0.9,
+           "status": "ok"
+          }
+         },
+         {
+          "indicator_id": "nri_winter_weather",
+          "hazard": "winter",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI winter weather annualized frequency",
+          "raw_value": 4.052631578947395,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 60.75858778625954,
+          "weight": 0.2,
+          "effective_weight": 0.2,
+          "contribution": 12.151717557251908,
+          "normalization": "hybrid: 0.5\u00b7national percentile (21.5) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.winter.nri_winter_weather.raw",
+           "dallas_tx.winter.nri_winter_weather.score"
+          ],
+          "coverage": null
+         },
+         {
+          "indicator_id": "nri_ice_storm",
+          "hazard": "winter",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI ice storm annualized frequency",
+          "raw_value": 1.2260731300071142,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 94.07601781170484,
+          "weight": 0.2,
+          "effective_weight": 0.2,
+          "contribution": 18.81520356234097,
+          "normalization": "hybrid: 0.5\u00b7national percentile (88.2) + 0.5\u00b7absolute log frequency (100.0; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.winter.nri_ice_storm.raw",
+           "dallas_tx.winter.nri_ice_storm.score"
+          ],
+          "coverage": null
+         },
+         {
+          "indicator_id": "nri_cold_wave",
+          "hazard": "winter",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI cold wave annualized frequency",
+          "raw_value": 0.9473684210526295,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 65.45145860885097,
+          "weight": 0.1,
+          "effective_weight": 0.1,
+          "contribution": 6.545145860885097,
+          "normalization": "hybrid: 0.5\u00b7national percentile (32.1) + 0.5\u00b7absolute log frequency (98.8; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.winter.nri_cold_wave.raw",
+           "dallas_tx.winter.nri_cold_wave.score"
+          ],
+          "coverage": null
+         }
+        ],
+        "notes": []
+       },
+       {
+        "hazard": "hurricane",
+        "label": "Hurricane",
+        "score": 26.96426369747335,
+        "band": "Low",
+        "status": "complete",
+        "available_weight_fraction": 1.0,
+        "weight_in_overall": 0.2,
+        "contribution_to_overall": 5.39285273949467,
+        "indicators": [
+         {
+          "indicator_id": "nri_hurricane",
+          "hazard": "hurricane",
+          "kind": "nri_percentile",
+          "label": "FEMA NRI hurricane annualized frequency",
+          "raw_value": 0.011526913696094829,
+          "raw_unit": "events or event-days per year (NRI AFREQ)",
+          "raw_status": "observed",
+          "score": 26.96426369747335,
+          "weight": 1.0,
+          "effective_weight": 1.0,
+          "contribution": 26.96426369747335,
+          "normalization": "hybrid: 0.5\u00b7national percentile (50.8) + 0.5\u00b7absolute log frequency (3.1; 0.01/yr -> 0, 1/yr -> 100)",
+          "period": "NRI December 2025, hazard-specific period of record",
+          "source_ids": [
+           "fema_nri"
+          ],
+          "fact_ids": [
+           "dallas_tx.hurricane.nri_hurricane.raw",
+           "dallas_tx.hurricane.nri_hurricane.score"
+          ],
+          "coverage": null
+         }
+        ],
+        "notes": []
+       }
+      ],
+      "top_indicators": [
+       {
+        "hazard": "flood",
+        "indicator_id": "nri_inland_flooding",
+        "label": "FEMA NRI inland flooding annualized frequency",
+        "raw_value": 4.607142857142857,
+        "raw_unit": "events or event-days per year (NRI AFREQ)",
+        "score": 98.89472010178116,
+        "effective_weight_in_hazard": 0.5,
+        "contribution_to_hazard": 49.44736005089058,
+        "contribution_to_overall": 9.889472010178118
+       },
+       {
+        "hazard": "extreme_heat",
+        "indicator_id": "nri_heat_wave",
+        "label": "FEMA NRI heat wave annualized frequency",
+        "raw_value": 19.10526315789487,
+        "raw_unit": "events or event-days per year (NRI AFREQ)",
+        "score": 98.35420680796403,
+        "effective_weight_in_hazard": 0.5,
+        "contribution_to_hazard": 49.17710340398202,
+        "contribution_to_overall": 9.835420680796403
+       },
+       {
+        "hazard": "severe_convective",
+        "indicator_id": "nri_hail",
+        "label": "FEMA NRI hail annualized frequency",
+        "raw_value": 8.92241579145822,
+        "raw_unit": "events or event-days per year (NRI AFREQ)",
+        "score": 98.43352417302799,
+        "effective_weight_in_hazard": 0.333,
+        "contribution_to_hazard": 32.77836354961832,
+        "contribution_to_overall": 6.555672709923664
+       },
+       {
+        "hazard": "severe_convective",
+        "indicator_id": "nri_tornado",
+        "label": "FEMA NRI tornado annualized frequency",
+        "raw_value": 0.9277701037042669,
+        "raw_unit": "events or event-days per year (NRI AFREQ)",
+        "score": 97.33327397558112,
+        "effective_weight_in_hazard": 0.334,
+        "contribution_to_hazard": 32.5093135078441,
+        "contribution_to_overall": 6.50186270156882
+       },
+       {
+        "hazard": "extreme_heat",
+        "indicator_id": "extreme_heat_days",
+        "label": "days with maximum temperature \u2265 35 \u00b0C (95 \u00b0F)",
+        "raw_value": 65.0,
+        "raw_unit": "days/yr",
+        "score": 65.0,
+        "effective_weight_in_hazard": 0.5,
+        "contribution_to_hazard": 32.5,
+        "contribution_to_overall": 6.5
+       }
+      ],
+      "indicator_contribution_note": "Hazard-level contributions (W_h\u00b7H_h) are the primary explanation and sum to the overall index. Indicator-level contributions (W_h\u00b7w_i\u00b7s_i) also sum to it, but a hazard with a single indicator (hurricane) concentrates its whole weight in one indicator, so indicator rankings must not be read as hazard rankings.",
+      "not_applicable": [
+       "flood.nri_coastal_flooding"
+      ],
+      "unavailable": [],
+      "premise_check": {
+       "claim": "overall exposure is High",
+       "supported": false,
+       "reasoning": "overall index 58.7 is in band 'Moderate' (bands: Low \u2265 0, Moderate \u2265 40, High \u2265 70); rank 2 of 11 ranked catalog hubs."
+      },
+      "methodology_version": "1.1.0",
+      "assumptions": [
+       "Hazard frequencies use Dallas County (FIPS 48113); climate statistics use NOAA station USW00003927 (DAL-FTW WSCMO AP).",
+       "Equal hazard weights are a transparent default, not validated operational priorities.",
+       "Climate observations come from the DFW airport station (station coordinates in Dallas County, ~23 km west-northwest of downtown Dallas)."
+      ],
+      "limitations": [
+       "Weather Hazard Exposure Index: a heuristic 0\u2013100 measure of weather-hazard exposure at the hub's county/station. It is not a probability of disruption, not a loss prediction, and has not been validated against operational outcomes.",
+       "Hubs are illustrative examples, not actual company facilities.",
+       "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific.",
+       "FEMA NRI annualized frequencies summarize each hazard's own multi-decade period of record (differs by hazard); they are NOT specific to any user-selected calendar year."
+      ]
+     }
+    ],
+    "profiles": [],
+    "hubs": []
+   },
+   "sources": [
+    {
+     "source_id": "fema_nri",
+     "dataset": "FEMA National Risk Index \u2014 Counties (ArcGIS FeatureServer)",
+     "version": "December 2025",
+     "location_id": "48113",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:47:09.249067+00:00",
+     "attribution": "FEMA National Risk Index (county level)"
+    },
+    {
+     "source_id": "noaa_ghcn_daily",
+     "dataset": "GHCN-Daily (NCEI Access Data Service daily-summaries)",
+     "version": null,
+     "location_id": "USW00003927",
+     "freshness": "snapshot",
+     "retrieved_at": "2026-11-25T10:42:26.735833+00:00",
+     "attribution": "NOAA National Centers for Environmental Information, GHCN-Daily"
+    }
+   ],
+   "data_freshness": {
+    "fema_nri": [
+     "snapshot"
+    ],
+    "noaa_ghcn_daily": [
+     "snapshot"
+    ]
+   },
+   "methodology_version": "1.1.0",
+   "assumptions": [
+    "Hazard frequencies use Dallas County (FIPS 48113); climate statistics use NOAA station USW00003927 (DAL-FTW WSCMO AP).",
+    "Equal hazard weights are a transparent default, not validated operational priorities.",
+    "Climate observations come from the DFW airport station (station coordinates in Dallas County, ~23 km west-northwest of downtown Dallas)."
+   ],
+   "limitations": [
+    "Weather Hazard Exposure Index: a heuristic 0\u2013100 measure of weather-hazard exposure at the hub's county/station. It is not a probability of disruption, not a loss prediction, and has not been validated against operational outcomes.",
+    "Hubs are illustrative examples, not actual company facilities.",
+    "Exposure at the county (FEMA) or airport-station (NOAA) level is not site-specific.",
+    "FEMA NRI annualized frequencies summarize each hazard's own multi-decade period of record (differs by hazard); they are NOT specific to any user-selected calendar year."
+   ],
+   "follow_up_suggestions": [
+    "What are the top indicators driving the severe convective hazard for the Dallas Hub?",
+    "How does the Dallas Hub compare to the highest-exposed hub?",
+    "What indicators contribute to the extreme heat hazard for the Dallas Hub?"
+   ],
+   "validation": {
+    "valid": true,
+    "attempts": 2,
+    "issues": [],
+    "retry_reasons": [
+     "unsupported numeric claim '58.7' (numbers must use fact placeholders)"
+    ],
+    "fallback_used": false
+   },
+   "agent": {
+    "provider": "gemini",
+    "model": "gemini-3.5-flash-lite",
+    "model_version": "gemini-3.5-flash-lite",
+    "iterations": 2,
+    "tool_calls": [
+     {
+      "name": "explain_hub_score",
+      "args": {
+       "claimed_band": "High",
+       "hub": "dallas_tx"
+      },
+      "ok": true,
+      "error": null,
+      "error_type": null,
+      "latency_ms": 356.9
+     }
+    ],
+    "input_tokens": 9942,
+    "output_tokens": 1694,
+    "thinking_tokens": 0,
+    "latency_ms": 18368.7
+   },
+   "_http_status": 200,
+   "_rate_limited_retry": false
+  },
+  "checks": [
+   "PASS schema+grounding valid (or labeled fallback)",
+   "PASS called explain_hub_score",
+   "PASS premise_correction present",
+   "PASS states band Moderate",
+   "PASS states its rank",
+   "PASS names primary driver severe_convective"
+  ]
+ }
+]

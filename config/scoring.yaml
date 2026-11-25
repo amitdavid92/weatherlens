@@ -30,8 +30,9 @@ bands:                               # heuristic labels on the 0–100 scale
 
 nri_normalization:
   # FEMA AFREQ -> 0–100: blend of relative (national mid-rank percentile) and absolute frequency.
-  # Absolute part: log10 scale between a 1-in-100-year return period (0.01/yr, the US
-  # 1%-annual-chance planning standard) -> 0 and an annual occurrence (1/yr) -> 100.
+  # Absolute part: log10 scale between 0.01/yr -> 0 and 1/yr -> 100. These anchors are a
+  # HEURISTIC MODELING ASSUMPTION (loosely inspired by the common "1%-annual-chance" planning
+  # convention and by annual occurrence), not a universal scientific standard.
   # One rule for every hazard (not tuned per hazard or per hub); saturates at 100 for hazards
   # occurring at least yearly, where the relative half then carries the comparison.
   method: hybrid

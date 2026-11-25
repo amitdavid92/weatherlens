@@ -84,7 +84,7 @@ s     = 0.5 · s_rel + 0.5 · s_abs                              # no-exposure t
 **Why:**
 - A percentile alone says *how a county compares nationally*. It ranks a ~1-in-87-year hurricane frequency above the 873 no-exposure counties, which gives it a mid-range score.
 - The absolute component says *how often, in absolute terms*.
-  - The anchors use one rule for every hazard. 0.01/yr is the US **1%-annual-chance** planning standard (the "100-year" event); 1/yr is an annual occurrence.
+  - The anchors use one rule for every hazard: 0.01/yr → 0 and 1/yr → 100. They are a **heuristic modeling assumption**, loosely inspired by the common "1%-annual-chance" planning convention and by annual occurrence. They are **not a universal scientific standard**, and other defensible anchors would shift magnitudes (not within-hazard rankings).
   - The scale is logarithmic because hazard frequencies span orders of magnitude.
 - The two halves are weighted equally, as a transparent default.
 
