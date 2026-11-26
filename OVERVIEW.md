@@ -1,49 +1,36 @@
 # WeatherLens: Project Overview
 
-**What it is.** WeatherLens is an AI assistant that helps a logistics company's analysts decide which US distribution hubs are most exposed to severe weather. The company uses that to choose where to invest in resilience upgrades. An analyst can ask questions in plain English:
-- "Which Midwest hubs are most exposed to winter disruption?"
-- "Compare Miami and Houston for hurricane and flood exposure"
-- "What percentage of days in Denver last year had snowfall?"
+**Objective.** A logistics company invests each year in weather-resilience upgrades at a few of its US distribution hubs. WeatherLens helps analysts decide which hubs are most exposed to severe weather. They can ask questions in plain English, such as "Which Midwest hubs are most exposed to winter disruption?", and get a ranking or comparison, an explanation and the sources.
 
-Each answer comes with a ranking or comparison, an explanation, and the sources behind it.
+**Solution.** A web dashboard (US map, rankings, hub profiles), an AI chat analyst that handles follow-up questions, and a methodology page, all served by one API.
 
-**How it works.**
-- **Data:** public government sources, namely NOAA daily weather station records and FEMA's National Risk Index of county hazard frequencies.
-- **Scoring:** a deterministic engine turns that data into a 0–100 *Weather Hazard Exposure Index* for five hazards: winter, hurricane, flood, severe storms and extreme heat.
-- **The AI model (Google Gemini):**
-  - reads the question;
-  - calls the engine's analysis tools;
-  - writes the explanation.
+**Technical approach.**
+- Public NOAA weather-station records and FEMA National Risk Index data feed a **deterministic scoring engine**. It computes a 0–100 Weather Hazard Exposure Index across five hazards and every authoritative figure.
+- **Gemini** chooses which engine tools to call and writes the explanation. It cites results by reference, and the server fills in the values.
+- A **heuristic grounding validator** flags unsupported numbers and claims. If an answer still fails after one retry, the user sees a labeled summary taken directly from the engine.
 
-  It never produces numbers itself. It refers to verified facts, which the system fills in, and a validator rejects any answer with invented or misattributed figures.
-- **When the AI answer fails validation,** the user sees a clearly labeled summary taken directly from the engine instead.
+**Measured results.** In the final full run of the 22-case evaluation against the real model:
+- 22/22 cases passed, with 95/95 checks and no critical failures;
+- in 19 of the 21 AI cases, the AI-written answer passed validation; the other two used the verified fallback;
+- the median response time was about 5 seconds.
 
-**What was delivered.**
-- A web application with a dashboard (US map, rankings, hub profiles), an AI chat analyst with follow-up questions, and a methodology page.
-- An API, a documented scoring method and a design document.
-- 350+ automated backend tests and a frontend test suite.
-- A 22-case evaluation suite that runs against the real AI model.
+That run preceded two later changes: the Phase 6 grounding fix and the Phase 7 deployment protections. Both were verified with targeted live questions and automated tests, not a repeat of the full evaluation.
 
-**Results.**
-- In the final evaluation run, all 22 cases passed, with 95 of 95 checks and no critical errors.
-- In 19 of the 21 cases that use the AI, the AI-written answer passed validation. In the other two, the system correctly fell back to its verified summary.
-- Typical response time is about 5 seconds.
-
-**Judgment calls made explicit.**
-- **Exposure, not disruption.** The index measures how often hazards occur around a hub, not the probability of an outage or a financial loss. That would need operational data the assignment doesn't provide, and the assistant says so.
-- **Illustrative hubs.** The 12 hubs are examples, since no real hub list was given.
-- **Missing data stays missing.** It is never filled in. For example, Miami's snowfall records are too sparse to use, so Miami is shown but not ranked overall.
-- **Premises get checked.** When a question assumes something the data doesn't support ("Why is Dallas's risk high?"), the assistant corrects it: Dallas is *Moderate*, ranked second, driven by severe storms.
-
-**How it was built.** The work was done in eight reviewed phases (0–7) with an AI coding agent (Claude Code). Each phase was planned, implemented, tested and approved before the next began. The phase reports are in `docs/`; the full redacted AI session record is delivered privately with the submission (index: `docs/ai-session/`).
+**Assumptions.**
+- The index measures **exposure** (how often hazards occur near a hub), **not** the probability of disruption or loss. That would need operational data the brief doesn't provide.
+- The 12 hubs are illustrative.
+- Missing data is never filled in; Miami, for example, is shown but not ranked overall.
+- False premises are corrected: Dallas is *Moderate*, not high.
 
 **Limitations.**
-- It is a demo, not a multi-user production system. It is deployment-ready as one Docker service, with an optional shared demo password and usage limits. Whether it is deployed, and at which URL, is stated in the submission email.
-- The final evaluation ran before the deployment-protection changes; those changes were verified with offline tests and a few live Gemini questions, not a repeat of the full evaluation.
-- The AI chat depends on Gemini's availability.
-- The scoring weights are documented judgment calls that haven't been validated against real outage history. That is the main next step if this became a real tool.
+- The weights are documented judgment calls, not validated against real outages.
+- The chat depends on Gemini.
+- It is a single-instance demo. It is deployment-ready with a demo password and usage limits; deployment status is given in the submission.
 
-**Links:**
-- [README](README.md): run instructions and results
-- [Architecture](docs/ARCHITECTURE.md)
-- [Scoring methodology](docs/SCORING_METHODOLOGY.md)
+**How it was built.** In eight reviewed phases:
+- **Claude Code** did the research, implementation and testing.
+- **ChatGPT** helped plan the phase briefs and independently reviewed the results.
+
+The full redacted AI record is delivered privately (index: `docs/ai-session/`).
+
+[README](README.md) · [Architecture](docs/ARCHITECTURE.md) · [Scoring methodology](docs/SCORING_METHODOLOGY.md)

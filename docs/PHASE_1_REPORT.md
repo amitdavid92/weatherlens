@@ -182,7 +182,7 @@ These figures are retrieved, not hardcoded; tests assert behaviors and states, n
 7. **NRI `*_EVNTS` can be fractional** (e.g. Dallas hail 338.9) because NRI apportions events spatially. Values are stored raw and must not be presented as whole-event counts.
 8. **The snapshot covers 2016–2025.** Other periods need live access or the cache.
 9. **The `validate-data` and `build-snapshot` CLI paths** are verified by real runs, not unit tests.
-10. **AI session export is pending.** You need to run `/export` (only the user can) and save it under `docs/ai-session/`. The raw JSONL stays outside the repo until it has been reviewed. Some docs mention a local path containing the macOS username `amitdavid`; this is low-sensitivity and flagged for your review.
+10. **AI session export is pending.** *(Superseded: the final privacy decision, D-046, is that full transcripts are delivered privately and never committed. See `docs/ai-session/README.md`.)* You need to run `/export` (only the user can) and save it under `docs/ai-session/`. The raw JSONL stays outside the repo until it has been reviewed. Some docs mention a local path containing the macOS username `amitdavid`; this is low-sensitivity and flagged for your review.
 
 ## 10. Git commits (branch `phase-1-data-layer`, based on `main`)
 | Hash | Message |

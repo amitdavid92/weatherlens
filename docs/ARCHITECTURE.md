@@ -1,8 +1,9 @@
 # Architecture
 
-The **Weather Risk Intelligence Agent** answers analysts' questions about weather-hazard exposure of 12 illustrative US distribution hubs. Core principle: **the LLM never produces numbers.**
+The **Weather Risk Intelligence Agent** answers analysts' questions about weather-hazard exposure of 12 illustrative US distribution hubs. Core principle: **authoritative numbers come from deterministic code, not from the LLM.**
 - A deterministic engine computes every statistic, score and ranking from public data.
-- The LLM picks tools and writes narrative that references verified facts by id.
+- The LLM picks tools and writes narrative that references the engine's facts by id.
+- The server renders those values and runs a heuristic grounding validator. Its known limits are in §5.2.
 
 ## 1. Components and how they talk
 ```
@@ -76,11 +77,11 @@ It also carries `agent.llm_calls`: every HTTP attempt, with model, latency, toke
      - every fact exists;
      - cited hub = the fact's hub;
      - no fact sits in a sentence about a different hub;
-     - no numbers outside placeholders;
+     - no numbers outside placeholders, apart from the allowed contextual literals listed in §5.2;
      - superlatives match the rank-1 hub or the comparison leader *for that hazard*;
      - unsupported premises are corrected.
    - On failure: one retry with targeted feedback.
-   - If it still fails: a **clearly labeled deterministic summary** built from the tool results, or an error if there are none. Never a fabricated answer.
+   - If it still fails: a **clearly labeled deterministic summary** built from the tool results, or an error if there are none.
 5. **Rendering.** `{{fact:id}}` placeholders are replaced with deterministic displays, with band-safe score rounding. The response carries the narrative *separately* from the authoritative payloads: rankings, comparisons, statistics, explanations, facts, sources, freshness, methodology version, assumptions, limitations and validation report.
 
 ### Agent tools
@@ -122,13 +123,13 @@ docs/          plan, decisions, methodology, phase reports, screenshots, AI sess
 
 There is no ORM, vector database or external database server, because the data volume is tiny and the access patterns are key lookups.
 
-## 4. Security notes (local prototype)
+## 4. Security notes (single-instance demo deployment)
 - **Secrets:** the Gemini key stays on the server, in `.env` (gitignored), and is never logged.
 - **Input limits:** chat input is limited to 2,000 characters; session ids are validated. Tool arguments are strict Pydantic models (`extra=forbid`, enums, length limits), and tool payloads are capped at 24 KB.
 - **Narrow tool surface:** the LLM has no code execution, HTTP or database access, only six read-only tools.
 - **Prompt injection:**
   - user text is wrapped as untrusted, and the rules are restated;
-  - the grounding validator rejects numbers that don't come from facts, whatever the model was told.
+  - the grounding validator rejects most numbers that don't come from facts, whatever the model was told (see the limits in §5.2).
 - **CORS:** restricted to the local Vite origins. Only GET/POST and `Content-Type` are allowed.
 - **Not production-ready:**
   - access control is an optional shared demo password, and rate limits live in process memory (Phase 7);
@@ -192,7 +193,23 @@ validate:  1 every fact id exists; cited hub = the fact's hub
                      │
 render:    placeholders → server-formatted displays (band-safe rounding, units)
 ```
-Regex checks are a second line of defence. The primary control is that the model never receives raw numbers it could copy: tool payloads carry fact references.
+**What this does and does not guarantee.**
+- **Primary control:** rendering, not regexes. Every figure the user sees in an accepted answer comes from the fact registry. The model is told to cite facts by id; the validator is the second line of defence.
+- **The model does see the values.** Tool payloads give each number *next to* its fact id, so the model can understand the results. It can therefore copy a value literally; the validator catches that, which is exactly what produced the A4/F1 fallbacks.
+
+**The validator is heuristic. Known limits:**
+- **Contextual numeric literals are allowed:**
+  - integers 0–12 without a `%` (small counts, list positions);
+  - numbers that appear in the user's message or in the descriptive text of tool results;
+  - years that appear in fact periods or labels.
+
+  A wrong small count, such as "3 hubs" where there are 4, would not be flagged.
+- **Number detection is pattern-based.** Numbers spelled out in words ("seven") are not detected.
+- **Attribution is checked per sentence, and only for sentences that name a hub.** It confirms that a fact belongs to a hub mentioned in the same sentence. It does not verify the meaning of the sentence: comparisons such as "higher than" or "driven by", or causal wording, can still be wrong while passing.
+- **Superlative checking uses a fixed phrase list** ("highest", "most exposed", "leads", "ranked first", …) with simple negation handling. Other phrasings are not checked.
+- **Premise correction is enforced only when a tool reports a premise check.** That happens when `explain_hub_score` receives the user's claimed band; unsupported premises of other kinds rely on the prompt.
+
+In short: an accepted answer's figures are engine figures, but its prose is only spot-checked. The evaluation suite measures how well this works in practice; it does not prove it.
 
 ### 5.3 Data ingestion, cache and snapshot
 ```

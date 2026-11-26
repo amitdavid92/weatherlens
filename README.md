@@ -2,9 +2,14 @@
 
 ![WeatherLens overview: US hub map, exposure rankings and AI Analyst](docs/screenshots/desktop-1440-overview.png)
 
-WeatherLens is an AI agent for logistics analysts. It answers questions about which US distribution hubs are most exposed to severe weather, as an input to choosing hubs for resilience investment. It uses public weather and hazard data. A deterministic engine computes every number, score and ranking. The LLM (Gemini) chooses which analysis tools to call and writes an explanation around verified facts. It never writes the numbers itself.
+An AI assistant that helps logistics analysts see which US distribution hubs are most exposed to severe weather, as input to resilience-investment decisions.
+- **Data and scoring:** public NOAA and FEMA data feed a deterministic engine, which computes every authoritative score, ranking and statistic.
+- **Gemini's role:** it picks the analysis tools and writes the explanation, citing the engine's results by reference.
+- **Safety net:** a heuristic grounding validator flags unsupported numbers and claims. A rejected answer is replaced by a labeled summary taken directly from the engine.
 
-> Built for the Moveo take-home in one day. It is a demo, not a production system: deployment-ready, with deployment status given in the submission. One-page summary: [OVERVIEW.md](OVERVIEW.md). Design: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+**Quick links:** [Overview (1 page)](OVERVIEW.md) · [Quick start](#quick-start) · [Architecture](docs/ARCHITECTURE.md) · [Scoring methodology](docs/SCORING_METHODOLOGY.md) · [Evaluation results](#actual-results)
+
+> Built for the Moveo take-home in one day. It is a demo, not a production system: it is deployment-ready, and its deployment status is given in the submission.
 
 ## The business problem, and what it answers
 Severe weather closes hubs, delays shipments and costs money. Each year the company picks a handful of hubs to invest in. WeatherLens answers the assignment's questions and follow-ups about them:
@@ -29,9 +34,13 @@ Severe weather closes hubs, delays shipments and costs money. Each year the comp
   - Every answer comes with evidence tables taken from the engine's structured output, plus sources, data freshness and a validation badge.
 - **Methodology view:** every weight, anchor, threshold, dataset version and freshness, served by the API.
 - **Grounded answers.**
-  - The LLM cites facts by id (`{{fact:…}}`) and the server renders the values.
-  - A validator rejects invented numbers, facts attributed to the wrong hub, unsupported "highest/most exposed" claims and uncorrected false premises.
-  - On failure there is one corrective retry, then a clearly labeled deterministic summary. A fabricated answer is never shown.
+  - The LLM cites engine results by fact id (`{{fact:…}}`), and the server renders the values, so displayed figures come from the engine.
+  - A heuristic validator flags the failure modes seen in testing:
+    - numbers written outside fact references;
+    - facts placed in a sentence about a different hub;
+    - "highest/most exposed" claims that contradict the ranking;
+    - uncorrected false premises.
+  - On failure there is one corrective retry, then a clearly labeled deterministic summary. The validator is a safeguard, not a proof of correctness; its limits are in [ARCHITECTURE §5.2](docs/ARCHITECTURE.md#52-grounding-flow).
 - **Honest handling of edge cases.** Unsupported hubs and hazards, missing data (e.g. Miami snowfall coverage), ambiguous questions, prompt injection and an unavailable LLM each get an explicit answer or a clarifying question.
 
 | AI Analyst with real Gemini (follow-up) | Hub profile |
@@ -39,7 +48,7 @@ Severe weather closes hubs, delays shipments and costs money. Each year the comp
 | ![follow-up](docs/screenshots/real-gemini-followup-dallas.png) | ![profile](docs/screenshots/desktop-1440-overview-miami.png) |
 
 ## Quick start
-Requirements: [uv](https://docs.astral.sh/uv/) (it installs Python 3.12) and Node.js ≥ 20.
+Requirements: [uv](https://docs.astral.sh/uv/) (it installs Python 3.12) and Node.js 22.22+ (or 24.15+). The frontend's test tooling (Vitest/jsdom) needs that; the app itself builds on Node 20.19+.
 
 ```bash
 uv sync --frozen && make web-install   # backend + frontend from lockfiles
@@ -162,7 +171,7 @@ docker run -p 8000:8000 -e GEMINI_API_KEY=... -e WEATHER_RISK_DEMO_PASSWORD=... 
   - limits per IP, per session and per day;
   - one AI request at a time, with a bounded queue;
   - a 60 s deadline per turn;
-  - provider errors are never shown to users.
+  - provider error details are logged on the server, not shown to users.
 
 Steps, environment variables, costs and verification: [docs/PHASE_7_REPORT.md](docs/PHASE_7_REPORT.md).
 
