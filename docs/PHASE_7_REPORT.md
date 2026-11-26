@@ -33,17 +33,23 @@ Prices are as listed by the providers in November 2026. Confirm them on each pri
 
 | Option | Cost | Always on? | Request timeout | Memory | Persistent disk | Notes |
 |---|---|---|---|---|---|---|
-| **Render Starter** (recommended) | $7/month | Yes | Long (minutes; well above the ~90 s we need) | 512 MB | Paid add-on (not needed) | Native Docker, Blueprint file, health checks, zero-downtime deploys, simple dashboard secrets |
-| Render Free | $0 (750 instance-hours/month) | **No**: sleeps after 15 min idle, ~1 min wake-up | Same | 512 MB, 0.1 CPU | No | Viable only if the service is woken shortly before the interview; sleeping also clears sessions |
+| Render Starter (always-on upgrade) | $7/month | Yes | Long (minutes; well above the ~90 s we need) | 512 MB | Paid add-on (not needed) | Native Docker, Blueprint file, health checks, zero-downtime deploys, simple dashboard secrets |
+| **Render Free** (selected in `render.yaml`) | $0 (750 instance-hours/month) | **No**: sleeps after 15 min idle, ~1 min wake-up | Same | 512 MB, 0.1 CPU | No | Viable only if the service is woken shortly before the interview; sleeping also clears sessions |
 | Railway Hobby | $5/month, includes $5 of usage | Yes | Long (minutes) | Usage-based | Volumes available | Comparable; usage-based billing is less predictable |
 | Google Cloud Run | Free tier usually covers demo traffic | Scales to zero (cold starts) unless min-instances, which are billed | Up to 60 min | Configurable | No (stateless) | Must pin max-instances=1 for in-memory limits; more setup (Artifact Registry, IAM) |
 | Fly.io | Usage-based, a few $/month | Configurable | Long | 256 MB+ | Volumes | More CLI setup; check current trial terms |
 
-**Recommendation: Render Starter, for the interview window.**
-- It is always on, so interviewers never hit a cold start.
-- It builds this Dockerfile as-is, and `render.yaml` encodes the safe settings (one instance, health check, secrets prompted).
-- The cost is a known, small, flat monthly fee. Downgrade or delete the service after the interview.
-- **Free alternative:** Render Free. Open the URL a few minutes before the interview to wake it.
+**Selected: Render Free (`plan: free` in `render.yaml`).** The author chose the zero-cost plan. It builds this Dockerfile as-is, and `render.yaml` keeps the same safe settings: one instance, health check, secrets prompted, and all protections and variables unchanged. Free-plan trade-offs:
+- **Cold starts.** The service sleeps after 15 minutes without traffic, and the next request waits about a minute while it wakes. The first page view after idling looks slow, or may briefly show the platform's loading page. Open the URL a few minutes before the interview, and tell reviewers a first load may take about a minute.
+- **Ephemeral storage, and no persistent disk on the free plan.** Each sleep, restart or redeploy wipes `data/cache/`:
+  - chat sessions are lost, so users see "This conversation has expired" and start a new one;
+  - the SQLite response cache is lost (not needed with `WEATHER_RISK_OFFLINE=true`);
+  - the in-memory rate-limit and daily-cap counters reset.
+
+  The dashboard data is unaffected, because it is baked into the image.
+- **Small CPU (0.1 vCPU).** Engine warm-up at startup (about 1 s on a laptop) and the first dashboard requests are noticeably slower. Memory, at about 240 MB of 512 MB, fits.
+- **Monthly allowance:** 750 free instance-hours per workspace. That is ample for one service.
+- **Upgrade path:** set `plan: starter` ($7/month, always on, no cold starts) if the sleep behaviour is unacceptable during the interview window.
 
 **Memory:** the server measured **240 MB RSS** after a full dashboard walk-through on macOS (Linux is similar or lower), well inside 512 MB.
 - Before the D-044 fix it was **424 MB**, too close to the limit, because the engine held every 10-year daily dataset.
@@ -89,7 +95,8 @@ All settings are environment variables, documented in `.env.example`. A value â‰
 | Conversations | `data/cache/sessions.db` (ephemeral disk) | **Lost** | No. Users see "This conversation has expired" and start a new one |
 | Rate-limit and daily counters | Process memory | Reset | Not needed |
 
-- **Persistent storage:** Render offers persistent disks only as a paid add-on, and attaching one disables zero-downtime deploys. It isn't needed here, so the recommendation does not use one.
+- **Persistent storage:** Render offers persistent disks only as a paid add-on on paid plans; the free plan has none. On the selected free plan this table applies at every restart, and also **every time the service sleeps** after 15 minutes idle, so conversations rarely outlive a pause. No disk is needed, and none is used.
+- **"Restart or redeploy"** in the table above therefore also covers free-plan sleep and wake-up.
 - **Losing conversations on restart** is acceptable for an interview demo. No external database is introduced.
 - **Without Gemini** (no key, outage or exhausted quota), the dashboard and methodology work fully from the snapshot. Chat returns a clear message. This was verified locally with no key in Phase 6, and the paths are unit-tested.
 
@@ -131,7 +138,7 @@ All settings are environment variables, documented in `.env.example`. A value â‰
 - **Health check:** `GET /api/health` returns `{"status":"ok", "llm": {"available": true}, â€¦}` and needs no password.
 - **Demo access:** open the URL; the browser asks for the username and password once per session. Share both with the interviewers in the submission email, not in the repository.
 - **Expected cost:**
-  - Render Starter: $7/month flat.
+  - Render Free: $0 (Starter, if upgraded: $7/month flat).
   - Gemini usage is bounded by the daily cap: at most 200 chat turns a day, about 2â€“4 model calls each. Set a budget alert to cover the rest.
 
 ## 7. Manual steps for you
@@ -149,7 +156,7 @@ All settings are environment variables, documented in `.env.example`. A value â‰
 4. **Create the service on Render.**
    - Sign in at render.com with GitHub.
    - Choose **New â†’ Blueprint** and select the repository. Render reads `render.yaml`.
-   - Confirm the **Starter** plan (paid), or switch to Free.
+   - Confirm the **Free** plan, which needs no payment details for the service itself. Switch to Starter only if always-on is needed.
    - When prompted, enter `GEMINI_API_KEY` and `WEATHER_RISK_DEMO_PASSWORD`.
    - Click Apply. The first build takes about 3â€“5 minutes.
 5. **Verify the live URL** (`https://weatherlens-xxxx.onrender.com`):

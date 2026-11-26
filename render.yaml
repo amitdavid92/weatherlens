@@ -6,7 +6,7 @@ services:
   - type: web
     name: weatherlens
     runtime: docker
-    plan: starter          # always on (no cold starts during the interview); "free" works but sleeps
+    plan: free             # $0; sleeps after 15 min idle (~1 min cold start); ephemeral disk. "starter" = always on
     region: oregon
     numInstances: 1        # rate limits, the AI slot and sessions are per-process: keep exactly one
     healthCheckPath: /api/health

@@ -165,7 +165,7 @@ Full method: [docs/SCORING_METHODOLOGY.md](docs/SCORING_METHODOLOGY.md). Decisio
 docker build -t weatherlens .
 docker run -p 8000:8000 -e GEMINI_API_KEY=... -e WEATHER_RISK_DEMO_PASSWORD=... weatherlens
 ```
-- **Recommended host:** Render, via `render.yaml`.
+- **Host:** Render's **free** plan, via `render.yaml`. It sleeps after 15 minutes idle, so the first request then takes about a minute. Its disk is ephemeral: chat sessions and usage counters reset on each restart, while dashboard data is baked into the image. `plan: starter` makes it always-on.
 - **Health check:** `/api/health`. It stays open even when a demo password is set.
 - **Chat protections:**
   - limits per IP, per session and per day;
