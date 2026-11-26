@@ -307,3 +307,19 @@ The evaluation found the deterministic fallback pasting an engine reason string 
 - **Decision:** correction vocabulary (*incorrect, false, premise, claim, …*) exempts a sentence from the winner check **only inside `premise_correction`**. Narrative sentences keep the strict `not`/`n't` rule, so "Contrary to the claim, Denver has the highest exposure" is still rejected (regression test).
 - **Also:** stray-number feedback names the fact placeholder that holds the typed value.
 - **Result:** the targeted F1 rerun no longer flags the superlative. The remaining fallback cause is the model typing scores literally despite the hint. That is rejected by design and documented as a limitation, not loosened.
+
+### D-044: Bounded climate-dataset cache (Phase 7)
+- **Problem:** the engine kept every hub's 10-year daily dataset in memory after deriving the (memoized) profiles. That came to 424 MB RSS, too close to 512 MB hosting tiers.
+- **Decision:** keep an LRU of 4 datasets. An evicted dataset reloads from the cache or snapshot in about 60 ms.
+- **Result:** 240 MB RSS. Results are unchanged (regression test recomputes all rankings after eviction).
+
+### D-045: Public-demo protection is in-process and single-instance (Phase 7)
+- **Controls:**
+  - per-IP (proxy-aware: the right-most `X-Forwarded-For` hop, so client-supplied entries are ignored), per-session and daily chat limits;
+  - one AI slot with a bounded queue;
+  - a per-turn deadline enforced before every Gemini call and retry;
+  - an optional HTTP Basic demo password, with `/api/health` exempt;
+  - provider error details logged, never returned.
+- **Deadline floor:** no Gemini call starts with under 10 s left. This is Gemini's minimum per-request deadline; shorter values return HTTP 400, which was found in the production rehearsal.
+- **Why not more:** the state is in memory, so **exactly one instance and one worker** must run. A restart resets the counters. This is adequate for an interview demo. Rate limits are not a substitute for a Gemini budget cap in Google Cloud.
+- **Sessions:** a session id is a 128-bit random bearer capability. There is no listing endpoint, and responses are `no-store`.
