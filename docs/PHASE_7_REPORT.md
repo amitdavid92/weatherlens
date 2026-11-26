@@ -2,7 +2,9 @@
 
 **Date:** 2026-11-26 · **Branch:** `phase-7-deployment`, from `main` at `d9d2506` (Phase 6 merged).
 
-**Status:** deployment-ready. Nothing has been pushed, provisioned, purchased or published. Per the scope decision, no bonus features (voice, alerts) were added.
+**Status:** deployment-ready when this report was written. Per the scope decision, no bonus features (voice, alerts) were added.
+
+> **Deployment outcome (2026-11-26, added afterwards):** deployed by the author to Render Free at https://weatherlens-rabk.onrender.com. The author verified it manually: authentication, the dashboard loading, and a real AI Analyst response. No further live tests were run.
 
 ## 1. Deployment architecture
 ```

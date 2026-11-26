@@ -7,9 +7,11 @@ An AI assistant that helps logistics analysts see which US distribution hubs are
 - **Gemini's role:** it picks the analysis tools and writes the explanation, citing the engine's results by reference.
 - **Safety net:** a heuristic grounding validator flags unsupported numbers and claims. A rejected answer is replaced by a labeled summary taken directly from the engine.
 
+**Live demo:** [weatherlens-rabk.onrender.com](https://weatherlens-rabk.onrender.com). It is password-protected; the demo credentials are provided privately to the reviewers. It runs on Render's free tier, so after 15 minutes idle the first load takes about a minute while the service wakes up.
+
 **Quick links:** [Overview (1 page)](OVERVIEW.md) · [Quick start](#quick-start) · [Architecture](docs/ARCHITECTURE.md) · [Scoring methodology](docs/SCORING_METHODOLOGY.md) · [Evaluation results](#actual-results)
 
-> Built for the Moveo take-home in one day. It is a demo, not a production system: it is deployment-ready, and its deployment status is given in the submission.
+> Built for the Moveo take-home in one day. It is a single-instance demo deployment, not a production system.
 
 ## The business problem, and what it answers
 Severe weather closes hubs, delays shipments and costs money. Each year the company picks a handful of hubs to invest in. WeatherLens answers the assignment's questions and follow-ups about them:
@@ -160,7 +162,7 @@ Full method: [docs/SCORING_METHODOLOGY.md](docs/SCORING_METHODOLOGY.md). Decisio
   These protections bound spending but do not replace a budget cap on the Gemini project.
 
 ## Deployment
-**Status: deployment-ready, not yet deployed** when this was written. WeatherLens is built to run as **one Docker service**: FastAPI serves the API and the built React app on the same origin, with the data snapshot baked into the image.
+**Status: deployed** at https://weatherlens-rabk.onrender.com (Render free plan, from `render.yaml`). The author verified the deployment manually: password authentication, the dashboard loading, and a real AI Analyst response. No other tests were run against the live service; the automated test and evaluation results above come from local runs. WeatherLens runs as **one Docker service**: FastAPI serves the API and the built React app on the same origin, with the data snapshot baked into the image.
 ```bash
 docker build -t weatherlens .
 docker run -p 8000:8000 -e GEMINI_API_KEY=... -e WEATHER_RISK_DEMO_PASSWORD=... weatherlens

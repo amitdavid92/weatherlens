@@ -25,7 +25,7 @@ That run preceded two later changes: the Phase 6 grounding fix and the Phase 7 d
 **Limitations.**
 - The weights are documented judgment calls, not validated against real outages.
 - The chat depends on Gemini.
-- It is a single-instance demo. It is deployment-ready with a demo password and usage limits; deployment status is given in the submission.
+- It is a single-instance demo, live at https://weatherlens-rabk.onrender.com behind a demo password (credentials provided privately) with usage limits. It runs on Render's free tier, so the first load after 15 minutes idle takes about a minute.
 
 **How it was built.** In eight reviewed phases:
 - **Claude Code** did the research, implementation and testing.
