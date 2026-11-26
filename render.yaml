@@ -1,0 +1,36 @@
+# Render Blueprint for WeatherLens (one Docker web service). Committing this file creates nothing.
+# A service exists only after the account owner applies it in the Render dashboard
+# (New > Blueprint). Secrets are marked `sync: false`, so Render asks for them in the dashboard
+# and they never live in git.
+services:
+  - type: web
+    name: weatherlens
+    runtime: docker
+    plan: starter          # always on (no cold starts during the interview); "free" works but sleeps
+    region: oregon
+    numInstances: 1        # rate limits, the AI slot and sessions are per-process: keep exactly one
+    healthCheckPath: /api/health
+    autoDeploy: false      # deploy deliberately, not on every push
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: WEATHER_RISK_DEMO_PASSWORD
+        sync: false
+      - key: WEATHER_RISK_DEMO_USERNAME
+        value: moveo
+      - key: WEATHER_RISK_OFFLINE
+        value: "true"
+      - key: WEATHER_RISK_TRUSTED_PROXY_HOPS
+        value: "1"
+      - key: WEATHER_RISK_CHAT_LIMIT_PER_IP_MINUTE
+        value: "6"
+      - key: WEATHER_RISK_CHAT_LIMIT_PER_IP_HOUR
+        value: "40"
+      - key: WEATHER_RISK_CHAT_LIMIT_PER_SESSION_HOUR
+        value: "30"
+      - key: WEATHER_RISK_CHAT_DAILY_LIMIT
+        value: "200"
+      - key: WEATHER_RISK_CHAT_DEADLINE_SECONDS
+        value: "60"
+      - key: WEATHER_RISK_LLM_TIMEOUT_SECONDS
+        value: "30"

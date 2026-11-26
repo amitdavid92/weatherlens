@@ -193,7 +193,7 @@ export function Overview({
                       <td>
                         <button className="linklike" onClick={() => onSelect(e.hub_id)}>
                           {e.display_name.replace(/ Hub$/, '')}
-                        </button>
+                        </button>{' '}
                         <span className="cell-sub">{hubsById[e.hub_id]?.region}</span>
                       </td>
                       <td className="col-score">
@@ -218,7 +218,7 @@ export function Overview({
                         <PartialTag />
                         <span className="num muted">{e.score_display ?? 'n/a'}</span>
                       </div>
-                      <p className="fineprint">{humanizeReason(e.exclusion_reason)}</p>
+                      <p className="fineprint" title={humanizeReason(e.exclusion_reason)}>{humanizeReason(e.exclusion_reason)}</p>
                     </div>
                   ))}
                 </div>

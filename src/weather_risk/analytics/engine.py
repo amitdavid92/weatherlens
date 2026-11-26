@@ -11,6 +11,7 @@ All numbers come from the data layer and pure scoring functions; nothing here ca
 
 from __future__ import annotations
 
+from collections import OrderedDict
 from datetime import UTC, date, datetime
 
 from weather_risk.analytics.config import ClimateMetric, Hazard, ScoringConfig
@@ -59,6 +60,7 @@ class UnsupportedRegionError(InvalidRequestError):
     pass
 
 
+CLIMATE_CACHE_MAX = 4  # daily datasets kept in memory (LRU)
 FEMA_PERIOD_NOTE = (
     "FEMA NRI annualized frequencies summarize each hazard's own multi-decade period of record "
     "(differs by hazard); they are NOT specific to any user-selected calendar year."
@@ -124,7 +126,9 @@ class AnalyticsEngine:
         self._today = today
         self._pct: NationalPercentiles | None = None
         self._counties: dict[str, CountyHazardRecord] = {}
-        self._climate: dict[tuple[str, str, str], ClimateDataset] = {}
+        # Daily datasets are large (~25 MB per hub-decade as Python objects); profiles derived from
+        # them are memoized below, so only a few recent datasets are kept (bounded memory, D-044).
+        self._climate: OrderedDict[tuple[str, str, str], ClimateDataset] = OrderedDict()
         self._profiles: dict[str, HubProfile] = {}
 
     # ------------------------------------------------------------------ basics
@@ -188,6 +192,9 @@ class AnalyticsEngine:
             else:
                 raise InvalidRequestError(f"{source} is not a climate source")
             self._climate[key] = ds
+            while len(self._climate) > CLIMATE_CACHE_MAX:
+                self._climate.popitem(last=False)
+        self._climate.move_to_end(key)
         return self._climate[key]
 
     def _stat(

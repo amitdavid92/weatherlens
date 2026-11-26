@@ -139,13 +139,28 @@ Full method: [docs/SCORING_METHODOLOGY.md](docs/SCORING_METHODOLOGY.md). Decisio
 - **Coverage gaps:** NOAA reports snowfall at Miami on too few days to use. Miami's winter score therefore rests on 70% of its indicator weight, and Miami is not ranked overall.
 - **LLM dependence.** The chat needs Gemini and network access. Under provider overload or quota limits it degrades to deterministic summaries or a clear "unavailable" message.
   - Occasionally the model types a value instead of citing it. The validator rejects such an answer, and the user sees the deterministic summary (A4/F1 in the final run).
-- **Prototype operations.**
-  - There is no authentication, rate limiting or spending cap.
-  - `/api/chat` handles one request at a time (a global lock).
-  - There is no deadline on a whole request.
-  - Sessions sit in a local SQLite file.
+- **Demo-grade operations.**
+  - Access control is an optional shared password.
+  - Chat limits, the daily cap and the single AI slot live in process memory, so run exactly one instance; a restart resets the counters.
+  - Sessions sit in a local SQLite file and may be lost on redeploys.
 
-  See the deployment notes in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#7-deployment-considerations).
+  These protections bound spending but do not replace a budget cap on the Gemini project.
+
+## Deployment
+WeatherLens deploys as **one Docker service**: FastAPI serves the API and the built React app on the same origin, with the data snapshot baked into the image.
+```bash
+docker build -t weatherlens .
+docker run -p 8000:8000 -e GEMINI_API_KEY=... -e WEATHER_RISK_DEMO_PASSWORD=... weatherlens
+```
+- **Recommended host:** Render, via `render.yaml`.
+- **Health check:** `/api/health`. It stays open even when a demo password is set.
+- **Chat protections:**
+  - limits per IP, per session and per day;
+  - one AI request at a time, with a bounded queue;
+  - a 60 s deadline per turn;
+  - provider errors are never shown to users.
+
+Steps, environment variables, costs and verification: [docs/PHASE_7_REPORT.md](docs/PHASE_7_REPORT.md).
 
 ## Repository
 ```

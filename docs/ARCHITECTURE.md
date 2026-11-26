@@ -131,8 +131,8 @@ There is no ORM, vector database or external database server, because the data v
   - the grounding validator rejects numbers that don't come from facts, whatever the model was told.
 - **CORS:** restricted to the local Vite origins. Only GET/POST and `Content-Type` are allowed.
 - **Not production-ready:**
-  - no authentication or rate limiting on the API;
-  - single process; `/api/chat` requests are serialized by one lock, and there is no deadline on a whole request (each LLM call has a 45 s timeout and retries are bounded);
+  - access control is an optional shared demo password, and rate limits live in process memory (Phase 7);
+  - single process and single instance: one AI request at a time behind a bounded queue, with a per-turn deadline (default 60 s); the dashboard only waits on short engine work, never on Gemini;
   - no TLS;
   - session data is not encrypted at rest;
   - the session id is the only access control.
@@ -227,7 +227,7 @@ engine asks repository for (source, params)
   At that point, sessions move to Postgres or Redis. The read-mostly cache can stay per-instance or move to object storage.
 
 ## 7. Deployment considerations
-This is a recommendation only; nothing has been deployed.
+Implemented in Phase 7: `Dockerfile`, `render.yaml` and the protections in `api/guard.py`. Instructions and verification are in [PHASE_7_REPORT.md](PHASE_7_REPORT.md). **Nothing is deployed yet.**
 - **Shape.** One container:
   - FastAPI serves the built React assets (`web/dist`) on the same origin, so CORS isn't needed;
   - `uvicorn` sits behind the platform's TLS (Render, Fly.io, Railway or Cloud Run).
@@ -237,13 +237,16 @@ This is a recommendation only; nothing has been deployed.
   - set `WEATHER_RISK_OFFLINE=true` for a deterministic, outage-proof demo, or keep live fetching with the snapshot as fallback;
   - SQLite on ephemeral disk is acceptable (the cache rebuilds, and sessions are disposable for a demo).
 - **Health.** `/api/health` reports the methodology version, snapshot entries and LLM availability, and serves as the liveness/readiness probe.
-- **Timeouts.** Set the platform request timeout to at least 120 s, and add a per-request deadline in the orchestrator before scaling up.
+- **Timeouts.** A chat waits at most `WEATHER_RISK_CHAT_QUEUE_TIMEOUT_SECONDS` (30 s) for the AI slot, then runs within `WEATHER_RISK_CHAT_DEADLINE_SECONDS` (60 s). The platform timeout must exceed their sum (about 90 s).
 - **Abuse and spend protection** (needed before a public URL):
   - per-IP rate limiting on `/api/chat`;
   - a daily request cap;
   - a Gemini budget alert or quota limit on the Google Cloud project;
   - optional shared-password or basic auth for the demo.
-- **Concurrency.** The single chat lock is fine for one interviewer. For more users, replace it with per-session locking and run more workers, with sessions in a shared store.
+- **Concurrency.** One AI slot is fine for a few interviewers. For more users:
+  - move the provider's per-turn state into the request;
+  - use per-session locking;
+  - keep sessions and limit counters in a shared store (Redis) before adding workers or instances.
 - **Cost.**
   - Hosting fits a free or low tier: one small instance.
   - Gemini Flash-Lite pricing at about 2–3 calls per question is small for demo traffic, but it is unbounded without the caps above.
@@ -257,7 +260,7 @@ This is a recommendation only; nothing has been deployed.
 | Committed snapshot | Reproducible evals; demo survives outages | ~2.9 MB of gzip data in the repository; data is as of the snapshot date |
 | Fixed climate anchors + national FEMA percentiles | Scores don't shift when hubs are added | Anchors are judgment calls (documented, with sensitivity analysis) |
 | Strict hub resolution (no fuzzy guessing) | No silent wrong-hub answers | More clarification questions |
-| One process, one chat lock | Simple and race-free | Doesn't scale beyond a demo |
+| One process, one AI slot, in-memory limits | Simple and race-free; no extra infrastructure | Doesn't scale beyond a demo; a restart resets the counters |
 | Domain-specific validator rules | Catch real failure modes seen in evaluation | Regex-based checks need maintenance as phrasing evolves; some rules are heuristic |
 
 **Where the design is heavier than the brief requires:**

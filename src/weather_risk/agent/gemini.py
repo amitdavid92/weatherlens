@@ -32,6 +32,9 @@ from weather_risk.agent.llm import (
 
 log = logging.getLogger("weather_risk.llm")
 MAX_RATE_LIMIT_WAIT_SECONDS = 20.0
+# Never start a Gemini call with less time left than this. It is also Gemini's minimum per-request
+# deadline: shorter values are rejected with 400 "Minimum allowed deadline is 10s" (seen live).
+MIN_CALL_SECONDS = 10.0
 # A 429 whose retry hint exceeds this is a daily (not per-minute) quota: skip that model.
 DAILY_QUOTA_HINT_SECONDS = 120.0
 
@@ -104,6 +107,7 @@ class GeminiProvider:
             api_key=api_key, http_options=types.HttpOptions(timeout=int(timeout_seconds * 1000))
         )
         self._max_attempts = max_attempts
+        self._timeout_seconds = timeout_seconds
         self._temperature = temperature
         self._sleep = sleep
         self.last_model_used: str | None = None
@@ -111,6 +115,8 @@ class GeminiProvider:
         self._exhausted_until: dict[str, float] = {}
         # Per-turn call log (reset by the orchestrator): one entry per HTTP attempt.
         self.call_log: list[dict[str, Any]] = []
+        # Absolute time.monotonic() deadline for the current turn (set by the orchestrator).
+        self.deadline: float | None = None
 
     # ----------------------------------------------------------------- call with retries
     def _call(
@@ -134,10 +140,11 @@ class GeminiProvider:
                 break
             last_hint: float | None = None
             for model in available:
+                call_config = self._within_deadline(config, phase)
                 t0 = time.perf_counter()
                 try:
                     resp = self._client.models.generate_content(
-                        model=model, contents=contents, config=config
+                        model=model, contents=contents, config=call_config
                     )
                 except Exception as exc:  # noqa: BLE001 - classified below
                     err = _classify(exc)
@@ -181,12 +188,32 @@ class GeminiProvider:
                 delay = min(2 ** (round_no - 1), 8)
                 if last_hint is not None:  # per-minute quota: honor the server hint (capped)
                     delay = min(max(delay, last_hint), MAX_RATE_LIMIT_WAIT_SECONDS)
+                if self.deadline is not None and (
+                    time.monotonic() + delay + MIN_CALL_SECONDS >= self.deadline
+                ):
+                    break  # no time left for another call after the wait
                 self.call_log.append({"phase": phase, "wait_ms": round(delay * 1000),
                                       "reason": last.kind if last else "retry"})  # fmt: skip
                 self._sleep(delay)
         if last is None:  # every model already circuit-broken: nothing was attempted
             raise LLMQuotaError("Gemini daily quota exhausted for all configured models")
         raise last
+
+    def _within_deadline(self, config: types.GenerateContentConfig, phase: str):
+        """Refuse to start a call after the turn deadline; cap the call timeout to what is left."""
+        if self.deadline is None:
+            return config
+        remaining = self.deadline - time.monotonic()
+        if remaining < MIN_CALL_SECONDS:
+            self.call_log.append(
+                {"phase": phase, "model": None, "ok": False, "error": "deadline_exceeded"}
+            )
+            raise LLMTimeoutError("request deadline reached before the AI call could start")
+        if remaining < self._timeout_seconds:
+            return config.model_copy(
+                update={"http_options": types.HttpOptions(timeout=int(remaining * 1000))}
+            )
+        return config
 
     # ----------------------------------------------------------------- interface
     def tool_step(

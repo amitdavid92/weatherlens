@@ -43,9 +43,7 @@ def test_deterministic_endpoints_work_without_llm(engine, tmp_path):
 def test_chat_without_llm_is_503_not_fake(engine, tmp_path):
     r = client(engine, tmp_path).post("/api/chat", json={"message": "Rank the Midwest"})
     assert r.status_code == 503
-    assert (
-        r.json()["error"] == "llm_unavailable" and "Deterministic endpoints" in r.json()["detail"]
-    )
+    assert r.json()["error"] == "llm_unavailable" and "dashboard" in r.json()["detail"]
 
 
 @pytest.mark.parametrize(
