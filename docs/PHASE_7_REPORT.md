@@ -164,4 +164,5 @@ All settings are environment variables, documented in `.env.example`. A value â‰
 ## 8. Commits
 - `6d23f96`: single-service production build and public-demo protection
 - `8ac9bcf`: Gemini 10 s minimum-deadline fix; HEAD on the frontend route
-- the final commit: bounded climate cache (D-044), docs, decisions D-044/D-045 and this report
+- `5a12403`: bounded climate cache (D-044)
+- `be9077b`: docs, decisions D-044/D-045 and this report
