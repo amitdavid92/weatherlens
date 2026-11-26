@@ -224,3 +224,14 @@ def test_capped_call_deadline_never_goes_below_the_gemini_minimum():
     p.structured(system="s", prompt="p", schema={})
     timeout_ms = seen[0].http_options.timeout
     assert 10_000 <= timeout_ms <= 12_000
+
+
+def test_climate_dataset_cache_is_bounded_and_results_unchanged(engine):
+    from weather_risk.analytics.engine import CLIMATE_CACHE_MAX
+
+    before = engine.rank_hubs().model_dump()
+    for h in engine.catalog.hubs:  # touch every hub-decade dataset
+        engine.climate_dataset(h, engine.climatology, engine.cfg.climate.source)
+    assert len(engine._climate) <= CLIMATE_CACHE_MAX
+    engine._profiles.clear()  # force recomputation from (re)loaded datasets
+    assert engine.rank_hubs().model_dump() == before
