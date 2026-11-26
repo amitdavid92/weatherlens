@@ -1,6 +1,6 @@
 # Pre-Publication Review
 
-**Date:** 2026-11-26 · **Reviewed state:** branch `phase-7-deployment` at `c5e0faf`, all 8 local branches, and the full history (54 commits).
+**Date:** 2026-11-26 · **Reviewed state:** branch `phase-7-deployment` at `0c1e32d`, all 8 local branches, and the full history (54 commits).
 
 No remote is configured and nothing has been pushed. This review changed no files other than this one.
 
@@ -16,7 +16,7 @@ The code, tests, secrets hygiene and mandatory requirements are in order. Separa
 | Item | Finding |
 |---|---|
 | Working tree | Clean |
-| Branches | `main` (`f681079`), `phase-1` … `phase-6` (all merged into `main`), and `phase-7-deployment`, which is **6 commits ahead of `main`, not merged** |
+| Branches | `main` (`d9d2506`), `phase-1` … `phase-6` (all merged into `main`), and `phase-7-deployment`, which is **6 commits ahead of `main`, not merged** |
 | Remote | None configured |
 | History | 54 commits, single author identity `Amit David <…@users.noreply.github.com>` (GitHub noreply, by choice). No deletions or renames in history |
 | Tracked files | 469 total: 256 are `data/snapshot/` (committed public-domain / CC BY data, 2.9 MB), plus source, tests, fixtures, docs, screenshots and eval results. Pack size 1.9 MB |
@@ -67,14 +67,14 @@ The code, tests, secrets hygiene and mandatory requirements are in order. Separa
 
 ## 5. AI transcripts in Git history (decision needed)
 `docs/ai-session/session-phase-0-1.txt` (94 KB, the Phase 0–1 Claude Code export) **is already in history.**
-- It was added in `a7d4584`, together with other Phase 2 docs, and is present on `main` and every branch.
+- It was added in `ad36d96`, together with other Phase 2 docs, and is present on `main` and every branch.
 - **Contents:** no credentials and no private email (reviewed in Phase 2 and re-scanned now). It does contain the author's phase briefs, which name Moveo, plus local paths with the username.
 
 If transcripts are to be private, deleting the file in a new commit is **not enough**, because history keeps it. Nothing has been pushed yet, so this is the cheapest moment to choose.
 
 | Option | What | Cost / side effects |
 |---|---|---|
-| **A. Remove it from history before the first push** (recommended if transcripts must be private) | Rewrite with `git filter-branch --index-filter 'git rm --cached --ignore-unmatch docs/ai-session/session-phase-0-1.txt' -- --all` (built in; `git filter-repo` is not installed), then push only `main` | Every commit from `a7d4584` onward gets a new hash, so the hashes cited in the phase reports become stale. A follow-up commit can remap them from the rewrite's old→new mapping. About 15 minutes, and **needs your approval** (history rewrite) |
+| **A. Remove it from history before the first push** (recommended if transcripts must be private) | Rewrite with `git filter-branch --index-filter 'git rm --cached --ignore-unmatch docs/ai-session/session-phase-0-1.txt' -- --all` (built in; `git filter-repo` is not installed), then push only `main` | Every commit from `ad36d96` onward gets a new hash, so the hashes cited in the phase reports become stale. A follow-up commit can remap them from the rewrite's old→new mapping. About 15 minutes, and **needs your approval** (history rewrite) |
 | B. Keep the Phase 0–1 export public | No rewrite. Only the Phase 2–7 and ChatGPT transcripts go privately | Cheapest. A partial transcript sits publicly next to private ones, which is inconsistent with the "transcripts private" policy, though it contains nothing secret |
 
 **Recommendation:**

@@ -1,6 +1,6 @@
 # Phase 3 Report: AI Agent & Backend API
 
-**Date:** 2026-11-25 · **Branch:** `phase-3-agent-api` (from `main` at merge `f2f7ed2`) · **Status:** complete, awaiting review. Phase 4 has not started.
+**Date:** 2026-11-25 · **Branch:** `phase-3-agent-api` (from `main` at merge `7e30e37`) · **Status:** complete, awaiting review. Phase 4 has not started.
 
 ## 1. Implementation summary
 - **Conversational agent** on real **Gemini** (`google-genai` SDK). It uses the deterministic analytics engine (methodology 1.1.0) as its only source of numbers.
@@ -148,7 +148,7 @@ The API `ChatResponse` adds:
 ## 10. Real-Gemini results
 All results go through `POST /api/chat` on a real uvicorn server. Full answers, tool calls and metrics are in [PHASE_3_LIVE_SMOKE.md](PHASE_3_LIVE_SMOKE.md) and [PHASE_3_LIVE_SMOKE_NO_WEATHER_NETWORK.md](PHASE_3_LIVE_SMOKE_NO_WEATHER_NETWORK.md). Each check compares the structured response with the v1.1.0 engine.
 
-**Final runs (code at `be39f26`):**
+**Final runs (code at `6e4a3bf`):**
 
 | Run | Turns | Checks passed | Narrative source | Retries | Deterministic fallbacks |
 |---|---|---|---|---|---|
@@ -260,12 +260,12 @@ The fake-provider tests verify our code paths. **They are not LLM evaluations.**
 ## 14. Commits (branch `phase-3-agent-api`)
 | Hash | Message |
 |---|---|
-| `f2f7ed2` | Merge branch 'phase-2-risk-engine' (on `main`) |
-| `4df462f` | feat(agent): Gemini-backed grounded agent with typed tools, fact registry and validation |
-| `1fac3eb` | feat(api): FastAPI endpoints for health, hubs, hub scores, chat and session history |
-| `55ee878` | test(agent,api): offline tests for tools, grounding, retries, sessions, limits and API contracts |
-| `be39f26` | feat(scripts): real-Gemini smoke scenarios through the HTTP API; band-safe scores in reports |
-| `4c773c3` | docs: Phase 3 report, architecture, real-Gemini smoke results, decisions, README |
+| `7e30e37` | Merge branch 'phase-2-risk-engine' (on `main`) |
+| `1eff500` | feat(agent): Gemini-backed grounded agent with typed tools, fact registry and validation |
+| `b6acfaf` | feat(api): FastAPI endpoints for health, hubs, hub scores, chat and session history |
+| `acd05aa` | test(agent,api): offline tests for tools, grounding, retries, sessions, limits and API contracts |
+| `6e4a3bf` | feat(scripts): real-Gemini smoke scenarios through the HTTP API; band-safe scores in reports |
+| `675836b` | docs: Phase 3 report, architecture, real-Gemini smoke results, decisions, README |
 
 Nothing has been pushed. `ASSIGNMENT.pdf` remains untracked.
 

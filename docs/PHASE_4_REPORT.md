@@ -1,6 +1,6 @@
 # Phase 4 Report: WeatherLens Web Application
 
-**Date:** 2026-11-25 · **Branch:** `phase-4-web-app` (from `main` at merge `c4b8206`) · **Status:** complete, awaiting review. Phase 5 has not started.
+**Date:** 2026-11-25 · **Branch:** `phase-4-web-app` (from `main` at merge `9d4f89d`) · **Status:** complete, awaiting review. Phase 5 has not started.
 
 ## 1. Implementation summary
 **WeatherLens — Logistics Weather Risk Intelligence** is a React + TypeScript + Vite application on top of the existing FastAPI backend and Gemini agent. It has three views (Overview, AI Analyst, Methodology & Data), plus an AI Analyst panel docked beside the dashboard on screens ≥ 1280 px.
@@ -159,12 +159,12 @@ Each question was clicked in a fresh conversation on the real UI. The displayed 
 ## 10. Commits (branch `phase-4-web-app`)
 | Hash | Message |
 |---|---|
-| `c4b8206` | Merge branch 'phase-3-agent-api' (on `main`) |
-| `adcb8c6` | feat(api): deterministic overview, rankings and methodology endpoints; backend display strings |
-| `48bffc6` | feat(web): WeatherLens React app — overview dashboard, AI Analyst, methodology |
-| `bd0f1dc` | test(web): Vitest integration tests on recorded real API responses; Playwright browser scripts |
-| `8dba198` | chore: make dev (full stack), web-* targets, frontend ignore rules |
-| `3fd0e19` | docs: Phase 4 report, screenshots, README, architecture, decisions |
+| `9d4f89d` | Merge branch 'phase-3-agent-api' (on `main`) |
+| `50ec359` | feat(api): deterministic overview, rankings and methodology endpoints; backend display strings |
+| `97b0072` | feat(web): WeatherLens React app — overview dashboard, AI Analyst, methodology |
+| `0073421` | test(web): Vitest integration tests on recorded real API responses; Playwright browser scripts |
+| `ba7bd02` | chore: make dev (full stack), web-* targets, frontend ignore rules |
+| `8e33ae8` | docs: Phase 4 report, screenshots, README, architecture, decisions |
 
 Nothing has been pushed. `ASSIGNMENT.pdf` remains untracked.
 

@@ -1,6 +1,6 @@
 # Phase 6 Report: Final Engineering Review and Submission Readiness
 
-**Date:** 2026-11-26 · **Branch:** `phase-6-review`, from `main` at `da0f85a`. Not pushed, not deployed.
+**Date:** 2026-11-26 · **Branch:** `phase-6-review`, from `main` at `aa450ee`. Not pushed, not deployed.
 
 ## 1. Executive summary
 - **Requirements:** every mandatory item in the assignment is implemented and evidenced. Neither bonus item (voice, alerts) was built. Deployment is recommended but not done (preferred, not mandatory).
@@ -55,7 +55,7 @@
 ## 4. Review findings (independent code and architecture review)
 | Sev. | Finding | Action |
 |---|---|---|
-| High | F1 grounding false positive: premise correction misread as a superlative claim | **Fixed** (bcf4a57), with regression tests |
+| High | F1 grounding false positive: premise correction misread as a superlative claim | **Fixed** (a0666d5), with regression tests |
 | High | Old API key in the raw session transcript (outside the repo) would leak through `/export` | **Mitigated:** `scripts/redact_session.py` plus a test; documented steps; the dry run removed all 3 occurrences. The author must run it (§12) |
 | Medium | `ASSIGNMENT.pdf` was untracked but not ignored, so `git add .` would commit it | **Fixed:** gitignored |
 | Medium | `/api/chat` is serialized by one global lock, and there is no deadline on a whole request. Worst case, with the provider degraded: bounded, but minutes | Documented (ARCHITECTURE §4, §7). Fine for a one-user demo; a per-request deadline and per-session locks are needed before any shared deployment |
@@ -153,9 +153,9 @@
 6. Before the interview, check Gemini quota or billing and run `make eval-smoke`.
 
 ## 13. Commits (phase-6-review)
-- `bcf4a57`: grounding fix and targeted runs
-- `c63ae27`: redaction tooling and session index
-- `4e5d0b2`: README, OVERVIEW, ARCHITECTURE, Phase 5 results, D-043
+- `a0666d5`: grounding fix and targeted runs
+- `958eaf9`: redaction tooling and session index
+- `ba15f93`: README, OVERVIEW, ARCHITECTURE, Phase 5 results, D-043
 - this report
 
-Phase 5 was merged into `main` at `da0f85a`, together with `ace1b16` (the user's final eval and benchmark artifacts).
+Phase 5 was merged into `main` at `aa450ee`, together with `fe3a7ce` (the user's final eval and benchmark artifacts).

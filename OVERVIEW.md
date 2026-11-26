@@ -21,7 +21,7 @@ Each answer comes with a ranking or comparison, an explanation, and the sources 
 **What was delivered.**
 - A web application with a dashboard (US map, rankings, hub profiles), an AI chat analyst with follow-up questions, and a methodology page.
 - An API, a documented scoring method and a design document.
-- 330+ automated tests.
+- 350+ automated backend tests and a frontend test suite.
 - A 22-case evaluation suite that runs against the real AI model.
 
 **Results.**
@@ -35,10 +35,11 @@ Each answer comes with a ranking or comparison, an explanation, and the sources 
 - **Missing data stays missing.** It is never filled in. For example, Miami's snowfall records are too sparse to use, so Miami is shown but not ranked overall.
 - **Premises get checked.** When a question assumes something the data doesn't support ("Why is Dallas's risk high?"), the assistant corrects it: Dallas is *Moderate*, ranked second, driven by severe storms.
 
-**How it was built.** The work was done in seven reviewed phases with an AI coding agent (Claude Code). Each phase was planned, implemented, tested and approved before the next began. The full session record is in `docs/ai-session/`.
+**How it was built.** The work was done in eight reviewed phases (0–7) with an AI coding agent (Claude Code). Each phase was planned, implemented, tested and approved before the next began. The phase reports are in `docs/`; the full redacted AI session record is delivered privately with the submission (index: `docs/ai-session/`).
 
 **Limitations.**
-- It is a local prototype: no authentication, rate limiting or deployment yet.
+- It is a demo, not a multi-user production system. It is deployment-ready as one Docker service, with an optional shared demo password and usage limits. Whether it is deployed, and at which URL, is stated in the submission email.
+- The final evaluation ran before the deployment-protection changes; those changes were verified with offline tests and a few live Gemini questions, not a repeat of the full evaluation.
 - The AI chat depends on Gemini's availability.
 - The scoring weights are documented judgment calls that haven't been validated against real outage history. That is the main next step if this became a real tool.
 

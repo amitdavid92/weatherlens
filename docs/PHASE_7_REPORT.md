@@ -1,6 +1,6 @@
 # Phase 7 Report: Secure Deployment Preparation
 
-**Date:** 2026-11-26 Â· **Branch:** `phase-7-deployment`, from `main` at `f681079` (Phase 6 merged).
+**Date:** 2026-11-26 Â· **Branch:** `phase-7-deployment`, from `main` at `d9d2506` (Phase 6 merged).
 
 **Status:** deployment-ready. Nothing has been pushed, provisioned, purchased or published. Per the scope decision, no bonus features (voice, alerts) were added.
 
@@ -65,7 +65,7 @@ All settings are environment variables, documented in `.env.example`. A value â‰
 - **Deadline enforcement:**
   - No Gemini call or retry starts after the deadline.
   - A call's own timeout is capped at the time remaining.
-  - No call starts with under 10 s left. Gemini rejects shorter per-request deadlines with HTTP 400; this was found in the rehearsal and fixed in `8ac9bcf`.
+  - No call starts with under 10 s left. Gemini rejects shorter per-request deadlines with HTTP 400; this was found in the rehearsal and fixed in `7d25ce6`.
   - Practical worst case: about 30 s queue wait plus 60 s deadline. The frontend's chat timeout is 120 s.
 - **Errors:**
   - Provider error text (which can include project details) is logged server-side only.
@@ -162,7 +162,7 @@ All settings are environment variables, documented in `.env.example`. A value â‰
 8. **After the interview:** suspend or delete the Render service and revoke the deployment key.
 
 ## 8. Commits
-- `6d23f96`: single-service production build and public-demo protection
-- `8ac9bcf`: Gemini 10 s minimum-deadline fix; HEAD on the frontend route
-- `5a12403`: bounded climate cache (D-044)
-- `be9077b`: docs, decisions D-044/D-045 and this report
+- `d0af737`: single-service production build and public-demo protection
+- `7d25ce6`: Gemini 10 s minimum-deadline fix; HEAD on the frontend route
+- `4f9c235`: bounded climate cache (D-044)
+- `dd012a0`: docs, decisions D-044/D-045 and this report

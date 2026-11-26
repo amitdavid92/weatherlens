@@ -89,4 +89,4 @@ Offline replay of the failed single-turn scenarios (scripted provider, real engi
 **Readiness (updated):** items 1 and 2 are done; the final full run and the benchmark are recorded above.
 
 ## 9. Commits
-`76022f6` instrumentation · `e7eb9e6` provider chain · `ab4c7e1` band source · `2c1f8ad` fact-backed summary · `3e74ee1` eval suite · plus this handover commit.
+`978947d` instrumentation · `1afef57` provider chain · `79a92fd` band source · `64db9d3` fact-backed summary · `45e54db` eval suite · plus this handover commit.

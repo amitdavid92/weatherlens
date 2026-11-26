@@ -202,7 +202,7 @@ Not changed in Phase 2.
 - A hazard ranking includes every hub whose *hazard* is complete. Miami is ranked #1 for hurricane and #2 for flood; it is excluded only from the overall and winter rankings, because its snowfall coverage is 20.5% (missing is never treated as 0).
 
 ### D-025: AI session export placement and review
-The user's `/export` (Phases 0–1) was moved unmodified to `docs/ai-session/session-phase-0-1.txt` after a pattern review: no credentials; personal data limited to the chosen GitHub noreply address and local paths. A real-looking Gemini key was later typed into the tracked `.env.example` and echoed into this session. That file was never staged. The key must be rotated and redacted from the next export.
+The user's `/export` (Phases 0–1) was moved unmodified to `docs/ai-session/session-phase-0-1.txt` after a pattern review: no credentials; personal data limited to the chosen GitHub noreply address and local paths. A real-looking Gemini key was later typed into the tracked `.env.example` and echoed into this session. That file was never staged. The key must be rotated and redacted from the next export. *(Superseded by D-046.)*
 
 ## Phase 3 (2026-11-25): agent and API
 
@@ -323,3 +323,9 @@ The evaluation found the deterministic fallback pasting an engine reason string 
 - **Deadline floor:** no Gemini call starts with under 10 s left. This is Gemini's minimum per-request deadline; shorter values return HTTP 400, which was found in the production rehearsal.
 - **Why not more:** the state is in memory, so **exactly one instance and one worker** must run. A restart resets the counters. This is adequate for an interview demo. Rate limits are not a substitute for a Gemini budget cap in Google Cloud.
 - **Sessions:** a session id is a 128-bit random bearer capability. There is no listing endpoint, and responses are `no-store`.
+
+### D-046: AI transcripts are delivered privately; the committed transcript was removed from history (pre-publication)
+- **Decision (author-approved):** full AI collaboration transcripts go to Moveo privately, not to the public repository. The repository keeps only an index (`docs/ai-session/README.md`) and the redaction procedure.
+- **History:** `docs/ai-session/session-phase-0-1.txt` had been committed in Phase 2. Before the first publication it was removed from all history with `git filter-branch --index-filter … -- --all`.
+  - No other path changed. Authors, dates and messages are identical; this was verified commit by commit against a private mirror backup.
+  - Commit IDs from that commit onward changed. IDs in the reports were remapped; IDs inside older commit messages refer to the original history.

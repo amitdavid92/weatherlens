@@ -184,7 +184,7 @@ Bands: Low < 40 ≤ Moderate < 70 ≤ High.
 4. **The climate window is 10 years**, short for rare heavy-snow events. FEMA periods of record differ by hazard.
 5. **Exposure is not operational risk.** The index has no vulnerability, redundancy or cost dimension.
 6. **Sources not yet used:** NOAA wind, precipitation and Storm Events data.
-7. **AI session.** The Phases 0–1 export is now `docs/ai-session/session-phase-0-1.txt`; it was reviewed, needed no redactions, and is unmodified. **Security:** a real-looking Gemini key was typed into the tracked `.env.example`. It was never staged or committed, but it now appears in this session's transcript. Rotate the key, move it to `.env`, restore the placeholder, and redact it from the next export (D-025).
+7. **AI session.** The Phases 0–1 export is now `docs/ai-session/session-phase-0-1.txt` (*later removed from the public repository and delivered privately; see D-046*); it was reviewed, needed no redactions, and is unmodified. **Security:** a real-looking Gemini key was typed into the tracked `.env.example`. It was never staged or committed, but it now appears in this session's transcript. Rotate the key, move it to `.env`, restore the placeholder, and redact it from the next export (D-025).
 
 ## 8. Commits
 | Hash | Message |
@@ -197,7 +197,7 @@ Bands: Low < 40 ≤ Moderate < 70 ≤ High.
 | `88663b9` | docs: scoring methodology, Phase 2 decisions and generated scenario validation |
 | `afa9d5e` | docs: Phase 2 report |
 | `d50aca6` | feat(analytics): methodology 1.1.0 hybrid FEMA normalization, explicit contribution levels and ranking eligibility |
-| `a7d4584` | docs: methodology 1.1.0, sensitivity analysis, updated validation and Phase 2 report; add reviewed AI session export (phases 0-1) |
+| `ad36d96` | docs: methodology 1.1.0, sensitivity analysis, updated validation and Phase 2 report; add reviewed AI session export (phases 0-1) |
 | (this commit) | docs: record refinement commit hashes |
 
 Nothing has been pushed; there is no remote. `ASSIGNMENT.pdf` remains untracked.

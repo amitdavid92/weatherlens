@@ -238,11 +238,9 @@ Implemented in Phase 7: `Dockerfile`, `render.yaml` and the protections in `api/
   - SQLite on ephemeral disk is acceptable (the cache rebuilds, and sessions are disposable for a demo).
 - **Health.** `/api/health` reports the methodology version, snapshot entries and LLM availability, and serves as the liveness/readiness probe.
 - **Timeouts.** A chat waits at most `WEATHER_RISK_CHAT_QUEUE_TIMEOUT_SECONDS` (30 s) for the AI slot, then runs within `WEATHER_RISK_CHAT_DEADLINE_SECONDS` (60 s). The platform timeout must exceed their sum (about 90 s).
-- **Abuse and spend protection** (needed before a public URL):
-  - per-IP rate limiting on `/api/chat`;
-  - a daily request cap;
-  - a Gemini budget alert or quota limit on the Google Cloud project;
-  - optional shared-password or basic auth for the demo.
+- **Abuse and spend protection.**
+  - **Implemented** (Phase 7, `api/guard.py`): per-IP and per-session limits on `/api/chat`, a daily request cap, one AI request at a time with a bounded queue, a per-turn deadline, and an optional shared demo password.
+  - **Still a manual step:** a Gemini budget alert or quota limit on the Google Cloud project. This is the real spending guarantee, because the in-app limits reset on restart.
 - **Concurrency.** One AI slot is fine for a few interviewers. For more users:
   - move the provider's per-turn state into the request;
   - use per-session locking;
@@ -274,11 +272,10 @@ Each was added in response to a failure observed in live runs (Phases 3 and 5). 
 - **Outcome validation:** calibrate the exposure index against real hub outage or delay records. This is the step that would turn exposure into disruption risk.
 - **Hub-level inputs:** asset vulnerability, criticality, throughput and site coordinates instead of county proxies.
 - **Operations:**
-  - a per-request deadline;
-  - rate limiting and spend caps;
-  - authentication;
-  - per-session locking;
-  - structured log shipping.
+  - limits and sessions in a shared store (e.g. Redis), so that several instances can run;
+  - user authentication instead of a shared demo password;
+  - per-session locking with more than one concurrent AI request;
+  - structured log shipping and alerting.
 - **Assignment bonus items:** a scheduled score-change alert (cron or webhook) and voice input.
 - **Evaluation:**
   - more paraphrases per intent;

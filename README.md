@@ -4,7 +4,7 @@
 
 WeatherLens is an AI agent for logistics analysts. It answers questions about which US distribution hubs are most exposed to severe weather, as an input to choosing hubs for resilience investment. It uses public weather and hazard data. A deterministic engine computes every number, score and ranking. The LLM (Gemini) chooses which analysis tools to call and writes an explanation around verified facts. It never writes the numbers itself.
 
-> Built for the Moveo take-home in one day. It is a local prototype, not a production system. One-page summary: [OVERVIEW.md](OVERVIEW.md). Design: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+> Built for the Moveo take-home in one day. It is a demo, not a production system: deployment-ready, with deployment status given in the submission. One-page summary: [OVERVIEW.md](OVERVIEW.md). Design: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## The business problem, and what it answers
 Severe weather closes hubs, delays shipments and costs money. Each year the company picks a handful of hubs to invest in. WeatherLens answers the assignment's questions and follow-ups about them:
@@ -97,6 +97,10 @@ Final full run `20261125T161815Z-full`, paid Gemini tier, run by the author:
 
 The earlier failed and crashed runs are kept in [evals/results/](evals/results/). This is a 22-case suite. It shows the system behaves correctly on these cases, not that it is accurate in general.
 
+**Code covered by the evaluation:** the full run used the Phase 5 code. Later changes were checked without a full rerun:
+- the Phase 6 grounding fix: targeted real-Gemini reruns of A4 and F1;
+- the Phase 7 deployment protections and layout: offline tests plus a handful of live questions on the production build ([PHASE_7_REPORT](docs/PHASE_7_REPORT.md)).
+
 ## Architecture (summary)
 ```
 WeatherLens (React/TS/Vite) ──/api──► FastAPI ──► Agent: Gemini tool loop → 6 typed tools → deterministic engine
@@ -147,7 +151,7 @@ Full method: [docs/SCORING_METHODOLOGY.md](docs/SCORING_METHODOLOGY.md). Decisio
   These protections bound spending but do not replace a budget cap on the Gemini project.
 
 ## Deployment
-WeatherLens deploys as **one Docker service**: FastAPI serves the API and the built React app on the same origin, with the data snapshot baked into the image.
+**Status: deployment-ready, not yet deployed** when this was written. WeatherLens is built to run as **one Docker service**: FastAPI serves the API and the built React app on the same origin, with the data snapshot baked into the image.
 ```bash
 docker build -t weatherlens .
 docker run -p 8000:8000 -e GEMINI_API_KEY=... -e WEATHER_RISK_DEMO_PASSWORD=... weatherlens
@@ -174,7 +178,7 @@ data/snapshot/  committed raw API responses + manifest (offline fallback)
 docs/        architecture, methodology, decisions, phase reports, screenshots, AI session
 scripts/     benchmark, live smoke, sensitivity, fixture recording, session redaction
 ```
-How the project was built with an AI agent, phase by phase: [docs/ai-session/](docs/ai-session/README.md).
+How the project was built with an AI agent: phase reports in [docs/](docs/), and an index in [docs/ai-session/](docs/ai-session/README.md). The full redacted session transcripts are delivered privately with the submission.
 
 ## Attribution
 Weather data by [Open-Meteo.com](https://open-meteo.com/) (ERA5, Copernicus/ECMWF). NOAA NCEI GHCN-Daily. FEMA National Risk Index.
