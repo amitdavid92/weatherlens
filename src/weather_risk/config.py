@@ -63,6 +63,30 @@ class Settings(BaseSettings):
 
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
 
+    # ---- public-demo protection (Phase 7). Limits <= 0 disable a check. In-memory, per process.
+    chat_limit_per_ip_minute: int = Field(default=10, alias="WEATHER_RISK_CHAT_LIMIT_PER_IP_MINUTE")
+    chat_limit_per_ip_hour: int = Field(default=60, alias="WEATHER_RISK_CHAT_LIMIT_PER_IP_HOUR")
+    chat_limit_per_session_hour: int = Field(
+        default=40, alias="WEATHER_RISK_CHAT_LIMIT_PER_SESSION_HOUR"
+    )
+    chat_daily_limit: int = Field(default=300, alias="WEATHER_RISK_CHAT_DAILY_LIMIT")
+    # AI requests run one at a time (the provider keeps per-turn state); others wait in a short queue.
+    chat_max_waiting: int = Field(default=4, alias="WEATHER_RISK_CHAT_MAX_WAITING")
+    chat_queue_timeout_seconds: float = Field(
+        default=30.0, alias="WEATHER_RISK_CHAT_QUEUE_TIMEOUT_SECONDS"
+    )
+    # Overall budget for one chat turn. Gemini is not called again after it has passed; a turn
+    # whose tools already succeeded then returns the labeled deterministic summary.
+    chat_deadline_seconds: float = Field(default=60.0, alias="WEATHER_RISK_CHAT_DEADLINE_SECONDS")
+    # Reverse proxies in front of the app (Render/Railway: 1). 0 = use the socket peer address.
+    trusted_proxy_hops: int = Field(default=0, alias="WEATHER_RISK_TRUSTED_PROXY_HOPS")
+    # Optional shared demo password (HTTP Basic auth on everything except /api/health).
+    demo_username: str = Field(default="moveo", alias="WEATHER_RISK_DEMO_USERNAME")
+    demo_password: SecretStr | None = Field(default=None, alias="WEATHER_RISK_DEMO_PASSWORD")
+    # Built frontend served by FastAPI in production (same origin). Ignored if the folder is absent.
+    web_dist_dir: Path = Field(default=PROJECT_ROOT / "web" / "dist", alias="WEATHER_RISK_WEB_DIST")
+    serve_frontend: bool = Field(default=True, alias="WEATHER_RISK_SERVE_FRONTEND")
+
 
 @lru_cache
 def get_settings() -> Settings:

@@ -9,7 +9,9 @@ substitutes a fake model.
 
 from __future__ import annotations
 
+import base64
 import logging
+import secrets
 import threading
 from contextlib import asynccontextmanager
 from typing import Any, Literal
@@ -17,7 +19,7 @@ from typing import Any, Literal
 from fastapi import FastAPI, HTTPException, Path, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 
 from weather_risk.agent.gemini import GeminiProvider
 from weather_risk.agent.llm import (
@@ -35,6 +37,7 @@ from weather_risk.agent.session import SessionNotFoundError, SessionStore
 from weather_risk.analytics.config import load_scoring_config
 from weather_risk.analytics.engine import AnalyticsEngine
 from weather_risk.analytics.models import HubProfile, RankingResult
+from weather_risk.api.guard import ChatSlots, DailyCounter, SlidingWindowLimiter, client_ip
 from weather_risk.catalog import load_catalog
 from weather_risk.config import PROJECT_ROOT, Settings, get_settings
 from weather_risk.data.errors import DataUnavailableError, UnsupportedHubError
@@ -58,8 +61,17 @@ class AppState:
         self.provider = provider
         self.provider_error = provider_error
         self.sessions = sessions
-        self.lock = threading.Lock()  # single-process prototype: serialize engine/agent access
-        self.agent = Agent(engine, provider, sessions) if provider else None
+        # Serializes ENGINE access only (dashboard endpoints and agent tool execution). The LLM
+        # calls of a chat turn run outside it, so the dashboard never waits for Gemini.
+        self.lock = threading.RLock()
+        self.agent = Agent(engine, provider, sessions, engine_lock=self.lock) if provider else None
+        s = settings
+        self.ip_minute = SlidingWindowLimiter(s.chat_limit_per_ip_minute, 60)
+        self.ip_hour = SlidingWindowLimiter(s.chat_limit_per_ip_hour, 3600)
+        self.session_hour = SlidingWindowLimiter(s.chat_limit_per_session_hour, 3600)
+        self.daily = DailyCounter(s.chat_daily_limit)
+        # One AI request at a time: the provider and session turn numbering keep per-turn state.
+        self.chat_slots = ChatSlots(1, s.chat_max_waiting, s.chat_queue_timeout_seconds)
 
 
 def build_state(settings: Settings, *, provider: LLMProvider | None = None,
@@ -88,6 +100,11 @@ def create_app(state: AppState | None = None) -> FastAPI:
             s = get_settings()
             configure_logging(s.log_level)
             app.state.ctx = build_state(s)
+        try:  # warm the deterministic engine so the first dashboard request is fast
+            with app.state.ctx.lock:
+                app.state.ctx.engine.rank_hubs()
+        except Exception:  # noqa: BLE001 - endpoints report data problems themselves
+            log.warning("engine_warmup_failed", exc_info=True)
         yield
 
     app = FastAPI(
@@ -113,6 +130,22 @@ def create_app(state: AppState | None = None) -> FastAPI:
     def ctx(request: Request) -> AppState:
         return request.app.state.ctx
 
+    @app.middleware("http")
+    async def protect(request: Request, call_next):
+        """Optional shared demo password (HTTP Basic) plus baseline security headers."""
+        c: AppState | None = request.app.state.ctx
+        pw = c.settings.demo_password if c else None
+        if pw and request.url.path != "/api/health" and not _authorized(request, c.settings):
+            return Response(status_code=401, content="Authentication required",
+                            headers={"WWW-Authenticate": 'Basic realm="WeatherLens demo"'})  # fmt: skip
+        response = await call_next(request)
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("Referrer-Policy", "no-referrer")
+        response.headers.setdefault("X-Frame-Options", "DENY")
+        if request.url.path.startswith(("/api/chat", "/api/sessions")):
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
     def err(status: int, error: str, detail: str, retryable: bool = False) -> JSONResponse:
         return JSONResponse(status_code=status,
                             content=ErrorResponse(error=error, detail=detail,
@@ -128,7 +161,10 @@ def create_app(state: AppState | None = None) -> FastAPI:
     async def http_handler(_: Request, exc: HTTPException):
         d = exc.detail if isinstance(exc.detail, dict) else {"error": "http_error",
                                                               "detail": str(exc.detail)}  # fmt: skip
-        return err(exc.status_code, d["error"], d["detail"], d.get("retryable", False))
+        resp = err(exc.status_code, d["error"], d["detail"], d.get("retryable", False))
+        for k, v in (exc.headers or {}).items():
+            resp.headers[k] = v
+        return resp
 
     @app.exception_handler(Exception)
     async def unhandled(_: Request, exc: Exception):
@@ -295,27 +331,28 @@ def create_app(state: AppState | None = None) -> FastAPI:
         c = ctx(request)
         if c.agent is None:
             raise HTTPException(503, {"error": "llm_unavailable", "detail":
-                                      f"The AI agent is not available: {c.provider_error}. "
-                                      "Deterministic endpoints still work.", "retryable": False})  # fmt: skip
+                                      "The AI Analyst is not available on this server. "
+                                      "The dashboard and methodology still work.",
+                                      "retryable": False})  # fmt: skip
+        _enforce_limits(c, request, body.session_id)
+        if not c.chat_slots.acquire():
+            raise HTTPException(503, {"error": "busy", "detail": "The AI Analyst is busy with "
+                                      "other questions. Please try again in a moment.",
+                                      "retryable": True}, headers={"Retry-After": "10"})  # fmt: skip
         try:
-            with c.lock:
-                return c.agent.chat(body.message, body.session_id)
+            return c.agent.chat(body.message, body.session_id,
+                                deadline_seconds=c.settings.chat_deadline_seconds)  # fmt: skip
         except SessionNotFoundError:
             raise HTTPException(404, {"error": "unknown_session", "detail":
                                       "session_id not found; omit it to start a new session"}) from None  # fmt: skip
-        except LLMAuthError as exc:
-            raise HTTPException(503, {"error": "llm_auth_error", "detail": str(exc)}) from None
-        except LLMQuotaError as exc:
-            raise HTTPException(429, {"error": "llm_quota_exceeded", "detail": str(exc),
-                                      "retryable": True}) from None  # fmt: skip
-        except LLMTimeoutError as exc:
-            raise HTTPException(504, {"error": "llm_timeout", "detail": str(exc),
-                                      "retryable": True}) from None  # fmt: skip
-        except LLMUnavailableError as exc:
-            raise HTTPException(503, {"error": "llm_unavailable", "detail": str(exc),
-                                      "retryable": True}) from None  # fmt: skip
         except LLMError as exc:
-            raise HTTPException(503, {"error": "llm_error", "detail": str(exc)}) from None
+            # Provider details go to the server log only, never to the client.
+            log.warning("chat_llm_error", extra={"kind": exc.kind, "detail": str(exc)[:300]})
+            status, error, detail = _LLM_ERRORS.get(type(exc), _LLM_ERRORS[LLMError])
+            raise HTTPException(status, {"error": error, "detail": detail,
+                                         "retryable": exc.retryable or status == 429}) from None  # fmt: skip
+        finally:
+            c.chat_slots.release()
 
     @app.get("/api/sessions/{session_id}", tags=["agent"], responses=ERRORS,
              summary="Conversation history of a session")  # fmt: skip
@@ -330,7 +367,74 @@ def create_app(state: AppState | None = None) -> FastAPI:
                            "user_message": t["user_message"], "response": t["response"]}
                           for t in turns]}  # fmt: skip
 
+    _mount_frontend(app, settings)
     return app
+
+
+_LLM_ERRORS: dict[type, tuple[int, str, str]] = {
+    LLMAuthError: (503, "llm_auth_error", "The AI provider rejected the server's credentials."),
+    LLMQuotaError: (429, "llm_quota_exceeded", "The AI provider's usage quota is exhausted. "
+                    "Please try again later; the dashboard still works."),
+    LLMTimeoutError: (504, "llm_timeout", "The AI Analyst took too long to answer. "
+                      "Please try again or ask a narrower question."),
+    LLMUnavailableError: (503, "llm_unavailable", "The AI provider is temporarily unavailable. "
+                          "Please try again shortly."),
+    LLMError: (503, "llm_error", "The AI Analyst could not answer this question."),
+}  # fmt: skip
+
+
+def _authorized(request: Request, settings: Settings) -> bool:
+    header = request.headers.get("authorization", "")
+    if not header.lower().startswith("basic "):
+        return False
+    try:
+        user, _, pw = base64.b64decode(header[6:], validate=True).decode("utf-8").partition(":")
+    except (ValueError, UnicodeDecodeError):
+        return False
+    expected = settings.demo_password.get_secret_value() if settings.demo_password else ""
+    ok_user = secrets.compare_digest(user.encode(), settings.demo_username.encode())
+    ok_pw = secrets.compare_digest(pw.encode(), expected.encode())
+    return ok_user and ok_pw
+
+
+def _enforce_limits(c: AppState, request: Request, session_id: str | None) -> None:
+    ip = client_ip(request, c.settings.trusted_proxy_hops)
+    wait = c.ip_minute.hit(ip) or c.ip_hour.hit(ip)
+    if wait is None and session_id:
+        wait = c.session_hour.hit(session_id)
+    if wait is not None:
+        log.info("chat_rate_limited", extra={"retry_after_s": round(wait)})
+        raise HTTPException(429, {"error": "rate_limited", "detail": "Too many questions in a "
+                                  f"short time. Please wait about {round(wait)} s.",
+                                  "retryable": True},
+                            headers={"Retry-After": str(round(wait))})  # fmt: skip
+    if not c.daily.hit():
+        log.warning("chat_daily_limit_reached", extra={"limit": c.daily.limit})
+        raise HTTPException(429, {"error": "daily_limit_reached", "detail": "The demo's daily "
+                                  "AI question limit has been reached. The dashboard still "
+                                  "works; the AI Analyst resets at 00:00 UTC.",
+                                  "retryable": False})  # fmt: skip
+
+
+def _mount_frontend(app: FastAPI, settings: Settings) -> None:
+    """Serve the built React app from the same origin (production). /api routes take priority."""
+    dist = settings.web_dist_dir.resolve()
+    index = dist / "index.html"
+    if not settings.serve_frontend or not index.is_file():
+        return
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def frontend(path: str) -> Response:
+        if path == "api" or path.startswith("api/"):
+            return JSONResponse(status_code=404, content={"error": "not_found",
+                                "detail": "unknown API route", "retryable": False})  # fmt: skip
+        target = (dist / path).resolve()
+        if path and target.is_file() and target.is_relative_to(dist):
+            cache = ("public, max-age=31536000, immutable" if path.startswith("assets/")
+                     else "no-cache")  # fmt: skip
+            return FileResponse(target, headers={"Cache-Control": cache})
+        # SPA fallback: unknown paths get index.html, so refreshes and deep links keep working.
+        return FileResponse(index, headers={"Cache-Control": "no-cache"})
 
 
 app = create_app()

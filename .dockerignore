@@ -1,0 +1,17 @@
+# keep the build context small and secret-free
+.env
+.env.*
+!.env.example
+.git
+.venv
+**/__pycache__
+.pytest_cache
+.ruff_cache
+data/cache
+web/node_modules
+web/dist
+web/test-results
+docs
+evals/results
+ASSIGNMENT.pdf
+*.jsonl

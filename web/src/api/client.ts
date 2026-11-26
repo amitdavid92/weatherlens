@@ -101,6 +101,12 @@ export function describeChatError(e: unknown): { title: string; detail: string; 
         detail: 'Gemini’s per-minute quota was reached. Wait about a minute, then retry.',
         retryable: true,
       }
+    case 'rate_limited':
+      return { title: 'Too many questions in a short time', detail: e.message, retryable: true }
+    case 'daily_limit_reached':
+      return { title: 'Daily AI question limit reached', detail: e.message, retryable: false }
+    case 'busy':
+      return { title: 'The AI Analyst is busy', detail: e.message, retryable: true }
     case 'llm_timeout':
       return { title: 'The AI provider timed out', detail: 'Gemini did not answer in time. Retry the question.', retryable: true }
     case 'llm_unavailable':
@@ -108,7 +114,7 @@ export function describeChatError(e: unknown): { title: string; detail: string; 
     case 'llm_error':
       return {
         title: 'The AI Analyst is unavailable',
-        detail: `${e.message} The Overview and Methodology views still work.`,
+        detail: /still work/.test(e.message) ? e.message : `${e.message} The Overview and Methodology views still work.`,
         retryable: e.retryable,
       }
     case 'unknown_session':

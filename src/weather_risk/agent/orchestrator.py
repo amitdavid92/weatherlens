@@ -14,6 +14,7 @@ import json
 import logging
 import re
 import time
+from contextlib import AbstractContextManager, nullcontext
 from datetime import date
 from typing import Any
 
@@ -150,15 +151,30 @@ class Agent:
         *,
         max_iterations: int = MAX_ITERATIONS,
         max_tool_calls: int = MAX_TOOL_CALLS,
+        engine_lock: AbstractContextManager | None = None,
     ) -> None:
         self.engine = engine
+        # Held only while a tool runs the engine, so dashboard requests never wait for the LLM.
+        self.engine_lock = engine_lock or nullcontext()
+        self._deadline: float | None = None
         self.provider = provider
         self.sessions = sessions
         self.max_iterations = max_iterations
         self.max_tool_calls = max_tool_calls
 
     # ------------------------------------------------------------------ public
-    def chat(self, message: str, session_id: str | None = None) -> ChatResponse:
+    def chat(self, message: str, session_id: str | None = None, *,
+             deadline_seconds: float | None = None) -> ChatResponse:  # fmt: skip
+        self._deadline = time.monotonic() + deadline_seconds if deadline_seconds else None
+        if hasattr(self.provider, "deadline"):
+            self.provider.deadline = self._deadline  # type: ignore[attr-defined]
+        try:
+            return self._chat(message, session_id)
+        finally:
+            if hasattr(self.provider, "deadline"):
+                self.provider.deadline = None  # type: ignore[attr-defined]
+
+    def _chat(self, message: str, session_id: str | None) -> ChatResponse:
         t0 = time.perf_counter()
         if session_id is None:
             sid = self.sessions.create()
@@ -231,6 +247,9 @@ class Agent:
         model_version = None
         iterations = 0
         while iterations < self.max_iterations:
+            if execs and self._deadline is not None and time.monotonic() >= self._deadline:
+                notes.append("request deadline reached; answering from the results so far")
+                break
             step = self.provider.tool_step(system=system, messages=messages, tools=tools)
             iterations += 1
             usage.add(step.usage)
@@ -246,7 +265,10 @@ class Agent:
             messages.append(ChatMessage(role="model", raw=step.raw))
             results = []
             for call in calls:
-                ex = self._guard(call, allowed) or toolbox.execute(call.name, call.args)
+                ex = self._guard(call, allowed)
+                if ex is None:
+                    with self.engine_lock:
+                        ex = toolbox.execute(call.name, call.args)
                 execs.append(ex)
                 results.append((call, {"ok": ex.ok, **ex.payload}))
             messages.append(ChatMessage(role="user", tool_results=results))
@@ -315,7 +337,8 @@ class Agent:
                 if not any(e.ok for e in execs) or isinstance(exc, LLMAuthError):
                     raise
                 log.warning("synthesis_provider_error", extra={"kind": exc.kind})
-                issues = [f"synthesis unavailable: provider {exc.kind} ({exc})"]
+                log.warning("synthesis_provider_error_detail", extra={"detail": str(exc)[:300]})
+                issues = [f"synthesis unavailable: provider {exc.kind}"]
                 answer = None
                 break
             usage.add(u)
