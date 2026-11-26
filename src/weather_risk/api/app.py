@@ -423,7 +423,7 @@ def _mount_frontend(app: FastAPI, settings: Settings) -> None:
     if not settings.serve_frontend or not index.is_file():
         return
 
-    @app.get("/{path:path}", include_in_schema=False)
+    @app.api_route("/{path:path}", methods=["GET", "HEAD"], include_in_schema=False)
     def frontend(path: str) -> Response:
         if path == "api" or path.startswith("api/"):
             return JSONResponse(status_code=404, content={"error": "not_found",

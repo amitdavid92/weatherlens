@@ -32,7 +32,9 @@ from weather_risk.agent.llm import (
 
 log = logging.getLogger("weather_risk.llm")
 MAX_RATE_LIMIT_WAIT_SECONDS = 20.0
-MIN_CALL_SECONDS = 1.0  # never start a Gemini call with less time than this left
+# Never start a Gemini call with less time left than this. It is also Gemini's minimum per-request
+# deadline: shorter values are rejected with 400 "Minimum allowed deadline is 10s" (seen live).
+MIN_CALL_SECONDS = 10.0
 # A 429 whose retry hint exceeds this is a daily (not per-minute) quota: skip that model.
 DAILY_QUOTA_HINT_SECONDS = 120.0
 

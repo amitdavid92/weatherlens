@@ -151,7 +151,7 @@ def test_deadline_stops_the_tool_loop_and_still_answers(engine, tmp_path):
 
 def test_provider_refuses_to_start_a_call_after_the_deadline():
     p, stub, sleeps = provider([api_error(503), Resp()], max_attempts=3)
-    p.deadline = time.monotonic() - 1
+    p.deadline = time.monotonic() + 5  # below Gemini's 10 s minimum per-call deadline
     with pytest.raises(LLMTimeoutError):
         p.structured(system="s", prompt="p", schema={})
     assert stub.models_called == [] and sleeps == []
@@ -159,7 +159,7 @@ def test_provider_refuses_to_start_a_call_after_the_deadline():
 
 def test_provider_does_not_sleep_past_the_deadline():
     p, stub, sleeps = provider([api_error(503), Resp()], max_attempts=3)
-    p.deadline = time.monotonic() + 1.5  # 1 s backoff + 1 s minimum call does not fit
+    p.deadline = time.monotonic() + 10.5  # enough for one call, not for 1 s backoff + another
     with pytest.raises(LLMUnavailableError):
         p.structured(system="s", prompt="p", schema={})
     assert len(stub.models_called) == 1 and sleeps == []
@@ -193,6 +193,7 @@ def test_frontend_is_served_with_spa_fallback(engine, tmp_path):
     (tmp_path / "secret.txt").write_text("outside")
     c = client(engine, tmp_path, WEATHER_RISK_WEB_DIST=str(dist))
     assert "WeatherLens" in c.get("/").text
+    assert c.head("/").status_code == 200  # uptime monitors often use HEAD
     a = c.get("/assets/app.js")
     assert a.status_code == 200 and "immutable" in a.headers["cache-control"]
     assert "WeatherLens" in c.get("/analyst/deep/link").text  # refresh on a client route
@@ -213,3 +214,13 @@ def test_sessions_are_isolated_and_not_cached(engine, tmp_path):
     assert h.status_code == 200 and h.headers["cache-control"] == "no-store"
     assert c.get("/api/sessions/someoneelse_000000000000").status_code == 404
     assert c.get("/api/sessions").status_code in (404, 405)  # no listing of sessions
+
+
+def test_capped_call_deadline_never_goes_below_the_gemini_minimum():
+    p, stub, _ = provider([Resp()])
+    seen = []
+    stub.generate_content = lambda **kw: (seen.append(kw["config"]), Resp())[1]
+    p.deadline = time.monotonic() + 12  # less than the 45 s per-call timeout
+    p.structured(system="s", prompt="p", schema={})
+    timeout_ms = seen[0].http_options.timeout
+    assert 10_000 <= timeout_ms <= 12_000
